@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Heading, Link, Text, VStack } from '@chakra-ui/react'
+import { Badge, Box, Container, Flex, Heading, Text, VStack } from '@chakra-ui/react'
 import { FaCar } from 'react-icons/fa'
 import { GrGroup } from 'react-icons/gr'
 import { MdOutlineTakeoutDining } from 'react-icons/md'
@@ -6,13 +6,13 @@ import { MdOutlineTakeoutDining } from 'react-icons/md'
 function BulletList({ items }) {
   return (
     <VStack as="ul" align="stretch" gap={2.5} listStyleType="none" m={0} p={0}>
-      {items.map((text) => (
-        <Flex key={text} as="li" align="flex-start" gap={2.5}>
+      {items.map((content, i) => (
+        <Flex key={i} as="li" align="flex-start" gap={2.5}>
           <Text as="span" color="green.700" fontWeight="bold" lineHeight="tall" flexShrink={0} mt={0.5}>
             •
           </Text>
           <Text color="fg" lineHeight="tall">
-            {text}
+            {content}
           </Text>
         </Flex>
       ))}
@@ -20,18 +20,20 @@ function BulletList({ items }) {
   )
 }
 
-function OptionCard({ title, icon, children }) {
+function OptionCard({ title, icon, prominentBadge, badges, children }) {
   return (
     <Box
       bg="bg"
       borderRadius="lg"
       borderWidth="1px"
       borderColor="border"
+      borderLeftWidth="4px"
+      borderLeftColor="green.700"
       boxShadow="sm"
       p={{ base: 5, md: 6 }}
       h="full"
     >
-      <Flex align="center" gap={3} mb={4}>
+      <Flex align="center" gap={3} mb={3}>
         <Box color="green.700" flexShrink={0} lineHeight={0} aria-hidden>
           {icon}
         </Box>
@@ -39,6 +41,40 @@ function OptionCard({ title, icon, children }) {
           {title}
         </Heading>
       </Flex>
+      {prominentBadge ? (
+        <Badge
+          size="lg"
+          px={3}
+          py={1}
+          borderRadius="md"
+          fontWeight="bold"
+          fontSize="sm"
+          mb={3}
+          w="fit-content"
+          bg="green.700"
+          color="white"
+        >
+          {prominentBadge}
+        </Badge>
+      ) : null}
+      {badges?.length ? (
+        <Flex flexWrap="wrap" gap={2} mb={4}>
+          {badges.map((label) => (
+            <Badge
+              key={label}
+              size="sm"
+              px={2}
+              py={0.5}
+              borderRadius="md"
+              bg="#1c9931"
+              color="white"
+              fontWeight="semibold"
+            >
+              {label}
+            </Badge>
+          ))}
+        </Flex>
+      ) : null}
       {children}
     </Box>
   )
@@ -46,19 +82,17 @@ function OptionCard({ title, icon, children }) {
 
 export function OrderOptionsSection() {
   return (
-    <Box as="section" id="order-options" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg">
+    <Box as="section" id="order-options" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg.subtle">
       <Container maxW="7xl">
         <VStack align="stretch" gap={{ base: 8, md: 10 }}>
           <Heading as="h2" size="2xl" fontWeight="bold">
-            Your options
+            Order Options
           </Heading>
           <Text color="fg.muted" fontSize="md" maxW="3xl" lineHeight="tall">
-            Delivery, take-out, and large orders—choose what works for you. Call{' '}
-            <Link href="tel:+16042776666" color="green.700" fontWeight="semibold" textDecoration="underline">
-              (604) 277-6666
-            </Link>{' '}
-            to place an order.
+            Delivery, take-out, and large orders. Choose what works for you.
           </Text>
+
+       
 
           <Box
             display="grid"
@@ -66,22 +100,26 @@ export function OrderOptionsSection() {
             gap={{ base: 5, lg: 6 }}
             alignItems="stretch"
           >
-            <OptionCard title="Delivery" icon={<FaCar size={26} />}>
+            <OptionCard
+              title="Delivery"
+              icon={<FaCar size={26} />}
+              prominentBadge="Free delivery · within 5 km"
+              badges={['$30 min order', 'From 4:30 p.m.']}
+            >
+             
               <BulletList
                 items={[
-                  'Free delivery within 5 km of Blundell Centre.',
                   'Available daily from 4:30 p.m. on orders over $30.00 before tax.',
                   'Last call for delivery: 8:20 p.m.',
-                  'Typical delivery time is about 45 minutes to an hour.',
                   'We accept cash, debit, and credit.',
                 ]}
               />
             </OptionCard>
 
-            <OptionCard title="Take-out" icon={<MdOutlineTakeoutDining size={28} />}>
+            <OptionCard title="Take-out" icon={<MdOutlineTakeoutDining size={28} />} badges={['10% off', '$30 min order']}>
               <BulletList
                 items={[
-                  'Order ahead by phone—we usually have it ready in 10–15 minutes.',
+  
                   '10% off your bill when you order take-out*.',
                   'Last call for take-out: 8:45 p.m.',
                 ]}
@@ -94,8 +132,8 @@ export function OrderOptionsSection() {
             <OptionCard title="Large group orders" icon={<GrGroup size={26} />}>
               <BulletList
                 items={[
-                  'Hosting a party, office lunch, or family dinner? We can handle larger orders.',
-                  'Call ahead with your head count and pickup time—we’ll help with portions and timing.',
+                  'Hosting a party, office lunch, or family dinner? We can handle large orders.',
+                  'Call ahead with your head count and pickup time—we can help with portions and timing.',
                   'Advance notice helps us prepare everything fresh and on schedule.',
                 ]}
               />

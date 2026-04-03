@@ -1,0 +1,1436 @@
+/**
+ * Bamboo Menu (Feb 2025) — structured from printable menu.
+ * Numbers match the printed menu where applicable.
+ * Each section: titleEn, titleZh. Each item: en, zh (English first).
+ */
+export const MENU_SECTION_NOTES = {
+  "cantonese-chow-mein": "Above items with black bean sauce: add $1.00.",
+  "rice-plates": "Change to fried rice: add $1.00."
+}
+
+export const MENU_SECTIONS = [
+  {
+    "id": "appetizers",
+    "titleEn": "Appetizers",
+    "titleZh": "頭盤",
+    "items": [
+      {
+        "num": "1",
+        "en": "Egg Roll (each)",
+        "zh": "旦卷",
+        "price": "$3.50"
+      },
+      {
+        "num": "2",
+        "en": "Spring Roll (two rolls / per order)",
+        "zh": "春卷",
+        "price": "$4.50"
+      },
+      {
+        "num": "3",
+        "en": "Deep Fried Wonton",
+        "zh": "炸雲吞",
+        "price": "$9.95"
+      },
+      {
+        "num": "4",
+        "en": "Honey Garlic Spareribs",
+        "zh": "蒜子蜜骨",
+        "price": "$16.95"
+      },
+      {
+        "num": "5",
+        "en": "Dry Garlic Spareribs",
+        "zh": "蒜子干骨",
+        "price": "$16.95"
+      },
+      {
+        "num": "6",
+        "en": "Fried Garlic Squid with Spicy Salt",
+        "zh": "椒鹽鮮魷",
+        "price": "(S) $12.75 · (L) $19.75"
+      },
+      {
+        "num": "7",
+        "en": "Fried Garlic Tofu with Spicy Salt",
+        "zh": "椒鹽豆腐",
+        "price": "(S) $10.95 · (L) $16.95"
+      },
+      {
+        "num": "8",
+        "en": "Fried Garlic Chicken Wings w/ Spicy Salt",
+        "zh": "椒鹽雞翼",
+        "price": "$16.50"
+      },
+      {
+        "num": "9",
+        "en": "Lettuce Wrap with Minced Beef",
+        "zh": "牛肉生菜包",
+        "price": "$18.50"
+      },
+      {
+        "num": "10",
+        "en": "Lettuce Wrap with Minced Chicken",
+        "zh": "雞肉生菜包",
+        "price": "$18.50"
+      },
+      {
+        "num": "11",
+        "en": "Lettuce Wrap with Minced Vegetable",
+        "zh": "什菜生菜包",
+        "price": "$18.50"
+      }
+    ]
+  },
+  {
+    "id": "soup",
+    "titleEn": "Soup",
+    "titleZh": "湯羹類",
+    "items": [
+      {
+        "num": "12",
+        "en": "Wonton Soup",
+        "zh": "雲吞湯",
+        "price": "(M) $9.50 · (L) $16.95"
+      },
+      {
+        "num": "13",
+        "en": "House Special Wor Wonton",
+        "zh": "窩雲吞",
+        "price": "$16.95"
+      },
+      {
+        "num": "14",
+        "en": "Hot & Sour Soup",
+        "zh": "酸辣湯",
+        "price": "(M) $10.25 · (L) $16.95"
+      },
+      {
+        "num": "15",
+        "en": "Cream Corn with Minced Chicken Soup",
+        "zh": "雞茸粟米湯",
+        "price": "(M) $9.95 · (L) $16.50"
+      },
+      {
+        "num": "16",
+        "en": "Mushroom Egg Swirl Soup",
+        "zh": "青豆蛋花湯",
+        "price": "(M) $8.75 · (L) $14.95"
+      },
+      {
+        "num": "17",
+        "en": "Diced Vegetables Soup",
+        "zh": "雜菜清湯",
+        "price": "(M) $8.75 · (L) $14.95"
+      },
+      {
+        "num": "18",
+        "en": "Bean Cake & Assorted Meat Soup",
+        "zh": "雞錦豆腐湯",
+        "price": "(M) $10.95 · (L) $17.95"
+      },
+      {
+        "num": "19",
+        "en": "Seafood Bean Cake Thick Soup",
+        "zh": "海鮮豆腐羹",
+        "price": "(M) $11.25 · (L) $18.50"
+      },
+      {
+        "num": "20",
+        "en": "Consomme Soup",
+        "zh": "清湯",
+        "price": "$3.75"
+      },
+      {
+        "num": "21",
+        "en": "Wonton Noodle in Soup",
+        "zh": "雲吞麵",
+        "price": "$9.50"
+      },
+      {
+        "num": "22",
+        "en": "B.B.Q. Pork Noodle in Soup",
+        "zh": "叉燒湯麵",
+        "price": "$9.50"
+      },
+      {
+        "num": "23",
+        "en": "B.B.Q. Pork & Wonton Noodle in Soup",
+        "zh": "叉燒雲吞麵",
+        "price": "$9.95"
+      },
+      {
+        "num": "24",
+        "en": "Beef Noodle in Soup",
+        "zh": "牛肉湯麵",
+        "price": "$9.50"
+      },
+      {
+        "num": "25",
+        "en": "Chicken Noodle in Soup",
+        "zh": "雞肉湯麵",
+        "price": "$9.50"
+      },
+      {
+        "num": "26",
+        "en": "Minced Beef & Egg White Soup",
+        "zh": "西湖牛肉羹",
+        "price": "(M) $10.95 · (L) $17.95"
+      }
+    ]
+  },
+  {
+    "id": "western-chow-fried-rice",
+    "titleEn": "Western chow mein & fried rice",
+    "titleZh": "西人炒飯炒麵",
+    "items": [
+      {
+        "num": "27",
+        "en": "Chicken Chow Mein or Fried Rice",
+        "zh": "雞炒麵或炒飯",
+        "price": "$11.95"
+      },
+      {
+        "num": "28",
+        "en": "B.B.Q. Pork Chow Mein",
+        "zh": "叉燒炒麵",
+        "price": "$12.25"
+      },
+      {
+        "num": "29",
+        "en": "Beef Chow Mein or Fried Rice",
+        "zh": "牛肉炒麵或炒飯",
+        "price": "$12.25"
+      },
+      {
+        "num": "30",
+        "en": "Mushroom Chow Mein or Fried Rice",
+        "zh": "蘑菇炒麵或炒飯",
+        "price": "$11.25"
+      },
+      {
+        "num": "31",
+        "en": "Shrimp Chow Mein or Fried Rice",
+        "zh": "蝦仁炒麵或炒飯",
+        "price": "$12.50"
+      },
+      {
+        "num": "32",
+        "en": "Chicken Mushroom Chow Mein or Fried Rice",
+        "zh": "雞蘑菇炒麵或炒飯",
+        "price": "$12.50"
+      },
+      {
+        "num": "33",
+        "en": "Beef & Tomato Chow Mein or Fried Rice",
+        "zh": "番茄牛肉炒麵或炒飯",
+        "price": "$15.95"
+      },
+      {
+        "num": "34",
+        "en": "Curried Beef Fried Rice",
+        "zh": "咖哩牛肉炒飯",
+        "price": "$15.50"
+      },
+      {
+        "num": "35",
+        "en": "Curried Chicken Fried Rice",
+        "zh": "咖哩雞炒飯",
+        "price": "$15.50"
+      }
+    ]
+  },
+  {
+    "id": "cantonese-chow-mein",
+    "titleEn": "Cantonese chow mein",
+    "titleZh": "炒粉麵類",
+    "items": [
+      {
+        "num": "36",
+        "en": "House Special Chow Mein",
+        "zh": "招牌炒麵",
+        "price": "$16.75"
+      },
+      {
+        "num": "37",
+        "en": "Chicken & Vegetable Chow Mein",
+        "zh": "雞球炒麵",
+        "price": "$15.50"
+      },
+      {
+        "num": "38",
+        "en": "Beef & Vegetable Chow Mein",
+        "zh": "牛肉炒麵",
+        "price": "$15.50"
+      },
+      {
+        "num": "39",
+        "en": "B.B.Q. Pork & Vegetable Chow Mein",
+        "zh": "叉燒炒麵",
+        "price": "$15.50"
+      },
+      {
+        "num": "40",
+        "en": "Prawn & Vegetable Chow Mein",
+        "zh": "蝦球炒麵",
+        "price": "$16.95"
+      },
+      {
+        "num": "41",
+        "en": "Seafood & Vegetable Chow Mein",
+        "zh": "海鮮炒麵",
+        "price": "$16.95"
+      },
+      {
+        "num": "42",
+        "en": "Beef & Tomato Chow Mein",
+        "zh": "番茄牛肉炒麵",
+        "price": "$15.95"
+      },
+      {
+        "num": "43",
+        "en": "Singapore Style Chow Mein",
+        "zh": "星州炒米",
+        "price": "$16.50",
+        "spicy": true
+      },
+      {
+        "num": "44",
+        "en": "Pan Fried Rice Noodle with Beef",
+        "zh": "干炒牛河",
+        "price": "$17.50"
+      },
+      {
+        "num": "45",
+        "en": "Japanese Style Chow Mein",
+        "zh": "日式炒麵",
+        "price": "$14.95"
+      },
+      {
+        "num": "46",
+        "en": "Ginger Chow Mein",
+        "zh": "姜蔥炒麵",
+        "price": "$14.50"
+      },
+      {
+        "num": "47",
+        "en": "Ginger Chicken or B.B.Q. Pork Chow Mein",
+        "zh": "姜蔥雞或叉燒炒麵",
+        "price": "$14.95"
+      },
+      {
+        "num": "48",
+        "en": "Beef with Black Bean Sauce Chow Mein",
+        "zh": "豉椒牛肉炒麵",
+        "price": "$15.50"
+      },
+      {
+        "num": "49",
+        "en": "Chicken with Black Bean Sauce Chow Mein",
+        "zh": "豉椒雞炒麵",
+        "price": "$15.50"
+      },
+      {
+        "num": "50",
+        "en": "Spareribs with Black Bean Sauce Chow Mein",
+        "zh": "豉椒排骨炒麵",
+        "price": "$15.50"
+      },
+      {
+        "num": "51",
+        "en": "Shredded Chicken Chow Mein",
+        "zh": "雞絲炒麵",
+        "price": "$15.50"
+      },
+      {
+        "num": "51a",
+        "en": "Satay Beef Chow Mein or Rice Noodle",
+        "zh": "沙爹牛肉麵或河",
+        "price": "$16.50"
+      },
+      {
+        "num": "52",
+        "en": "Soy Sauce Chicken Chow Mein",
+        "zh": "豉油皇雞絲炒麵",
+        "price": "$15.50"
+      },
+      {
+        "num": "53",
+        "en": "Mixed Vegetable Chow Mein",
+        "zh": "雜菜炒麵",
+        "price": "$14.95"
+      },
+      {
+        "num": "54",
+        "en": "Mixed Vegetable Chicken or Beef Chow Mein",
+        "zh": "雜菜雞或牛肉炒麵",
+        "price": "$15.75"
+      }
+    ]
+  },
+  {
+    "id": "fried-rice",
+    "titleEn": "Fried rice",
+    "titleZh": "炒飯類",
+    "items": [
+      {
+        "num": "55",
+        "en": "House Special Fried Rice",
+        "zh": "招牌炒飯",
+        "price": "$15.95"
+      },
+      {
+        "num": "56",
+        "en": "Shredded Chicken Fried Rice",
+        "zh": "生炒雞絲飯",
+        "price": "$14.75"
+      },
+      {
+        "num": "57",
+        "en": "Minced Beef Fried Rice",
+        "zh": "生炒牛肉飯",
+        "price": "$14.75"
+      },
+      {
+        "num": "58",
+        "en": "Shrimp Fried Rice",
+        "zh": "蝦仁炒飯",
+        "price": "$15.75"
+      },
+      {
+        "num": "59",
+        "en": "Young Chow Fried Rice",
+        "zh": "揚州炒飯",
+        "price": "$15.75"
+      },
+      {
+        "num": "60",
+        "en": "B.B.Q. Pork Fried Rice",
+        "zh": "叉燒炒飯",
+        "price": "$14.75"
+      },
+      {
+        "num": "61",
+        "en": "Mixed Vegetable Fried Rice",
+        "zh": "雜菜炒飯",
+        "price": "$14.75"
+      },
+      {
+        "num": "62",
+        "en": "Mushroom Fried Rice",
+        "zh": "蘑菇炒飯",
+        "price": "$14.75"
+      },
+      {
+        "num": "63",
+        "en": "Minced Beef & Tomato Fried Rice",
+        "zh": "碎牛肉番茄炒飯",
+        "price": "$15.75"
+      },
+      {
+        "num": "64",
+        "en": "Honeymoon Fried Rice",
+        "zh": "鴛鴦炒飯",
+        "price": "$19.75"
+      },
+      {
+        "num": "65",
+        "en": "Fook Chow Seafood Fried Rice",
+        "zh": "福州炒飯",
+        "price": "$17.50"
+      },
+      {
+        "num": "66",
+        "en": "Diced Chicken & Salted Fish Fried Rice",
+        "zh": "咸魚雞粒炒飯",
+        "price": "$16.50"
+      },
+      {
+        "num": "67",
+        "en": "Egg Plain Fried Rice",
+        "zh": "旦炒飯",
+        "price": "$12.50"
+      }
+    ]
+  },
+  {
+    "id": "rice-plates",
+    "titleEn": "Dishes on rice",
+    "titleZh": "飯類",
+    "items": [
+      {
+        "num": "68",
+        "en": "House Special on Rice",
+        "zh": "招牌飯",
+        "price": "$15.75"
+      },
+      {
+        "num": "69",
+        "en": "Beef with Scrambled Egg on Rice",
+        "zh": "滑旦牛肉飯",
+        "price": "$15.75"
+      },
+      {
+        "num": "70",
+        "en": "B.B.Q. Pork on Rice",
+        "zh": "叉燒飯",
+        "price": "$14.50"
+      },
+      {
+        "num": "71",
+        "en": "Beef with Black Bean Sauce on Rice",
+        "zh": "豉椒牛飯",
+        "price": "$14.50"
+      },
+      {
+        "num": "72",
+        "en": "Chicken w/ Black Bean Sauce on Rice",
+        "zh": "豉椒雞飯",
+        "price": "$14.50"
+      },
+      {
+        "num": "73",
+        "en": "Bean Cake & B.B.Q. Pork on Rice",
+        "zh": "叉燒豆腐飯",
+        "price": "$14.50"
+      },
+      {
+        "num": "74",
+        "en": "Seafood & Vegetable on Rice",
+        "zh": "時菜海鮮飯",
+        "price": "$15.75"
+      },
+      {
+        "num": "75",
+        "en": "Prawns & Vegetable on Rice",
+        "zh": "時菜蝦球飯",
+        "price": "$15.95"
+      },
+      {
+        "num": "76",
+        "en": "Fish & Bean Cake on Rice",
+        "zh": "斑腩豆腐飯",
+        "price": "$15.50"
+      },
+      {
+        "num": "77",
+        "en": "Fish & Vegetable on Rice",
+        "zh": "時菜斑球飯",
+        "price": "$15.50"
+      },
+      {
+        "num": "78",
+        "en": "Beef & Vegetable on Rice",
+        "zh": "時菜牛肉飯",
+        "price": "$14.50"
+      },
+      {
+        "num": "79",
+        "en": "Chicken & Vegetable on Rice",
+        "zh": "時菜雞飯",
+        "price": "$14.50"
+      },
+      {
+        "num": "80",
+        "en": "Minced Beef on Rice",
+        "zh": "免治牛肉飯",
+        "price": "$14.50"
+      },
+      {
+        "num": "81",
+        "en": "Curried Chicken on Rice",
+        "zh": "咖哩雞飯",
+        "price": "$14.50"
+      },
+      {
+        "num": "82",
+        "en": "Curried Beef on Rice",
+        "zh": "咖哩牛肉飯",
+        "price": "$14.50"
+      },
+      {
+        "num": "83",
+        "en": "Curried Prawns on Rice",
+        "zh": "咖哩蝦飯",
+        "price": "$15.95"
+      },
+      {
+        "num": "84",
+        "en": "Curried Mixed Vegetable on Rice",
+        "zh": "咖哩什菜飯",
+        "price": "$14.25"
+      },
+      {
+        "num": "85",
+        "en": "Cantonese Sweet & Sour Pork on Rice",
+        "zh": "咕嚕肉飯",
+        "price": "$14.95"
+      },
+      {
+        "num": "86",
+        "en": "Beef & Tomato on Rice",
+        "zh": "鮮茄牛肉飯",
+        "price": "$14.95"
+      },
+      {
+        "num": "87",
+        "en": "Minced Beef & Bean Cake on Rice",
+        "zh": "麻婆豆腐飯",
+        "price": "$14.95"
+      },
+      {
+        "num": "88",
+        "en": "Spareribs w/ Black Bean Sauce on Rice",
+        "zh": "豉椒排骨飯",
+        "price": "$14.95"
+      },
+      {
+        "num": "89",
+        "en": "Beef w/ Green Beans in Black Bean Sauce on Rice",
+        "zh": "豉汁豆仔牛肉飯",
+        "price": "$14.95"
+      }
+    ]
+  },
+  {
+    "id": "chicken",
+    "titleEn": "Chicken",
+    "titleZh": "雞類",
+    "items": [
+      {
+        "num": "90",
+        "en": "Mandarin Orange Chicken",
+        "zh": "杏橙雞",
+        "price": "$20.25"
+      },
+      {
+        "num": "91",
+        "en": "Lemon Boneless Chicken",
+        "zh": "檸檬雞",
+        "price": "$18.50"
+      },
+      {
+        "num": "92",
+        "en": "Breaded Almond Chicken",
+        "zh": "杏仁酥雞",
+        "price": "$18.50"
+      },
+      {
+        "num": "93",
+        "en": "Pineapple Sweet & Sour Chicken Balls",
+        "zh": "甜酸雞球",
+        "price": "$18.50"
+      },
+      {
+        "num": "94",
+        "en": "Cantonese Sweet & Sour Chicken",
+        "zh": "廣東甜酸雞",
+        "price": "$20.25"
+      },
+      {
+        "num": "95",
+        "en": "Cantonese Honey Garlic Chicken",
+        "zh": "廣東蜜汁雞",
+        "price": "$20.25"
+      },
+      {
+        "num": "96",
+        "en": "Deep Fried Chicken Wings",
+        "zh": "炸雞翼",
+        "price": "$16.25"
+      },
+      {
+        "num": "97",
+        "en": "Honey Garlic Chicken Wings",
+        "zh": "蜜汁雞翼",
+        "price": "$16.95"
+      },
+      {
+        "num": "98",
+        "en": "Boneless Chicken w/ Black Bean Sauce",
+        "zh": "豉椒雞球",
+        "price": "$16.75"
+      },
+      {
+        "num": "99",
+        "en": "Szechuan Style Chicken (Spicy)",
+        "zh": "四川雞球",
+        "price": "$19.95",
+        "spicy": true
+      },
+      {
+        "num": "100",
+        "en": "Chicken with 3 kinds of Mushrooms",
+        "zh": "三菇雞球",
+        "price": "$20.25"
+      },
+      {
+        "num": "101",
+        "en": "Diced Chicken w/ Cashew or Almond Nuts",
+        "zh": "腰果/杏仁雞丁",
+        "price": "$16.75"
+      },
+      {
+        "num": "102",
+        "en": "Curried Boneless Chicken (Spicy)",
+        "zh": "咖哩雞球",
+        "price": "$16.95",
+        "spicy": true
+      },
+      {
+        "num": "103",
+        "en": "Chicken with Broccoli",
+        "zh": "百家利雞球",
+        "price": "$16.50"
+      },
+      {
+        "num": "104",
+        "en": "Chicken with Gai Lan",
+        "zh": "芥蘭雞球",
+        "price": "$17.95"
+      },
+      {
+        "num": "105",
+        "en": "Chicken with Bok Choy",
+        "zh": "時菜雞球",
+        "price": "$16.95"
+      },
+      {
+        "num": "106",
+        "en": "Tomato with Chicken",
+        "zh": "鮮茄雞球",
+        "price": "$16.95"
+      },
+      {
+        "num": "107",
+        "en": "Green Beans with Chicken in Black Bean Sauce",
+        "zh": "豉汁豆仔雞球",
+        "price": "$16.25"
+      },
+      {
+        "num": "108",
+        "en": "Deep Fried Crispy Chicken w/ Hot Sauce",
+        "zh": "川油淋雞",
+        "price": "$18.75"
+      },
+      {
+        "num": "109",
+        "en": "Deep Fried Crispy Chicken w/ Shrimp Chips",
+        "zh": "炸子雞",
+        "price": "(Half) $18.50 · (Whole) $32.95"
+      }
+    ]
+  },
+  {
+    "id": "beef",
+    "titleEn": "Beef",
+    "titleZh": "牛肉類",
+    "items": [
+      {
+        "num": "111",
+        "en": "Satay with Tender Beef",
+        "zh": "沙爹牛柳球",
+        "price": "$19.95"
+      },
+      {
+        "num": "111a",
+        "en": "Satay with Sliced Beef",
+        "zh": "沙爹牛肉",
+        "price": "$16.95"
+      },
+      {
+        "num": "112",
+        "en": "Beef & Ginger with Green Onions",
+        "zh": "姜蔥牛肉",
+        "price": "$19.95"
+      },
+      {
+        "num": "113",
+        "en": "Beef with Black Bean Sauce",
+        "zh": "豉椒牛肉",
+        "price": "$16.95"
+      },
+      {
+        "num": "114",
+        "en": "Curried Beef",
+        "zh": "咖哩牛肉",
+        "price": "$16.95"
+      },
+      {
+        "num": "115",
+        "en": "Beef with 3 kinds of Mushrooms",
+        "zh": "三菇牛肉",
+        "price": "$20.25"
+      },
+      {
+        "num": "116",
+        "en": "Beef with Oyster Sauce",
+        "zh": "蠔油牛肉",
+        "price": "$20.25"
+      },
+      {
+        "num": "117",
+        "en": "Szechuan Beef (Spicy)",
+        "zh": "四川牛肉",
+        "price": "$19.95",
+        "spicy": true
+      },
+      {
+        "num": "118",
+        "en": "Chinese Style Tender Beef",
+        "zh": "中式牛柳",
+        "price": "$19.95"
+      },
+      {
+        "num": "119",
+        "en": "Tender Beef with Black Pepper Sauce",
+        "zh": "黑椒牛柳",
+        "price": "$19.95"
+      },
+      {
+        "num": "120",
+        "en": "Tender Beef with Mushroom Baby Corn",
+        "zh": "生炒牛柳球",
+        "price": "$19.95"
+      },
+      {
+        "num": "121",
+        "en": "Beef with Bok Choy",
+        "zh": "時菜牛肉",
+        "price": "$16.95"
+      },
+      {
+        "num": "122",
+        "en": "Beef with Gai Lan",
+        "zh": "芥蘭牛肉",
+        "price": "$17.95"
+      },
+      {
+        "num": "123",
+        "en": "Green Beans w/ Beef in Black Bean Sauce",
+        "zh": "豉汁豆仔牛肉",
+        "price": "$16.25"
+      },
+      {
+        "num": "124",
+        "en": "Beef with Broccoli",
+        "zh": "百家利牛肉",
+        "price": "$16.50"
+      },
+      {
+        "num": "125",
+        "en": "Soft Tofu with Beef",
+        "zh": "牛肉滑旦付",
+        "price": "$16.50"
+      },
+      {
+        "num": "126",
+        "en": "Ground Beef with Tofu",
+        "zh": "麻婆豆付",
+        "price": "$16.50"
+      },
+      {
+        "num": "127",
+        "en": "Tomato with Beef",
+        "zh": "番茄牛肉",
+        "price": "$16.75"
+      },
+      {
+        "num": "128",
+        "en": "Honey Ginger Beef (Spicy)",
+        "zh": "薑焗牛肉",
+        "price": "$19.95",
+        "spicy": true
+      }
+    ]
+  },
+  {
+    "id": "seafood",
+    "titleEn": "Seafood",
+    "titleZh": "海鮮類",
+    "items": [
+      {
+        "num": "129",
+        "en": "Deep Fried Prawns with Sweet & Sour Sauce",
+        "zh": "酥炸大蝦",
+        "price": "$19.50"
+      },
+      {
+        "num": "130",
+        "en": "Sauteed Prawns",
+        "zh": "油泡蝦球",
+        "price": "$20.95"
+      },
+      {
+        "num": "131",
+        "en": "Pan Fried Prawns with Broccoli",
+        "zh": "百家利蝦球",
+        "price": "$19.50"
+      },
+      {
+        "num": "132",
+        "en": "Prawns with Black Bean Sauce",
+        "zh": "豉椒蝦球",
+        "price": "$19.50"
+      },
+      {
+        "num": "133",
+        "en": "Curried Prawns (Spicy)",
+        "zh": "咖哩蝦球",
+        "price": "$19.50",
+        "spicy": true
+      },
+      {
+        "num": "134",
+        "en": "Pan Fried Prawns with Bok Choy",
+        "zh": "時菜蝦球",
+        "price": "$19.50"
+      },
+      {
+        "num": "135",
+        "en": "Prawns with 3 kinds of Mushrooms",
+        "zh": "三菇蝦球",
+        "price": "$20.95"
+      },
+      {
+        "num": "136",
+        "en": "Fried Prawns with Spicy Salt (shell off)",
+        "zh": "椒鹽蝦球",
+        "price": "$21.75"
+      },
+      {
+        "num": "137",
+        "en": "Szechuan Style Prawns (Spicy)",
+        "zh": "四川蝦球",
+        "price": "$21.75",
+        "spicy": true
+      },
+      {
+        "num": "138",
+        "en": "Sauteed Three kinds of Seafood",
+        "zh": "油泡三鮮",
+        "price": "$19.95"
+      },
+      {
+        "num": "139",
+        "en": "Scallops with Broccoli or Bok Choy",
+        "zh": "時菜帶子",
+        "price": "$19.95"
+      },
+      {
+        "num": "140",
+        "en": "Three kinds of Seafood with Broccoli or Bok Choy",
+        "zh": "時菜三鮮",
+        "price": "$18.95"
+      },
+      {
+        "num": "141",
+        "en": "Fried Garlic Fish Fillets w/ Spicy Salt",
+        "zh": "椒鹽魚球",
+        "price": "$19.95"
+      },
+      {
+        "num": "142",
+        "en": "Fried Fish Fillets w/ Cream Corn Sauce",
+        "zh": "粟米現塊",
+        "price": "$19.95"
+      },
+      {
+        "num": "142a",
+        "en": "Sweet & Sour Fish Fillets",
+        "zh": "甜酸現塊",
+        "price": "$19.95"
+      },
+      {
+        "num": "143",
+        "en": "Pan Fried Fish Fillets with Broccoli or Bok Choy",
+        "zh": "時菜現塊",
+        "price": "$18.95"
+      },
+      {
+        "num": "144",
+        "en": "Sauteed Fish Fillets",
+        "zh": "油泡現球",
+        "price": "$19.95"
+      },
+      {
+        "num": "145",
+        "en": "Pan Fried Prawns with Cashew Nuts",
+        "zh": "腰果蝦球",
+        "price": "$18.95"
+      },
+      {
+        "num": "146",
+        "en": "Pan Fried Prawns with Spicy Sauce",
+        "zh": "醬爆蝦球",
+        "price": "$18.95",
+        "spicy": true
+      },
+      {
+        "num": "147",
+        "en": "Pan Fried Prawns with Scrambled Egg",
+        "zh": "滑旦蝦球",
+        "price": "$19.50"
+      }
+    ]
+  },
+  {
+    "id": "hot-pot",
+    "titleEn": "Hot pot",
+    "titleZh": "煲仔類",
+    "items": [
+      {
+        "num": "148",
+        "en": "Beef & Ginger Hot Pot",
+        "zh": "姜蔥牛肉煲",
+        "price": "$19.95"
+      },
+      {
+        "num": "149",
+        "en": "Chicken & Ginger Hot Pot (Boneless)",
+        "zh": "姜蔥雞球煲",
+        "price": "$19.95"
+      },
+      {
+        "num": "150",
+        "en": "Singing Chicken with Chinese Sausage (Boneless)",
+        "zh": "啫啫雞煲",
+        "price": "$19.95"
+      },
+      {
+        "num": "151",
+        "en": "Fried Tofu with Mixed Meat",
+        "zh": "八珍豆腐煲",
+        "price": "$18.50"
+      },
+      {
+        "num": "152",
+        "en": "Fried Tofu with Seafood",
+        "zh": "海鮮豆腐煲",
+        "price": "$19.95"
+      },
+      {
+        "num": "153",
+        "en": "Fried Tofu with Fish Fillets",
+        "zh": "班腩豆腐煲",
+        "price": "$18.95"
+      },
+      {
+        "num": "154",
+        "en": "Salted Fish with Chicken & Soft Tofu",
+        "zh": "咸魚雞粒豆腐煲",
+        "price": "$18.95"
+      },
+      {
+        "num": "155",
+        "en": "Eggplant with Shredded Pork (Spicy)",
+        "zh": "魚香茄子煲",
+        "price": "$18.50",
+        "spicy": true
+      },
+      {
+        "num": "156",
+        "en": "Eggplant with Prawns (Spicy)",
+        "zh": "蝦球茄子煲",
+        "price": "$19.50",
+        "spicy": true
+      }
+    ]
+  },
+  {
+    "id": "pork",
+    "titleEn": "Pork",
+    "titleZh": "豬肉類",
+    "items": [
+      {
+        "num": "157",
+        "en": "Sweet & Sour Pork",
+        "zh": "甜酸肉",
+        "price": "$15.75"
+      },
+      {
+        "num": "158",
+        "en": "Cantonese Sweet & Sour Pork",
+        "zh": "咕嚕肉",
+        "price": "$17.50"
+      },
+      {
+        "num": "159",
+        "en": "Fried Pork Chop with Orange Sauce",
+        "zh": "香橙豬扒",
+        "price": "$19.95"
+      },
+      {
+        "num": "160",
+        "en": "Fried Pork Chop with Gourmet Sauce",
+        "zh": "京都豬扒",
+        "price": "$19.95"
+      },
+      {
+        "num": "161",
+        "en": "Fried Pork Chop with Spicy Salt",
+        "zh": "椒鹽豬扒",
+        "price": "$19.95",
+        "spicy": true
+      },
+      {
+        "num": "162",
+        "en": "Fried Pork Chop with Honey Garlic Sauce",
+        "zh": "蜜汁豬扒",
+        "price": "$19.95",
+        "spicy": true
+      },
+      {
+        "num": "163",
+        "en": "Fried Ribs with Spicy Salt",
+        "zh": "椒鹽骨",
+        "price": "$16.95",
+        "spicy": true
+      },
+      {
+        "num": "164",
+        "en": "Honey Garlic Pork or Ribs",
+        "zh": "蜜汁肉/骨",
+        "price": "$16.95"
+      },
+      {
+        "num": "165",
+        "en": "Dry Garlic Pork or Ribs",
+        "zh": "蒜子干肉/骨",
+        "price": "$16.95"
+      },
+      {
+        "num": "166",
+        "en": "Pan Fried Spareribs with Black Bean Sauce",
+        "zh": "豉椒炆排骨",
+        "price": "$16.95"
+      },
+      {
+        "num": "167",
+        "en": "Steamed Spareribs with Black Bean Sauce",
+        "zh": "豉汁蒸排骨",
+        "price": "$19.95"
+      },
+      {
+        "num": "168",
+        "en": "Steamed Minced Pork with Chinese Sausage",
+        "zh": "臘腸蒸肉餅",
+        "price": "$19.95"
+      },
+      {
+        "num": "169",
+        "en": "Steamed Minced Pork with Salted Fish",
+        "zh": "咸魚蒸肉餅",
+        "price": "$19.95"
+      },
+      {
+        "num": "170",
+        "en": "B.B.Q. Pork with Broccoli or Bok Choy",
+        "zh": "百家利/白菜叉燒",
+        "price": "$16.50"
+      },
+      {
+        "num": "171",
+        "en": "B.B.Q. Pork",
+        "zh": "蜜汁叉燒",
+        "price": "$15.50"
+      },
+      {
+        "num": "171a",
+        "en": "Sliced Pork w/ Garlic, Pepper & Cabbage",
+        "zh": "回鍋肉",
+        "price": "$16.95"
+      }
+    ]
+  },
+  {
+    "id": "egg-foo-young",
+    "titleEn": "Egg foo young",
+    "titleZh": "芙蓉類",
+    "items": [
+      {
+        "num": "172",
+        "en": "House Special Foo Young",
+        "zh": "招牌芙蓉",
+        "price": "$16.50"
+      },
+      {
+        "num": "173",
+        "en": "Chicken Foo Young",
+        "zh": "雞芙蓉",
+        "price": "$15.50"
+      },
+      {
+        "num": "174",
+        "en": "B.B.Q. Pork Foo Young",
+        "zh": "叉燒芙蓉",
+        "price": "$15.50"
+      },
+      {
+        "num": "175",
+        "en": "Mushroom Foo Young",
+        "zh": "蘑菇芙蓉",
+        "price": "$15.50"
+      },
+      {
+        "num": "176",
+        "en": "Shrimp Foo Young",
+        "zh": "蝦仁芙蓉",
+        "price": "$16.50"
+      },
+      {
+        "num": "177",
+        "en": "Chicken & Mushroom Foo Young",
+        "zh": "雞蘑菇芙蓉",
+        "price": "$16.50"
+      }
+    ]
+  },
+  {
+    "id": "chop-suey",
+    "titleEn": "Chop suey",
+    "titleZh": "什錦類",
+    "items": [
+      {
+        "num": "178",
+        "en": "House Special Chop Suey",
+        "zh": "招牌什碎",
+        "price": "$17.95"
+      },
+      {
+        "num": "179",
+        "en": "Beef Chop Suey",
+        "zh": "牛肉什碎",
+        "price": "$16.50"
+      },
+      {
+        "num": "180",
+        "en": "Chicken Chop Suey",
+        "zh": "雞球什碎",
+        "price": "$16.50"
+      },
+      {
+        "num": "181",
+        "en": "B.B.Q. Pork Chop Suey",
+        "zh": "叉燒什碎",
+        "price": "$16.50"
+      },
+      {
+        "num": "182",
+        "en": "Prawn Chop Suey",
+        "zh": "蝦球什碎",
+        "price": "$17.50"
+      },
+      {
+        "num": "183",
+        "en": "Seafood Chop Suey",
+        "zh": "海鮮什碎",
+        "price": "$17.50"
+      },
+      {
+        "num": "184",
+        "en": "Baby Corn with Beef",
+        "zh": "粟米仔牛肉",
+        "price": "$17.95"
+      },
+      {
+        "num": "185",
+        "en": "Baby Corn with Chicken",
+        "zh": "粟米仔雞球",
+        "price": "$17.95"
+      },
+      {
+        "num": "186",
+        "en": "Baby Corn with Seafood",
+        "zh": "粟米仔海鮮",
+        "price": "$18.25"
+      },
+      {
+        "num": "188",
+        "en": "Curried Potatoes with Beef or Chicken",
+        "zh": "咖哩薯仔牛肉/雞",
+        "price": "$16.95",
+        "spicy": true
+      },
+      {
+        "num": "189",
+        "en": "Curried Potatoes with Seafood",
+        "zh": "咖哩薯仔海鮮",
+        "price": "$17.25",
+        "spicy": true
+      },
+      {
+        "num": "190",
+        "en": "Bean Sprouts with Beef or Chicken",
+        "zh": "芽菜牛肉/雞球",
+        "price": "$14.95"
+      },
+      {
+        "num": "191",
+        "en": "Green Beans with Beef or Chicken in Black Bean Sauce",
+        "zh": "豉汁四季豆牛肉/雞",
+        "price": "$16.25"
+      },
+      {
+        "num": "192",
+        "en": "Green Beans with Minced Pork in Spicy Sauce",
+        "zh": "干煸四季豆",
+        "price": "$15.95",
+        "spicy": true
+      }
+    ]
+  },
+  {
+    "id": "vegetarian",
+    "titleEn": "Vegetarian special",
+    "titleZh": "蔬菜類",
+    "items": [
+      {
+        "num": "193",
+        "en": "Pan Fried Broccoli or Bok Choy",
+        "zh": "清炒時菜",
+        "price": "$15.95"
+      },
+      {
+        "num": "194",
+        "en": "3 kinds of Mushrooms in Oyster Sauce",
+        "zh": "蠔油曹三菇",
+        "price": "$18.50"
+      },
+      {
+        "num": "195",
+        "en": "Pan Fried or Garlic Gai Lan",
+        "zh": "清炒/蒜蓉芥蘭",
+        "price": "$16.95"
+      },
+      {
+        "num": "196",
+        "en": "Pan Fried Mixed Vegetables",
+        "zh": "清炒什菜",
+        "price": "$15.50"
+      },
+      {
+        "num": "197",
+        "en": "Chinese Mushroom with Bok Choy",
+        "zh": "時菜扒北菇",
+        "price": "$18.25"
+      },
+      {
+        "num": "198",
+        "en": "Mixed Vegetables or Broccoli in Black Bean Sauce",
+        "zh": "豉汁什菜或西蘭花",
+        "price": "$16.50"
+      },
+      {
+        "num": "199",
+        "en": "Fried Tofu with Oyster Sauce",
+        "zh": "紅燒豆付",
+        "price": "$16.95"
+      },
+      {
+        "num": "200",
+        "en": "Soft Tofu with Mixed Vegetables",
+        "zh": "什菜滑豆付",
+        "price": "$15.75"
+      },
+      {
+        "num": "201",
+        "en": "Lettuce with Oyster Sauce",
+        "zh": "蠔油生菜",
+        "price": "$10.95"
+      },
+      {
+        "num": "202",
+        "en": "Deluxe Vegetables with Oyster Sauce",
+        "zh": "蠔油四寶蔬",
+        "price": "$17.25"
+      }
+    ]
+  },
+  {
+    "id": "sides-drinks",
+    "titleEn": "Sides & beverages",
+    "titleZh": "小食及飲品",
+    "items": [
+      {
+        "num": "203",
+        "en": "Shrimp Chips",
+        "zh": "蝦片",
+        "price": "$3.75"
+      },
+      {
+        "num": "204",
+        "en": "Sweet & Sour Sauce",
+        "zh": "甜酸汁",
+        "price": "(S) $3.25 · (L) $4.25"
+      },
+      {
+        "num": "205",
+        "en": "Black Bean Sauce",
+        "zh": "豉汁",
+        "price": "(S) $3.25 · (L) $4.25"
+      },
+      {
+        "num": "206",
+        "en": "Curry Sauce",
+        "zh": "咖哩汁",
+        "price": "(S) $3.25 · (L) $4.25"
+      },
+      {
+        "num": "207",
+        "en": "Steam Rice",
+        "zh": "白飯",
+        "price": "(S) $3.25 · (M) $3.95 · (L) $4.75"
+      },
+      {
+        "num": "208",
+        "en": "Canned Pop",
+        "zh": "罐裝汽水",
+        "price": "$1.95"
+      }
+    ]
+  },
+  {
+    "id": "dinner-combos",
+    "titleEn": "Dinner combinations",
+    "titleZh": "套餐",
+    "items": [
+      {
+        "num": "",
+        "en": "Dinner for one — four set combinations",
+        "zh": "一人晚餐",
+        "price": "$15.75"
+      },
+      {
+        "num": "",
+        "en": "Dinner for two — Style A or B",
+        "zh": "二人晚餐",
+        "price": "$44.95"
+      },
+      {
+        "num": "",
+        "en": "Dinner for three — Style A or B",
+        "zh": "三人晚餐",
+        "price": "$63.95"
+      },
+      {
+        "num": "",
+        "en": "Dinner for four — fixed set",
+        "zh": "四人晚餐",
+        "price": "$82.95"
+      },
+      {
+        "num": "",
+        "en": "Dinner for six — fixed set",
+        "zh": "六人晚餐",
+        "price": "$112.95"
+      },
+      {
+        "num": "",
+        "en": "Dinner for eight — fixed set",
+        "zh": "八人晚餐",
+        "price": "$149.95"
+      }
+    ]
+  }
+]

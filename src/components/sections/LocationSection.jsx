@@ -35,12 +35,39 @@ const hoursRows = [
 
 export function LocationSection() {
   return (
-    <Box as="section" id="location" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg.subtle">
+    <Box as="section" id="location" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg">
       <Container maxW="7xl">
         <VStack align="stretch" gap={{ base: 8, md: 10 }}>
           <Heading as="h2" size="2xl" fontWeight="bold">
             Location & Hours
           </Heading>
+
+          <VStack align="stretch" gap={4}>
+            <Flex align="flex-start" gap={3}>
+              <Box color="green.700" mt={0.5} flexShrink={0} lineHeight={0}>
+                <MdLocationOn size={22} aria-hidden />
+              </Box>
+              <Link
+                href={mapsSearchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                color="green.700"
+                fontWeight="medium"
+                textDecoration="underline"
+                lineHeight="tall"
+              >
+                {ADDRESS}
+              </Link>
+            </Flex>
+            <Flex align="center" gap={3}>
+              <Box color="green.700" flexShrink={0} lineHeight={0}>
+                <MdPhone size={20} aria-hidden />
+              </Box>
+              <Link href={`tel:${PHONE_TEL}`} color="green.700" fontWeight="medium" textDecoration="underline">
+                {PHONE_DISPLAY}
+              </Link>
+            </Flex>
+          </VStack>
 
           <Flex
             direction={{ base: 'column', lg: 'row' }}
@@ -76,35 +103,6 @@ export function LocationSection() {
 
             {/* Details */}
             <VStack align="stretch" flex={{ lg: '1' }} gap={6} minW={0}>
-             
-
-              <VStack align="stretch" gap={4}>
-                <Flex align="flex-start" gap={3}>
-                  <Box color="blue.600" mt={0.5} flexShrink={0} lineHeight={0}>
-                    <MdLocationOn size={22} aria-hidden />
-                  </Box>
-                  <Link
-                    href={mapsSearchUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    color="blue.600"
-                    fontWeight="medium"
-                    textDecoration="underline"
-                    lineHeight="tall"
-                  >
-                    {ADDRESS}
-                  </Link>
-                </Flex>
-                <Flex align="center" gap={3}>
-                  <Box color="blue.600" flexShrink={0} lineHeight={0}>
-                    <MdPhone size={20} aria-hidden />
-                  </Box>
-                  <Link href={`tel:${PHONE_TEL}`} color="blue.600" fontWeight="medium" textDecoration="underline">
-                    {PHONE_DISPLAY}
-                  </Link>
-                </Flex>
-              </VStack>
-
               <Box bg="gray.50" borderRadius="lg" px={{ base: 4, md: 5 }} py={5} borderWidth="1px" borderColor="gray.400">
                 <Text fontWeight="semibold" fontSize="md" mb={4} textAlign="center">
                   Our Hours

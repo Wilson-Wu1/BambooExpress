@@ -38,19 +38,8 @@ export function NavLinks({ onNavigate, direction = 'row', flexWrap }) {
       flexWrap={direction === 'row' ? flexWrap : undefined}
     >
       {link('/#main', 'Main')}
-      <Box
-        key="menu-pdf"
-        as="a"
-        href="/bamboo-menu.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={onNavigate}
-        {...navLinkStyles}
-        w={direction === 'column' ? 'full' : undefined}
-        justifyContent={direction === 'column' ? 'flex-start' : undefined}
-      >
-        Menu
-      </Box>
+      {link('/menu', 'Menu')}
+      {link('/#order-options', 'Order Options')}
       {link('/#location', 'Location & Hours')}
     </Stack>
   )
