@@ -1,7 +1,6 @@
 import { Box, Button, Container, Flex, Heading, Text, VStack } from '@chakra-ui/react'
 import { GiChopsticks } from 'react-icons/gi'
 import { MdPhone } from 'react-icons/md'
-import { Link as RouterLink } from 'react-router-dom'
 
 export function HeroSection() {
   return (
@@ -62,8 +61,10 @@ export function HeroSection() {
               _hover={{ bg: 'green.600' }}
             >
               <Box
-                as={RouterLink}
-                to="/menu"
+                as="a"
+                href="/bamboo-menu.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 display="inline-flex"
                 alignItems="center"
                 gap={2}
