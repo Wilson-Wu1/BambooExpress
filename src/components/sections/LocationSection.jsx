@@ -1,0 +1,162 @@
+import {
+  Badge,
+  Box,
+  Button,
+  Container,
+  Flex,
+  Heading,
+  Link,
+  Separator,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
+import { MdLocationOn, MdPhone } from 'react-icons/md'
+
+const ADDRESS = '8180 No 2 Rd #178, Richmond, BC V7C 5K1'
+const PHONE_DISPLAY = '(604) 277-6666'
+const PHONE_TEL = '+16042776666'
+
+const mapsSearchUrl =
+  'https://www.google.com/maps/search/?api=1&query=8180+No+2+Rd+%23178,+Richmond,+BC+V7C+5K1'
+
+/** Google Maps embed (search). Replace with your “Share → Embed” iframe if you prefer. */
+const mapsEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(ADDRESS)}&z=16&ie=UTF8&iwloc=&output=embed`
+
+const hoursRows = [
+  { day: 'Monday', closed: true },
+  { day: 'Tuesday', range: '11:00 a.m. – 9:00 p.m.' },
+  { day: 'Wednesday', range: '11:00 a.m. – 9:00 p.m.' },
+  { day: 'Thursday', range: '11:00 a.m. – 9:00 p.m.' },
+  { day: 'Friday', range: '11:00 a.m. – 9:00 p.m.' },
+  { day: 'Saturday', range: '11:00 a.m. – 9:00 p.m.' },
+  { day: 'Sunday', range: '4:00 p.m. – 9:00 p.m.' },
+]
+
+export function LocationSection() {
+  return (
+    <Box as="section" id="location" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg.subtle">
+      <Container maxW="7xl">
+        <VStack align="stretch" gap={{ base: 8, md: 10 }}>
+          <Heading as="h2" size="2xl" fontWeight="bold">
+            Location
+          </Heading>
+
+          <Flex
+            direction={{ base: 'column', lg: 'row' }}
+            gap={{ base: 8, lg: 10 }}
+            align={{ lg: 'stretch' }}
+          >
+            {/* Map */}
+            <Box
+              flex={{ lg: '1' }}
+              minW={0}
+              borderRadius="lg"
+              overflow="hidden"
+              borderWidth="1px"
+              borderColor="border"
+              boxShadow="sm"
+              bg="bg"
+              h={{ base: '280px', sm: '340px', lg: '420px' }}
+            >
+              <Box
+                as="iframe"
+                title="Bamboo Express on Google Maps"
+                src={mapsEmbedUrl}
+                w="100%"
+                h="100%"
+                border={0}
+                display="block"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </Box>
+
+            {/* Details */}
+            <VStack align="stretch" flex={{ lg: '1' }} gap={6} minW={0}>
+             
+
+              <VStack align="stretch" gap={4}>
+                <Flex align="flex-start" gap={3}>
+                  <Box color="blue.600" mt={0.5} flexShrink={0} lineHeight={0}>
+                    <MdLocationOn size={22} aria-hidden />
+                  </Box>
+                  <Link
+                    href={mapsSearchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color="blue.600"
+                    fontWeight="medium"
+                    textDecoration="underline"
+                    lineHeight="tall"
+                  >
+                    {ADDRESS}
+                  </Link>
+                </Flex>
+                <Flex align="center" gap={3}>
+                  <Box color="blue.600" flexShrink={0} lineHeight={0}>
+                    <MdPhone size={20} aria-hidden />
+                  </Box>
+                  <Link href={`tel:${PHONE_TEL}`} color="blue.600" fontWeight="medium" textDecoration="underline">
+                    {PHONE_DISPLAY}
+                  </Link>
+                </Flex>
+              </VStack>
+
+              <Box bg="gray.50" borderRadius="lg" px={{ base: 4, md: 5 }} py={5} borderWidth="1px" borderColor="gray.400">
+                <Text fontWeight="semibold" fontSize="md" mb={4} textAlign="center">
+                  Our Hours
+                </Text>
+                <VStack align="stretch" gap={0} separator={<Separator />}>
+                  {hoursRows.map((row) => (
+                    <Flex key={row.day} py={3} justify="space-between" align="center" gap={4} wrap="wrap">
+                      <Text fontWeight="medium" color="fg">
+                        {row.day}
+                      </Text>
+                      {row.closed ? (
+                        <Badge colorPalette="red" variant="subtle" size="md" px={2.5} py={0.5} borderRadius="full">
+                          Closed
+                        </Badge>
+                      ) : (
+                        <Text color="fg.muted" fontSize="sm" textAlign="right">
+                          {row.range}
+                        </Text>
+                      )}
+                    </Flex>
+                  ))}
+                </VStack>
+              </Box>
+
+              <Flex direction={{ base: 'column', sm: 'row' }} gap={3} w="full">
+                <Button
+                  asChild
+                  colorPalette="red"
+                  size="lg"
+                  minH="48px"
+                  flex={{ sm: 1 }}
+                  fontWeight="semibold"
+                >
+                  <a href={mapsSearchUrl} target="_blank" rel="noopener noreferrer">
+                    Get directions
+                  </a>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  colorPalette="red"
+                  size="lg"
+                  minH="48px"
+                  flex={{ sm: 1 }}
+                  fontWeight="semibold"
+                >
+                  <a href="/bamboo-menu.pdf" target="_blank" rel="noopener noreferrer">
+                    View menu
+                  </a>
+                </Button>
+              </Flex>
+            </VStack>
+          </Flex>
+        </VStack>
+      </Container>
+    </Box>
+  )
+}
