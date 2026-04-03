@@ -15,61 +15,16 @@ import {
   HStack,
   IconButton,
   Image,
+  Link,
   Text,
-  VStack,
 } from '@chakra-ui/react'
+import { MdPhone } from 'react-icons/md'
 import { Link as RouterLink, Outlet } from 'react-router-dom'
+import { NavLinks } from './NavLinks'
+import { SiteFooter } from './SiteFooter'
 
-const navLinkStyles = {
-  px: 3,
-  py: 2,
-  borderRadius: 'md',
-  minH: '44px',
-  display: 'inline-flex',
-  alignItems: 'center',
-  fontWeight: 'medium',
-  color: 'fg',
-  _hover: { bg: 'bg.muted', color: 'green.700' },
-}
-
-function NavLinks({ onNavigate, direction = 'row' }) {
-  const Stack = direction === 'row' ? HStack : VStack
-  const gap = direction === 'row' ? 1 : 0
-
-  const link = (to, label) => (
-    <Box
-      key={to}
-      as={RouterLink}
-      to={to}
-      onClick={onNavigate}
-      {...navLinkStyles}
-      w={direction === 'column' ? 'full' : undefined}
-      justifyContent={direction === 'column' ? 'flex-start' : undefined}
-    >
-      {label}
-    </Box>
-  )
-
-  return (
-    <Stack gap={gap} align={direction === 'column' ? 'stretch' : 'center'}>
-      {link('/#main', 'Main')}
-      <Box
-        key="menu-pdf"
-        as="a"
-        href="/bamboo-menu.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={onNavigate}
-        {...navLinkStyles}
-        w={direction === 'column' ? 'full' : undefined}
-        justifyContent={direction === 'column' ? 'flex-start' : undefined}
-      >
-        Menu
-      </Box>
-      {link('/#location', 'Location & hours')}
-    </Stack>
-  )
-}
+const PHONE_DISPLAY = '(604) 277-6666'
+const PHONE_HREF = 'tel:+16042776666'
 
 export function Layout() {
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -115,36 +70,60 @@ export function Layout() {
               <Text as="span">Bamboo Express</Text>
             </Box>
 
-            <HStack gap={1} display={{ base: 'none', md: 'flex' }}>
-              <NavLinks />
-            </HStack>
+            <HStack gap={{ base: 2, md: 3 }} align="center" flexShrink={0}>
+              <HStack gap={1} display={{ base: 'none', md: 'flex' }}>
+                <NavLinks />
+              </HStack>
 
-            <DrawerRoot open={drawerOpen} onOpenChange={(e) => setDrawerOpen(e.open)}>
-              <DrawerTrigger asChild display={{ base: 'inline-flex', md: 'none' }}>
-                <IconButton
-                  aria-label="Open navigation menu"
-                  variant="ghost"
-                  size="md"
-                  minW="44px"
-                  minH="44px"
-                  colorPalette="green"
-                >
-                  <MenuIcon />
-                </IconButton>
-              </DrawerTrigger>
-              <DrawerBackdrop />
-              <DrawerPositioner>
-                <DrawerContent>
-                  <DrawerHeader>
-                    <DrawerTitle>Navigate</DrawerTitle>
-                    <DrawerCloseTrigger top="3" insetEnd="3" position="absolute" />
-                  </DrawerHeader>
-                  <DrawerBody pt={2}>
-                    <NavLinks onNavigate={closeDrawer} direction="column" />
-                  </DrawerBody>
-                </DrawerContent>
-              </DrawerPositioner>
-            </DrawerRoot>
+              <Link
+                href={PHONE_HREF}
+                display="inline-flex"
+                alignItems="center"
+                gap={1.5}
+                fontWeight="semibold"
+                fontSize={{ base: 'sm', md: 'md' }}
+                color="green.800"
+                textDecoration="underline"
+                px={{ base: 1, md: 2 }}
+                py={2}
+                borderRadius="md"
+                minH="44px"
+                _hover={{ color: 'green.700', bg: 'bg.muted' }}
+                aria-label={`Call Bamboo Express at ${PHONE_DISPLAY}`}
+              >
+                <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>
+                  <MdPhone size={20} />
+                </Box>
+                {PHONE_DISPLAY}
+              </Link>
+
+              <DrawerRoot open={drawerOpen} onOpenChange={(e) => setDrawerOpen(e.open)}>
+                <DrawerTrigger asChild display={{ base: 'inline-flex', md: 'none' }}>
+                  <IconButton
+                    aria-label="Open navigation menu"
+                    variant="ghost"
+                    size="md"
+                    minW="44px"
+                    minH="44px"
+                    colorPalette="green"
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                </DrawerTrigger>
+                <DrawerBackdrop />
+                <DrawerPositioner>
+                  <DrawerContent>
+                    <DrawerHeader>
+                      <DrawerTitle>Navigate</DrawerTitle>
+                      <DrawerCloseTrigger top="3" insetEnd="3" position="absolute" />
+                    </DrawerHeader>
+                    <DrawerBody pt={2}>
+                      <NavLinks onNavigate={closeDrawer} direction="column" />
+                    </DrawerBody>
+                  </DrawerContent>
+                </DrawerPositioner>
+              </DrawerRoot>
+            </HStack>
           </Flex>
         </Container>
       </Box>
@@ -153,13 +132,7 @@ export function Layout() {
         <Outlet />
       </Box>
 
-      <Box as="footer" borderTopWidth="1px" borderColor="border" py={6} px={4} mt="auto">
-        <Container maxW="container.lg">
-          <Text fontSize="sm" color="fg.muted" textAlign="center">
-            © {new Date().getFullYear()} Bamboo Express · Richmond, BC
-          </Text>
-        </Container>
-      </Box>
+      <SiteFooter />
     </Box>
   )
 }

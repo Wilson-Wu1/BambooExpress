@@ -10,6 +10,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { GiChopsticks } from 'react-icons/gi'
 import { MdLocationOn, MdPhone } from 'react-icons/md'
 
 const ADDRESS = '8180 No 2 Rd #178, Richmond, BC V7C 5K1'
@@ -34,12 +35,39 @@ const hoursRows = [
 
 export function LocationSection() {
   return (
-    <Box as="section" id="location" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg.subtle">
+    <Box as="section" id="location" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg">
       <Container maxW="7xl">
         <VStack align="stretch" gap={{ base: 8, md: 10 }}>
           <Heading as="h2" size="2xl" fontWeight="bold">
-            Location
+            Location & Hours
           </Heading>
+
+          <VStack align="stretch" gap={4}>
+            <Flex align="flex-start" gap={3}>
+              <Box color="green.700" mt={0.5} flexShrink={0} lineHeight={0}>
+                <MdLocationOn size={22} aria-hidden />
+              </Box>
+              <Link
+                href={mapsSearchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                color="green.700"
+                fontWeight="medium"
+                textDecoration="underline"
+                lineHeight="tall"
+              >
+                {ADDRESS}
+              </Link>
+            </Flex>
+            <Flex align="center" gap={3}>
+              <Box color="green.700" flexShrink={0} lineHeight={0}>
+                <MdPhone size={20} aria-hidden />
+              </Box>
+              <Link href={`tel:${PHONE_TEL}`} color="green.700" fontWeight="medium" textDecoration="underline">
+                {PHONE_DISPLAY}
+              </Link>
+            </Flex>
+          </VStack>
 
           <Flex
             direction={{ base: 'column', lg: 'row' }}
@@ -50,13 +78,15 @@ export function LocationSection() {
             <Box
               flex={{ lg: '1' }}
               minW={0}
+              minH={{ lg: 0 }}
               borderRadius="lg"
               overflow="hidden"
               borderWidth="1px"
               borderColor="border"
               boxShadow="sm"
               bg="bg"
-              h={{ base: '280px', sm: '340px', lg: '420px' }}
+              h={{ base: '280px', sm: '340px', lg: 'auto' }}
+              alignSelf={{ lg: 'stretch' }}
             >
               <Box
                 as="iframe"
@@ -73,35 +103,6 @@ export function LocationSection() {
 
             {/* Details */}
             <VStack align="stretch" flex={{ lg: '1' }} gap={6} minW={0}>
-             
-
-              <VStack align="stretch" gap={4}>
-                <Flex align="flex-start" gap={3}>
-                  <Box color="blue.600" mt={0.5} flexShrink={0} lineHeight={0}>
-                    <MdLocationOn size={22} aria-hidden />
-                  </Box>
-                  <Link
-                    href={mapsSearchUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    color="blue.600"
-                    fontWeight="medium"
-                    textDecoration="underline"
-                    lineHeight="tall"
-                  >
-                    {ADDRESS}
-                  </Link>
-                </Flex>
-                <Flex align="center" gap={3}>
-                  <Box color="blue.600" flexShrink={0} lineHeight={0}>
-                    <MdPhone size={20} aria-hidden />
-                  </Box>
-                  <Link href={`tel:${PHONE_TEL}`} color="blue.600" fontWeight="medium" textDecoration="underline">
-                    {PHONE_DISPLAY}
-                  </Link>
-                </Flex>
-              </VStack>
-
               <Box bg="gray.50" borderRadius="lg" px={{ base: 4, md: 5 }} py={5} borderWidth="1px" borderColor="gray.400">
                 <Text fontWeight="semibold" fontSize="md" mb={4} textAlign="center">
                   Our Hours
@@ -129,28 +130,55 @@ export function LocationSection() {
               <Flex direction={{ base: 'column', sm: 'row' }} gap={3} w="full">
                 <Button
                   asChild
-                  colorPalette="red"
                   size="lg"
                   minH="48px"
                   flex={{ sm: 1 }}
                   fontWeight="semibold"
+                  bg="green.700"
+                  color="white"
+                  _hover={{ bg: 'green.600' }}
                 >
-                  <a href={mapsSearchUrl} target="_blank" rel="noopener noreferrer">
-                    Get directions
-                  </a>
+                  <Box
+                    as="a"
+                    href="/bamboo-menu.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    display="inline-flex"
+                    alignItems="center"
+                    gap={2}
+                  >
+                    <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>
+                      <GiChopsticks size={22} />
+                    </Box>
+                    View menu
+                  </Box>
                 </Button>
                 <Button
                   asChild
-                  variant="outline"
-                  colorPalette="red"
                   size="lg"
                   minH="48px"
                   flex={{ sm: 1 }}
                   fontWeight="semibold"
+                  bg="white"
+                  color="green.800"
+                  borderWidth="1px"
+                  borderColor="gray.200"
+                  _hover={{ bg: 'gray.100' }}
                 >
-                  <a href="/bamboo-menu.pdf" target="_blank" rel="noopener noreferrer">
-                    View menu
-                  </a>
+                  <Box
+                    as="a"
+                    href={mapsSearchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    display="inline-flex"
+                    alignItems="center"
+                    gap={2}
+                  >
+                    <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>
+                      <MdLocationOn size={22} />
+                    </Box>
+                    Get directions
+                  </Box>
                 </Button>
               </Flex>
             </VStack>
