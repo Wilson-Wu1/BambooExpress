@@ -47,7 +47,7 @@ function OptionCard({ title, icon, children }) {
 export function OrderOptionsSection() {
   return (
     <Box as="section" id="order-options" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg">
-      <Container maxW="container.lg">
+      <Container maxW="7xl">
         <VStack align="stretch" gap={{ base: 8, md: 10 }}>
           <Heading as="h2" size="2xl" fontWeight="bold">
             Your options
