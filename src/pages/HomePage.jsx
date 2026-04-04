@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { HeroSection } from '../components/sections/HeroSection'
 import { LocationSection } from '../components/sections/LocationSection'
 import { OrderOptionsSection } from '../components/sections/OrderOptionsSection'
+import { PopularDishesSection } from '../components/sections/PopularDishesSection'
 
 export function HomePage() {
   const location = useLocation()
@@ -22,6 +23,7 @@ export function HomePage() {
   return (
     <>
       <HeroSection />
+      <PopularDishesSection />
       <OrderOptionsSection />
       <LocationSection />
     </>

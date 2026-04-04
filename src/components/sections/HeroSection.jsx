@@ -1,6 +1,7 @@
 import { Box, Button, Container, Flex, Heading, Text, VStack } from '@chakra-ui/react'
 import { GiChopsticks } from 'react-icons/gi'
 import { MdPhone } from 'react-icons/md'
+import { Link as RouterLink } from 'react-router-dom'
 
 export function HeroSection() {
   return (
@@ -11,7 +12,7 @@ export function HeroSection() {
       overflow="hidden"
       scrollMarginTop="5rem"
       color="white"
-      minH={{ base: '420px', md: 'min(72vh, 600px)' }}
+      minH={{ base: '420px', md: 'min(80vh, 700px)' }}
       display="flex"
       alignItems="center"
       py={{ base: 16, md: 20 }}
@@ -23,7 +24,7 @@ export function HeroSection() {
         css={{
           backgroundImage: 'url(/hero-ss-pork.png)',
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundPosition: 'top',
         }}
         aria-hidden
       />
@@ -61,10 +62,8 @@ export function HeroSection() {
               _hover={{ bg: 'green.600' }}
             >
               <Box
-                as="a"
-                href="/bamboo-menu.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                as={RouterLink}
+                to="/menu"
                 display="inline-flex"
                 alignItems="center"
                 gap={2}

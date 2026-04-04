@@ -1,5 +1,6 @@
-import { Badge, Box, Container, Flex, Heading, Text, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, Container, Flex, Heading, Text, VStack } from '@chakra-ui/react'
 import { FaCar } from 'react-icons/fa'
+import { MdPhone } from 'react-icons/md'
 import { GrGroup } from 'react-icons/gr'
 import { MdOutlineTakeoutDining } from 'react-icons/md'
 
@@ -139,6 +140,31 @@ export function OrderOptionsSection() {
               />
             </OptionCard>
           </Box>
+
+          <Flex justify="center" pt={{ base: 2, md: 4 }}>
+            <Button
+              asChild
+              variant="outline"
+              colorPalette="green"
+              size="lg"
+              minH="48px"
+              fontWeight="semibold"
+            >
+              <Box
+                as="a"
+                href="tel:+16042776666"
+                display="inline-flex"
+                alignItems="center"
+                gap={2}
+                aria-label="Call Bamboo Express at (604) 277-6666"
+              >
+                <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>
+                  <MdPhone size={22} />
+                </Box>
+                Call now
+              </Box>
+            </Button>
+          </Flex>
         </VStack>
       </Container>
     </Box>
