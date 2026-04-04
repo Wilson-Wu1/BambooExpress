@@ -63,7 +63,25 @@ function isSingletonSectionTitleStopwordQuery(qNormEn) {
   return tokens.length === 1 && SECTION_TITLE_SINGLETON_STOPWORDS.has(t)
 }
 
+function dinnerComboItemMatches(item, qNormEn, qRaw) {
+  if (item.headlineZh?.includes(qRaw)) return true
+  if (item.headlineEn && normalizeEnglishForSearch(item.headlineEn).includes(qNormEn)) return true
+  if (item.hintEn && normalizeEnglishForSearch(item.hintEn).includes(qNormEn)) return true
+  if (item.price && normalizeEnglishForSearch(item.price).includes(qNormEn)) return true
+  for (const opt of item.options || []) {
+    if (opt.label && normalizeEnglishForSearch(opt.label).includes(qNormEn)) return true
+    for (const line of opt.dishes || []) {
+      if (normalizeEnglishForSearch(line).includes(qNormEn)) return true
+    }
+  }
+  for (const line of item.dishes || []) {
+    if (normalizeEnglishForSearch(line).includes(qNormEn)) return true
+  }
+  return false
+}
+
 function itemMatchesQuery(item, qNormEn, qRaw) {
+  if (item.type === 'dinner_combo') return dinnerComboItemMatches(item, qNormEn, qRaw)
   if (item.en && normalizeEnglishForSearch(item.en).includes(qNormEn)) return true
   if (item.zh && item.zh.includes(qRaw)) return true
   if (item.num && normalizeEnglishForSearch(String(item.num)).includes(qNormEn)) return true
@@ -87,6 +105,7 @@ function buildSearchResults(trimmed) {
   const qNormEn = normalizeEnglishForSearch(trimmed)
   const out = []
   for (const section of MENU_SECTIONS) {
+    if (section.id === 'dinner-combos') continue
     const allInSection = sectionTitleMatches(section, qNormEn, qRaw)
     const items = allInSection
       ? section.items
@@ -98,9 +117,18 @@ function buildSearchResults(trimmed) {
   return out
 }
 
+const PRICE_SPLIT_RE = /\s*·\s*/
+
+function splitMenuPriceRows(price) {
+  if (typeof price !== 'string') return []
+  return price.split(PRICE_SPLIT_RE).map((s) => s.trim()).filter(Boolean)
+}
+
 function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt }) {
   const hasPhoto = Boolean(imageSrc && imageAlt)
   const [photoOpen, setPhotoOpen] = useState(false)
+  const priceRows = splitMenuPriceRows(price)
+  const multiSizeLayout = priceRows.length > 1
 
   const openPhoto = () => setPhotoOpen(true)
   const onPhotoKeyDown = (e) => {
@@ -137,52 +165,109 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt }) {
             : undefined
         }
       >
-        <Flex align="center" justify="space-between" gap={3} mb={1} flexWrap="wrap">
-          {num ? (
-            <Badge colorPalette="green" variant="subtle" fontSize="xs" px={2} py={0.5} borderRadius="md">
-              #{num}
-            </Badge>
-          ) : null}
-          <Text
-            fontWeight="bold"
-            fontSize="sm"
-            color="green.800"
-            flexShrink={0}
-            whiteSpace="nowrap"
-            ml="auto"
-          >
-            {price}
-          </Text>
-        </Flex>
-        <Box fontWeight="semibold" fontSize="md" lineHeight="snug" w="full">
-          <Text as="span" fontWeight="inherit" fontSize="inherit" lineHeight="inherit">
-            {en}
-          </Text>
-          {spicy ? (
-            <Box
-              as="span"
-              display="inline-flex"
-              alignItems="center"
-              justifyContent="center"
-              ml={2}
-              color="green.700"
-              lineHeight={1}
-              aria-label="Spicy"
-              title="Spicy"
-              css={{
-                '& svg': {
-                  display: 'block',
-                  transform: 'translateY(0.14em)',
-                },
-              }}
-            >
-              <PiPepperLight size={18} aria-hidden />
+        {multiSizeLayout ? (
+          <Flex justify="space-between" align="flex-start" gap={3} mb={1} flexWrap="wrap">
+            <VStack align="flex-start" gap={1} flex="1" minW={0}>
+              {num ? (
+                <Badge colorPalette="green" variant="subtle" fontSize="xs" px={2} py={0.5} borderRadius="md">
+                  #{num}
+                </Badge>
+              ) : null}
+              <Box fontWeight="semibold" fontSize="md" lineHeight="snug" w="full">
+                <Text as="span" fontWeight="inherit" fontSize="inherit" lineHeight="inherit">
+                  {en}
+                </Text>
+                {spicy ? (
+                  <Box
+                    as="span"
+                    display="inline-flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    ml={2}
+                    color="green.700"
+                    lineHeight={1}
+                    aria-label="Spicy"
+                    title="Spicy"
+                    css={{
+                      '& svg': {
+                        display: 'block',
+                        transform: 'translateY(0.14em)',
+                      },
+                    }}
+                  >
+                    <PiPepperLight size={18} aria-hidden />
+                  </Box>
+                ) : null}
+              </Box>
+              <Text color="fg.muted" fontSize="sm" lineHeight="tall" lang="zh-Hant">
+                {zh}
+              </Text>
+            </VStack>
+            <VStack align="flex-end" gap={0.5} flexShrink={0}>
+              {priceRows.map((line, rowIdx) => (
+                <Text
+                  key={rowIdx}
+                  fontWeight="bold"
+                  fontSize="sm"
+                  color="green.800"
+                  whiteSpace="nowrap"
+                  lineHeight="short"
+                >
+                  {line}
+                </Text>
+              ))}
+            </VStack>
+          </Flex>
+        ) : (
+          <>
+            <Flex align="center" justify="space-between" gap={3} mb={1} flexWrap="wrap">
+              {num ? (
+                <Badge colorPalette="green" variant="subtle" fontSize="xs" px={2} py={0.5} borderRadius="md">
+                  #{num}
+                </Badge>
+              ) : null}
+              <Text
+                fontWeight="bold"
+                fontSize="sm"
+                color="green.800"
+                flexShrink={0}
+                whiteSpace="nowrap"
+                ml="auto"
+              >
+                {price}
+              </Text>
+            </Flex>
+            <Box fontWeight="semibold" fontSize="md" lineHeight="snug" w="full">
+              <Text as="span" fontWeight="inherit" fontSize="inherit" lineHeight="inherit">
+                {en}
+              </Text>
+              {spicy ? (
+                <Box
+                  as="span"
+                  display="inline-flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  ml={2}
+                  color="green.700"
+                  lineHeight={1}
+                  aria-label="Spicy"
+                  title="Spicy"
+                  css={{
+                    '& svg': {
+                      display: 'block',
+                      transform: 'translateY(0.14em)',
+                    },
+                  }}
+                >
+                  <PiPepperLight size={18} aria-hidden />
+                </Box>
+              ) : null}
             </Box>
-          ) : null}
-        </Box>
-        <Text color="fg.muted" fontSize="sm" mt={1} lineHeight="tall" lang="zh-Hant">
-          {zh}
-        </Text>
+            <Text color="fg.muted" fontSize="sm" mt={1} lineHeight="tall" lang="zh-Hant">
+              {zh}
+            </Text>
+          </>
+        )}
         {hasPhoto ? (
           <Flex mt="auto" pt={3} justify="flex-end" align="center" gap={2} color="green.700" userSelect="none">
             <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>
@@ -236,6 +321,166 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt }) {
         </DialogRoot>
       ) : null}
     </>
+  )
+}
+
+function ComboDishList({ dishes, dense = false }) {
+  return (
+    <VStack as="ul" align="stretch" gap={dense ? 1.5 : 2.5} listStyleType="none" m={0} p={0}>
+      {dishes.map((line, i) => (
+        <Box as="li" key={i} display="flex" gap={dense ? 2 : 2.5} alignItems="flex-start">
+          <Text
+            as="span"
+            color="green.600"
+            flexShrink={0}
+            mt={dense ? 0 : 0.5}
+            aria-hidden
+            fontSize={dense ? 'xs' : 'sm'}
+            lineHeight={dense ? 1.25 : undefined}
+          >
+            •
+          </Text>
+          <Text fontSize={dense ? 'xs' : 'sm'} lineHeight={dense ? 'short' : 'tall'} color="fg">
+            {line}
+          </Text>
+        </Box>
+      ))}
+    </VStack>
+  )
+}
+
+function DinnerComboCard({ combo, compact = false, dense = false }) {
+  const { headlineEn, headlineZh, price, hintEn, layout, options, dishes } = combo
+  const headingSize = compact || dense ? 'sm' : 'md'
+  const priceSize = compact || dense ? 'md' : 'lg'
+  const cardRadius = dense ? 'md' : 'lg'
+
+  return (
+    <Box
+      borderWidth="1px"
+      borderColor="border"
+      borderRadius={cardRadius}
+      overflow="hidden"
+      bg="bg"
+      boxShadow="sm"
+      w="full"
+    >
+      <Flex
+        bg="green.700"
+        color="white"
+        px={{ base: dense ? 3 : 4, md: dense ? 4 : 5 }}
+        py={dense ? 2 : 3}
+        justify="space-between"
+        align="flex-start"
+        gap={dense ? 2 : 3}
+        flexWrap="wrap"
+      >
+        <VStack align="flex-start" gap={dense ? 0 : 0.5}>
+          <Heading as="h4" size={headingSize} fontWeight="bold" lineHeight={dense ? 'short' : undefined}>
+            {headlineEn}
+          </Heading>
+          <Text fontSize={dense ? 'xs' : 'sm'} opacity={0.92} lang="zh-Hant" lineHeight={dense ? 'short' : undefined}>
+            {headlineZh}
+          </Text>
+        </VStack>
+        <Text fontWeight="bold" fontSize={priceSize} whiteSpace="nowrap" color="white">
+          {price}
+        </Text>
+      </Flex>
+      <Box p={{ base: dense ? 3 : 4, md: dense ? 4 : 5 }}>
+        {hintEn ? (
+          <Text
+            fontSize={dense ? 'xs' : 'sm'}
+            color="fg.muted"
+            mb={dense ? 2 : 4}
+            fontWeight="medium"
+            lineHeight={dense ? 'short' : undefined}
+          >
+            {hintEn}
+          </Text>
+        ) : null}
+        {layout === 'fixed' ? (
+          <ComboDishList dishes={dishes || []} dense={dense} />
+        ) : (
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: dense ? 2 : 3, md: dense ? 3 : 4 }}>
+            {(options || []).map((opt) => (
+              <Box
+                key={opt.label}
+                bg="bg"
+                borderRadius={cardRadius}
+                borderWidth="1px"
+                borderColor="border"
+                boxShadow="sm"
+                p={{ base: dense ? 3 : 5, md: dense ? 4 : 6 }}
+              >
+                <Text
+                  fontWeight="bold"
+                  fontSize={dense ? 'sm' : 'lg'}
+                  mb={dense ? 2 : 4}
+                  textAlign="center"
+                  color="fg"
+                >
+                  {opt.label}
+                </Text>
+                <ComboDishList dishes={opt.dishes} dense={dense} />
+              </Box>
+            ))}
+          </SimpleGrid>
+        )}
+      </Box>
+    </Box>
+  )
+}
+
+function DinnerCombosColumn({ sectionId, items }) {
+  const blocks = []
+  let i = 0
+  while (i < items.length) {
+    const item = items[i]
+    if (item.type !== 'dinner_combo') {
+      blocks.push(
+        <MenuItemCard
+          key={`${sectionId}-${item.num || 'x'}-${i}`}
+          num={item.num}
+          zh={item.zh}
+          en={item.en}
+          price={item.price}
+          spicy={item.spicy}
+          imageSrc={item.imageSrc}
+          imageAlt={item.imageAlt}
+        />,
+      )
+      i += 1
+      continue
+    }
+    const next = items[i + 1]
+    const pairFourSix =
+      item.headlineEn === 'Dinner For Four' &&
+      next?.type === 'dinner_combo' &&
+      next.headlineEn === 'Dinner For Six'
+    if (pairFourSix) {
+      blocks.push(
+        <SimpleGrid
+          key={`${sectionId}-dinner-four-six-${i}`}
+          columns={{ base: 1, md: 2 }}
+          gap={{ base: 4, md: 5 }}
+          w="full"
+          alignItems="stretch"
+        >
+          <DinnerComboCard combo={item} dense />
+          <DinnerComboCard combo={next} dense />
+        </SimpleGrid>,
+      )
+      i += 2
+    } else {
+      blocks.push(<DinnerComboCard key={`${sectionId}-dinner-${i}`} combo={item} dense />)
+      i += 1
+    }
+  }
+  return (
+    <VStack align="stretch" gap={{ base: 4, md: 5 }} w="full">
+      {blocks}
+    </VStack>
   )
 }
 
@@ -294,7 +539,7 @@ function MenuSectionPanel({ section }) {
   }
 
   return (
-    <Box id={`menu-${section.id}`} scrollMarginTop="7rem">
+    <Box id={`menu-${section.id}`} scrollMarginTop="7rem" w="full">
       <Box
         bg="green.700"
         color="white"
@@ -315,37 +560,91 @@ function MenuSectionPanel({ section }) {
         </Heading>
       </Box>
 
-      {MENU_SECTION_NOTES[section.id] || section.id === 'dinner-combos' ? (
+      {MENU_SECTION_NOTES[section.id] ? (
         <VStack align="stretch" gap={2} mb={4}>
-          {MENU_SECTION_NOTES[section.id] ? (
-            <Text fontSize="sm" color="fg.muted" fontStyle="italic">
-              {MENU_SECTION_NOTES[section.id]}
-            </Text>
-          ) : null}
-          {section.id === 'dinner-combos' ? (
-            <Text fontSize="sm" color="fg.muted" fontStyle="italic">
-              Set combinations include fixed dishes — see the printable menu for Style A / B details and full line-ups.
-            </Text>
-          ) : null}
+          <Text fontSize="sm" color="fg.muted" fontStyle="italic">
+            {MENU_SECTION_NOTES[section.id]}
+          </Text>
         </VStack>
       ) : null}
 
-      <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gap={{ base: 2, sm: 3, md: 4 }}>
-        {section.items.map((item, idx) => (
-          <MenuItemCard
-            key={`${section.id}-${item.num || 'x'}-${idx}`}
-            num={item.num}
-            zh={item.zh}
-            en={item.en}
-            price={item.price}
-            spicy={item.spicy}
-            imageSrc={item.imageSrc}
-            imageAlt={item.imageAlt}
-          />
-        ))}
-      </SimpleGrid>
+      {section.id === 'dinner-combos' ? (
+        <DinnerCombosColumn sectionId={section.id} items={section.items} />
+      ) : (
+        <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gap={{ base: 2, sm: 3, md: 4 }}>
+          {section.items.map((item, idx) => (
+            <MenuItemCard
+              key={`${section.id}-${item.num || 'x'}-${idx}`}
+              num={item.num}
+              zh={item.zh}
+              en={item.en}
+              price={item.price}
+              spicy={item.spicy}
+              imageSrc={item.imageSrc}
+              imageAlt={item.imageAlt}
+            />
+          ))}
+        </SimpleGrid>
+      )}
     </Box>
   )
+}
+
+function menuSearchResultCells(section, items) {
+  const cells = []
+  let i = 0
+  while (i < items.length) {
+    const item = items[i]
+    if (section.id === 'dinner-combos' && item.type === 'dinner_combo') {
+      const next = items[i + 1]
+      const pairFourSix =
+        item.headlineEn === 'Dinner For Four' &&
+        next?.type === 'dinner_combo' &&
+        next.headlineEn === 'Dinner For Six'
+      if (pairFourSix) {
+        cells.push(
+          <Box
+            key={`search-${section.id}-dinner-four-six-${i}`}
+            gridColumn={{ sm: '1 / -1' }}
+            w="full"
+          >
+            <SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: 2, sm: 3, md: 4 }} alignItems="stretch">
+              <DinnerComboCard combo={item} compact />
+              <DinnerComboCard combo={next} compact />
+            </SimpleGrid>
+          </Box>,
+        )
+        i += 2
+        continue
+      }
+    }
+    if (item.type === 'dinner_combo') {
+      cells.push(
+        <Box
+          key={`search-${section.id}-dinner-${i}`}
+          gridColumn={{ sm: '1 / -1' }}
+          w="full"
+        >
+          <DinnerComboCard combo={item} compact />
+        </Box>,
+      )
+    } else {
+      cells.push(
+        <MenuItemCard
+          key={`search-${section.id}-${item.num || 'x'}-${i}`}
+          num={item.num}
+          zh={item.zh}
+          en={item.en}
+          price={item.price}
+          spicy={item.spicy}
+          imageSrc={item.imageSrc}
+          imageAlt={item.imageAlt}
+        />,
+      )
+    }
+    i += 1
+  }
+  return cells
 }
 
 function MenuSearchResultsPanel({ blocks, query }) {
@@ -381,18 +680,7 @@ function MenuSearchResultsPanel({ blocks, query }) {
             </Text>
           </Flex>
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gap={{ base: 2, sm: 3, md: 4 }}>
-            {items.map((item, idx) => (
-              <MenuItemCard
-                key={`search-${section.id}-${item.num || 'x'}-${idx}`}
-                num={item.num}
-                zh={item.zh}
-                en={item.en}
-                price={item.price}
-                spicy={item.spicy}
-                imageSrc={item.imageSrc}
-                imageAlt={item.imageAlt}
-              />
-            ))}
+            {menuSearchResultCells(section, items)}
           </SimpleGrid>
         </Box>
       ))}
@@ -483,7 +771,7 @@ export function MenuSection() {
                 <Box as="span" lineHeight={0} aria-hidden>
                   <GiChopsticks size={20} />
                 </Box>
-                Printable PDF
+                View Full Menu
               </Box>
             </Button>
           </Flex>
@@ -611,6 +899,7 @@ export function MenuSection() {
             <Box
               flex="1"
               minW={0}
+              w={{ base: 'full', md: 'auto' }}
               id="menu-section-panel"
               role="tabpanel"
               aria-label={

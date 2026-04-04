@@ -126,14 +126,14 @@ export function OrderOptionsSection() {
                 ]}
               />
               <Text fontSize="sm" color="fg.muted" mt={4} lineHeight="tall">
-                *Discount applies to orders over $30.00 before tax.
+                * Discount applies to orders over $30.00 before tax.
               </Text>
             </OptionCard>
 
-            <OptionCard title="Large group orders" icon={<GrGroup size={26} />}>
+            <OptionCard title="Catering" icon={<GrGroup size={26} />}>
               <BulletList
                 items={[
-                  'Hosting a party, office lunch, or family dinner? We can handle large orders.',
+                  'Hosting a party, office lunch, or family dinner? We can handle catering orders.',
                   'Call ahead with your head count and pickup time—we can help with portions and timing.',
                   'Advance notice helps us prepare everything fresh and on schedule.',
                 ]}

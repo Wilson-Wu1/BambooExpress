@@ -103,8 +103,15 @@ export function LocationSection() {
 
             {/* Details */}
             <VStack align="stretch" flex={{ lg: '1' }} gap={6} minW={0}>
-              <Box bg="gray.50" borderRadius="lg" px={{ base: 4, md: 5 }} py={5} borderWidth="1px" borderColor="gray.400">
-                <Text fontWeight="semibold" fontSize="md" mb={4} textAlign="center">
+              <Box
+                bg="bg"
+                borderRadius="lg"
+                borderWidth="1px"
+                borderColor="border"
+                boxShadow="sm"
+                p={{ base: 5, md: 6 }}
+              >
+                <Text fontWeight="bold" fontSize="lg" mb={4} textAlign="center" color="fg">
                   Our Hours
                 </Text>
                 <VStack align="stretch" gap={0} separator={<Separator />}>

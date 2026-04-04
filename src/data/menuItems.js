@@ -4,8 +4,8 @@
  * Each section: titleEn, titleZh. Each item: en, zh (English first).
  */
 export const MENU_SECTION_NOTES = {
-  "cantonese-chow-mein": "Add black bean sauce: add $1.00.",
-  "rice-plates": "Change to fried rice: add $1.00."
+  "cantonese-chow-mein": "Add black bean sauce: +$1.00",
+  "rice-plates": "Change to fried rice: +$1.00"
 }
 
 export const MENU_SECTIONS = [
@@ -15,40 +15,140 @@ export const MENU_SECTIONS = [
     "titleZh": "套餐",
     "items": [
       {
-        "num": "",
-        "en": "Dinner for one — four set combinations",
-        "zh": "一人晚餐",
-        "price": "$15.75"
+        "type": "dinner_combo",
+        "headlineEn": "Dinner For One",
+        "headlineZh": "一人晚餐",
+        "price": "$15.75",
+        "hintEn": "Choose 1 of 4 combinations.",
+        "layout": "four_options",
+        "options": [
+          {
+            "label": "# 1",
+            "dishes": ["Western Chicken Chow Mein", "S & S Pork", "Pork Fried Rice"]
+          },
+          {
+            "label": "# 2",
+            "dishes": ["Deep Fried Prawns", "Western Chicken Chow Mein", "S & S Pork"]
+          },
+          {
+            "label": "# 3",
+            "dishes": ["Beef Chop Suey", "Western Chicken Chow Mein", "Pork Foo Young"]
+          },
+          {
+            "label": "# 4",
+            "dishes": ["Pork Fried Rice", "Deep Fried Prawns", "Western Chicken Chow Mein"]
+          }
+        ]
       },
       {
-        "num": "",
-        "en": "Dinner for two — Style A or B",
-        "zh": "二人晚餐",
-        "price": "$44.95"
+        "type": "dinner_combo",
+        "headlineEn": "Dinner For Two",
+        "headlineZh": "二人晚餐",
+        "price": "$44.95",
+        "hintEn": "Choose Style A or Style B.",
+        "layout": "style_ab",
+        "options": [
+          {
+            "label": "Style A",
+            "dishes": [
+              "Spring Roll (2 rolls)",
+              "Lemon Chicken",
+              "Prawn Mixed Vegetables",
+              "B.B.Q. Pork Fried Rice"
+            ]
+          },
+          {
+            "label": "Style B",
+            "dishes": [
+              "Spring Roll (2 rolls)",
+              "Beef w/ Broccoli",
+              "Cantonese S&S Pork",
+              "Soy Sauce Chicken Chow Mein"
+            ]
+          }
+        ]
       },
       {
-        "num": "",
-        "en": "Dinner for three — Style A or B",
-        "zh": "三人晚餐",
-        "price": "$63.95"
+        "type": "dinner_combo",
+        "headlineEn": "Dinner For Three",
+        "headlineZh": "三人晚餐",
+        "price": "$63.95",
+        "hintEn": "Choose Style A or Style B.",
+        "layout": "style_ab",
+        "options": [
+          {
+            "label": "Style A",
+            "dishes": [
+              "Spring Roll (3 rolls)",
+              "Beef Mixed Vegetables",
+              "Cantonese S&S Pork",
+              "Dry Garlic Ribs",
+              "B.B.Q. Pork Fried Rice"
+            ]
+          },
+          {
+            "label": "Style B",
+            "dishes": [
+              "Spring Roll (3 rolls)",
+              "Beef w/ Broccoli",
+              "S&S Chicken Balls",
+              "Honey Garlic Ribs",
+              "Soy Sauce Chicken Chow Mein"
+            ]
+          }
+        ]
       },
       {
-        "num": "",
-        "en": "Dinner for four — fixed set",
-        "zh": "四人晚餐",
-        "price": "$82.95"
+        "type": "dinner_combo",
+        "headlineEn": "Dinner For Four",
+        "headlineZh": "四人晚餐",
+        "price": "$82.95",
+        "hintEn": "Fixed set — includes:",
+        "layout": "fixed",
+        "dishes": [
+          "Spring Roll (4 rolls)",
+          "Cantonese S&S Pork",
+          "House Special Mixed Vegetables",
+          "Breaded Almond Chicken",
+          "Young Chow Fried Rice",
+          "Soy Sauce Chicken Chow Mein"
+        ]
       },
       {
-        "num": "",
-        "en": "Dinner for six — fixed set",
-        "zh": "六人晚餐",
-        "price": "$112.95"
+        "type": "dinner_combo",
+        "headlineEn": "Dinner For Six",
+        "headlineZh": "六人晚餐",
+        "price": "$112.95",
+        "hintEn": "Fixed set — includes:",
+        "layout": "fixed",
+        "dishes": [
+          "Spring Roll (6 rolls)",
+          "Deep Fried Prawns",
+          "Beef w/ Broccoli",
+          "1/2 Crispy Fried Chicken",
+          "Cantonese S&S Pork",
+          "House Special Fried Rice",
+          "Soy Sauce Chicken Chow Mein"
+        ]
       },
       {
-        "num": "",
-        "en": "Dinner for eight — fixed set",
-        "zh": "八人晚餐",
-        "price": "$149.95"
+        "type": "dinner_combo",
+        "headlineEn": "Dinner For Eight",
+        "headlineZh": "八人晚餐",
+        "price": "$149.95",
+        "hintEn": "Fixed set — includes:",
+        "layout": "fixed",
+        "dishes": [
+          "Spring Roll (8 rolls)",
+          "Lettuce Wrap w/ Minced Beef or Chicken",
+          "Lemon Boneless Chicken",
+          "Breaded Almond Chicken",
+          "Cantonese S&S Pork",
+          "Beef w/ Broccoli",
+          "House Special Mixed Vegetables",
+          "House Special Fried Rice",
+          "Soy Sauce Chicken Chow Mein"
+        ]
       }
     ]
   },
@@ -510,7 +610,7 @@ export const MENU_SECTIONS = [
   },
   {
     "id": "rice-plates",
-    "titleEn": "Dishes on Rice",
+    "titleEn": "Dishes On Rice",
     "titleZh": "飯類",
     "items": [
       {
