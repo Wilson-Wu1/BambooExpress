@@ -760,7 +760,7 @@ export const MENU_SECTIONS = [
       {
         "num": "90",
         "en": "Mandarin Orange Chicken",
-        "zh": "杏橙雞",
+        "zh": "香橙鸡",
         "price": "$20.25"
       },
       {
