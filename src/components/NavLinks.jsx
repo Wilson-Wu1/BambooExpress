@@ -16,6 +16,9 @@ const navLinkStyles = {
   alignItems: 'center',
   fontWeight: 'medium',
   color: 'fg',
+  transitionProperty: 'background-color, color',
+  transitionDuration: '0.2s',
+  transitionTimingFunction: 'ease',
   _hover: { bg: 'bg.muted', color: 'green.700' },
 }
 

@@ -10,13 +10,23 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useReducedMotion } from 'framer-motion'
 import { GiChopsticks } from 'react-icons/gi'
 import { Link as RouterLink } from 'react-router-dom'
 import { POPULAR_DISHES } from '../../data/menuItems'
+import { MotionBox } from '../../lib/chakra-motion'
+import { EASE_OUT, revealViewport } from '../../lib/motion-presets'
 
 function PopularDishCard({ num, en, zh, price, menuSectionId, imageSrc, imageAlt }) {
+  const reduceMotion = useReducedMotion()
+  const revealTransition = { duration: reduceMotion ? 0 : 0.48, ease: EASE_OUT }
+  const cardVariants = {
+    hidden: reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 },
+    visible: { opacity: 1, y: 0, transition: revealTransition },
+  }
+
   return (
-    <Box
+    <MotionBox
       bg="bg"
       borderRadius="lg"
       borderWidth="1px"
@@ -25,6 +35,11 @@ function PopularDishCard({ num, en, zh, price, menuSectionId, imageSrc, imageAlt
       h="full"
       display="flex"
       flexDirection="column"
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={revealViewport}
+      whileHover={reduceMotion ? undefined : { y: -3, transition: { duration: 0.22, ease: EASE_OUT } }}
     >
       <Box position="relative" aspectRatio="4/3" w="full" bg="bg.muted">
         <Image
@@ -66,25 +81,38 @@ function PopularDishCard({ num, en, zh, price, menuSectionId, imageSrc, imageAlt
             color="green.700"
             textDecoration="underline"
           >
-            View on full menu
+            View On Menu
           </Box>
         </Box>
       </VStack>
-    </Box>
+    </MotionBox>
   )
 }
 
 export function PopularDishesSection() {
+  const reduceMotion = useReducedMotion()
+  const revealTransition = { duration: reduceMotion ? 0 : 0.5, ease: EASE_OUT }
+  const headerVariants = {
+    hidden: reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
+    visible: { opacity: 1, y: 0, transition: revealTransition },
+  }
+
   return (
     <Box as="section" id="popular-dishes" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg">
       <Container maxW="7xl">
         <VStack align="stretch" gap={{ base: 6, md: 8 }}>
-          <Flex
-            direction={{ base: 'column', md: 'row' }}
-            align={{ base: 'stretch', md: 'flex-end' }}
-            justify="space-between"
-            gap={4}
+          <MotionBox
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={revealViewport}
           >
+            <Flex
+              direction={{ base: 'column', md: 'row' }}
+              align={{ base: 'stretch', md: 'flex-end' }}
+              justify="space-between"
+              gap={4}
+            >
             <Box>
               <Heading as="h2" size="2xl" fontWeight="bold">
                 Popular dishes
@@ -114,10 +142,11 @@ export function PopularDishesSection() {
                 <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>
                   <GiChopsticks size={22} />
                 </Box>
-                Full menu
+                View menu
               </Box>
             </Button>
-          </Flex>
+            </Flex>
+          </MotionBox>
 
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gap={{ base: 4, md: 5 }}>
             {POPULAR_DISHES.map((dish) => (

@@ -401,7 +401,7 @@ S('dinner-combos', 'Dinner Combinations', '套餐', dinnerCombosItems)
 const SECTION_NOTES = {
   'cantonese-chow-mein':
     'Above items with black bean sauce: add $1.00.',
-  'rice-plates': 'Change to fried rice: add $1.00.',
+  'rice-plates': 'Change to fried rice: add $1.00',
 }
 
 const header = `/**

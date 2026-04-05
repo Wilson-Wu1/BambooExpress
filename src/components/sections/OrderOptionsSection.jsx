@@ -1,8 +1,11 @@
 import { Badge, Box, Button, Container, Flex, Heading, Text, VStack } from '@chakra-ui/react'
+import { useReducedMotion } from 'framer-motion'
 import { FaCar } from 'react-icons/fa'
 import { MdPhone } from 'react-icons/md'
 import { GrGroup } from 'react-icons/gr'
 import { MdOutlineTakeoutDining } from 'react-icons/md'
+import { MotionBox } from '../../lib/chakra-motion'
+import { EASE_OUT, revealViewport } from '../../lib/motion-presets'
 
 function BulletList({ items }) {
   return (
@@ -21,9 +24,11 @@ function BulletList({ items }) {
   )
 }
 
-function OptionCard({ title, icon, prominentBadge, badges, children }) {
+function OptionCard({ title, icon, prominentBadge, badges, children, itemVariants }) {
+  const reduceMotion = useReducedMotion()
+
   return (
-    <Box
+    <MotionBox
       bg="bg"
       borderRadius="lg"
       borderWidth="1px"
@@ -33,6 +38,8 @@ function OptionCard({ title, icon, prominentBadge, badges, children }) {
       boxShadow="sm"
       p={{ base: 5, md: 6 }}
       h="full"
+      variants={itemVariants}
+      whileHover={reduceMotion ? undefined : { y: -2, transition: { duration: 0.2, ease: EASE_OUT } }}
     >
       <Flex align="center" gap={3} mb={3}>
         <Box color="green.700" flexShrink={0} lineHeight={0} aria-hidden>
@@ -77,31 +84,70 @@ function OptionCard({ title, icon, prominentBadge, badges, children }) {
         </Flex>
       ) : null}
       {children}
-    </Box>
+    </MotionBox>
   )
 }
 
 export function OrderOptionsSection() {
+  const reduceMotion = useReducedMotion()
+  const revealTransition = { duration: reduceMotion ? 0 : 0.5, ease: EASE_OUT }
+  const cardRevealTransition = { duration: reduceMotion ? 0 : 0.45, ease: EASE_OUT }
+  const stagger = reduceMotion ? 0 : 0.13
+
+  const introVariants = {
+    hidden: reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 },
+    visible: { opacity: 1, y: 0, transition: revealTransition },
+  }
+
+  const cardsContainerVariants = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: stagger, delayChildren: reduceMotion ? 0 : 0.04 },
+    },
+  }
+
+  const cardItemVariants = {
+    hidden: reduceMotion ? { opacity: 1, y: 0, x: 0 } : { opacity: 0, y: 14, x: -14 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      transition: cardRevealTransition,
+    },
+  }
+
   return (
     <Box as="section" id="order-options" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg.subtle">
       <Container maxW="7xl">
         <VStack align="stretch" gap={{ base: 8, md: 10 }}>
-          <Heading as="h2" size="2xl" fontWeight="bold">
-            Order Options
-          </Heading>
-          <Text color="fg.muted" fontSize="md" maxW="3xl" lineHeight="tall">
-            Delivery, take-out, and large orders. Choose what works for you.
-          </Text>
+          <MotionBox
+            variants={introVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={revealViewport}
+          >
+            <VStack align="stretch" gap={3}>
+              <Heading as="h2" size="2xl" fontWeight="bold">
+                Order Options
+              </Heading>
+              <Text color="fg.muted" fontSize="md" maxW="3xl" lineHeight="tall">
+                Delivery, take-out, and large orders. Choose what works for you.
+              </Text>
+            </VStack>
+          </MotionBox>
 
-       
-
-          <Box
+          <MotionBox
             display="grid"
             gridTemplateColumns={{ base: '1fr', lg: 'repeat(3, 1fr)' }}
             gap={{ base: 5, lg: 6 }}
             alignItems="stretch"
+            variants={cardsContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={revealViewport}
           >
             <OptionCard
+              itemVariants={cardItemVariants}
               title="Delivery"
               icon={<FaCar size={26} />}
               prominentBadge="Free delivery · within 5 km"
@@ -117,7 +163,12 @@ export function OrderOptionsSection() {
               />
             </OptionCard>
 
-            <OptionCard title="Take-out" icon={<MdOutlineTakeoutDining size={28} />} badges={['10% off', '$30 min order']}>
+            <OptionCard
+              itemVariants={cardItemVariants}
+              title="Take-out"
+              icon={<MdOutlineTakeoutDining size={28} />}
+              badges={['10% off', '$30 min order']}
+            >
               <BulletList
                 items={[
   
@@ -130,7 +181,7 @@ export function OrderOptionsSection() {
               </Text>
             </OptionCard>
 
-            <OptionCard title="Catering" icon={<GrGroup size={26} />}>
+            <OptionCard itemVariants={cardItemVariants} title="Catering" icon={<GrGroup size={26} />}>
               <BulletList
                 items={[
                   'Hosting a party, office lunch, or family dinner? We can handle catering orders.',
@@ -139,8 +190,14 @@ export function OrderOptionsSection() {
                 ]}
               />
             </OptionCard>
-          </Box>
+          </MotionBox>
 
+          <MotionBox
+            variants={introVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={revealViewport}
+          >
           <Flex justify="center" pt={{ base: 2, md: 4 }}>
             <Button
               asChild
@@ -165,6 +222,7 @@ export function OrderOptionsSection() {
               </Box>
             </Button>
           </Flex>
+          </MotionBox>
         </VStack>
       </Container>
     </Box>

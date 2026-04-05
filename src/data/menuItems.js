@@ -4,8 +4,8 @@
  * Each section: titleEn, titleZh. Each item: en, zh (English first).
  */
 export const MENU_SECTION_NOTES = {
-  "cantonese-chow-mein": "Add black bean sauce: +$1.00",
-  "rice-plates": "Change to fried rice: +$1.00"
+  "cantonese-chow-mein": "Add black bean sauce: +$1.00 / 加豉汁 +$1.00",
+  "rice-plates": "Change to fried rice: +$1.00 / 炒饭底加 $1.00"
 }
 
 export const MENU_SECTIONS = [

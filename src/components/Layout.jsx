@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useReducedMotion } from 'framer-motion'
 import {
   Box,
+  CloseButton,
   Container,
   DrawerBackdrop,
   DrawerBody,
@@ -20,6 +22,8 @@ import {
 } from '@chakra-ui/react'
 import { MdPhone } from 'react-icons/md'
 import { Link as RouterLink, Outlet } from 'react-router-dom'
+import { MotionBox } from '../lib/chakra-motion'
+import { EASE_OUT } from '../lib/motion-presets'
 import { NavLinks } from './NavLinks'
 import { SiteFooter } from './SiteFooter'
 
@@ -29,10 +33,11 @@ const PHONE_HREF = 'tel:+16042776666'
 export function Layout() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const closeDrawer = () => setDrawerOpen(false)
+  const reduceMotion = useReducedMotion()
 
   return (
     <Box minH="100dvh" display="flex" flexDirection="column" bg="bg">
-      <Box
+      <MotionBox
         as="header"
         position="sticky"
         top={0}
@@ -41,6 +46,9 @@ export function Layout() {
         borderColor="border"
         bg="bg/95"
         backdropFilter="blur(8px)"
+        initial={reduceMotion ? false : { opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: reduceMotion ? 0 : 0.42, ease: EASE_OUT }}
       >
         <Container maxW="container.lg" py={3}>
           <Flex align="center" justify="space-between" gap={4}>
@@ -115,7 +123,14 @@ export function Layout() {
                   <DrawerContent>
                     <DrawerHeader>
                       <DrawerTitle>Navigate</DrawerTitle>
-                      <DrawerCloseTrigger top="3" insetEnd="3" position="absolute" />
+                      <DrawerCloseTrigger asChild position="absolute" top="3" insetEnd="3">
+                        <CloseButton
+                          size="md"
+                          aria-label="Close navigation"
+                          variant="ghost"
+                          colorPalette="green"
+                        />
+                      </DrawerCloseTrigger>
                     </DrawerHeader>
                     <DrawerBody pt={2}>
                       <NavLinks onNavigate={closeDrawer} direction="column" />
@@ -126,7 +141,7 @@ export function Layout() {
             </HStack>
           </Flex>
         </Container>
-      </Box>
+      </MotionBox>
 
       <Box as="main" flex="1">
         <Outlet />

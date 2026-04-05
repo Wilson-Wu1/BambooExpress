@@ -10,8 +10,11 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { useReducedMotion } from 'framer-motion'
 import { GiChopsticks } from 'react-icons/gi'
 import { MdLocationOn, MdPhone } from 'react-icons/md'
+import { MotionBox } from '../../lib/chakra-motion'
+import { EASE_OUT, revealViewport } from '../../lib/motion-presets'
 
 const ADDRESS = '8180 No 2 Rd #178, Richmond, BC V7C 5K1'
 const PHONE_DISPLAY = '(604) 277-6666'
@@ -34,40 +37,56 @@ const hoursRows = [
 ]
 
 export function LocationSection() {
+  const reduceMotion = useReducedMotion()
+  const revealTransition = { duration: reduceMotion ? 0 : 0.5, ease: EASE_OUT }
+  const blockVariants = {
+    hidden: reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 },
+    visible: { opacity: 1, y: 0, transition: revealTransition },
+  }
+
   return (
     <Box as="section" id="location" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg">
       <Container maxW="7xl">
         <VStack align="stretch" gap={{ base: 8, md: 10 }}>
-          <Heading as="h2" size="2xl" fontWeight="bold">
-            Location & Hours
-          </Heading>
+          <MotionBox
+            variants={blockVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={revealViewport}
+          >
+            <VStack align="stretch" gap={4}>
+              <Heading as="h2" size="2xl" fontWeight="bold">
+                Location & Hours
+              </Heading>
 
-          <VStack align="stretch" gap={4}>
-            <Flex align="flex-start" gap={3}>
-              <Box color="green.700" mt={0.5} flexShrink={0} lineHeight={0}>
-                <MdLocationOn size={22} aria-hidden />
-              </Box>
-              <Link
-                href={mapsSearchUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                color="green.700"
-                fontWeight="medium"
-                textDecoration="underline"
-                lineHeight="tall"
-              >
-                {ADDRESS}
-              </Link>
-            </Flex>
-            <Flex align="center" gap={3}>
-              <Box color="green.700" flexShrink={0} lineHeight={0}>
-                <MdPhone size={20} aria-hidden />
-              </Box>
-              <Link href={`tel:${PHONE_TEL}`} color="green.700" fontWeight="medium" textDecoration="underline">
-                {PHONE_DISPLAY}
-              </Link>
-            </Flex>
-          </VStack>
+              <VStack align="stretch" gap={4}>
+                <Flex align="flex-start" gap={3}>
+                  <Box color="green.700" mt={0.5} flexShrink={0} lineHeight={0}>
+                    <MdLocationOn size={22} aria-hidden />
+                  </Box>
+                  <Link
+                    href={mapsSearchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color="green.700"
+                    fontWeight="medium"
+                    textDecoration="underline"
+                    lineHeight="tall"
+                  >
+                    {ADDRESS}
+                  </Link>
+                </Flex>
+                <Flex align="center" gap={3}>
+                  <Box color="green.700" flexShrink={0} lineHeight={0}>
+                    <MdPhone size={20} aria-hidden />
+                  </Box>
+                  <Link href={`tel:${PHONE_TEL}`} color="green.700" fontWeight="medium" textDecoration="underline">
+                    {PHONE_DISPLAY}
+                  </Link>
+                </Flex>
+              </VStack>
+            </VStack>
+          </MotionBox>
 
           <Flex
             direction={{ base: 'column', lg: 'row' }}
@@ -75,7 +94,7 @@ export function LocationSection() {
             align={{ lg: 'stretch' }}
           >
             {/* Map */}
-            <Box
+            <MotionBox
               flex={{ lg: '1' }}
               minW={0}
               minH={{ lg: 0 }}
@@ -87,6 +106,10 @@ export function LocationSection() {
               bg="bg"
               h={{ base: '280px', sm: '340px', lg: 'auto' }}
               alignSelf={{ lg: 'stretch' }}
+              variants={blockVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={revealViewport}
             >
               <Box
                 as="iframe"
@@ -99,17 +122,21 @@ export function LocationSection() {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
-            </Box>
+            </MotionBox>
 
             {/* Details */}
             <VStack align="stretch" flex={{ lg: '1' }} gap={6} minW={0}>
-              <Box
+              <MotionBox
                 bg="bg"
                 borderRadius="lg"
                 borderWidth="1px"
                 borderColor="border"
                 boxShadow="sm"
                 p={{ base: 5, md: 6 }}
+                variants={blockVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={revealViewport}
               >
                 <Text fontWeight="bold" fontSize="lg" mb={4} textAlign="center" color="fg">
                   Our Hours
@@ -132,8 +159,14 @@ export function LocationSection() {
                     </Flex>
                   ))}
                 </VStack>
-              </Box>
+              </MotionBox>
 
+              <MotionBox
+                variants={blockVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={revealViewport}
+              >
               <Flex direction={{ base: 'column', sm: 'row' }} gap={3} w="full">
                 <Button
                   asChild
@@ -188,6 +221,7 @@ export function LocationSection() {
                   </Box>
                 </Button>
               </Flex>
+              </MotionBox>
             </VStack>
           </Flex>
         </VStack>

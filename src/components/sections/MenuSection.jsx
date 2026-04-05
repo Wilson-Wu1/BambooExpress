@@ -3,6 +3,7 @@ import {
   Badge,
   Box,
   Button,
+  CloseButton,
   Container,
   DialogBackdrop,
   DialogBody,
@@ -753,10 +754,14 @@ export function MenuSection() {
             </Box>
             <Button
               asChild
-              variant="outline"
-              colorPalette="green"
               size="lg"
               minH="48px"
+              fontWeight="semibold"
+              variant="outline"
+              borderColor="green.700"
+              color="green.700"
+              bg="green.50"
+              _hover={{ bg: 'green.100', borderColor: 'green.800', color: 'green.800' }}
               alignSelf={{ base: 'stretch', md: 'center' }}
             >
               <Box
@@ -857,13 +862,25 @@ export function MenuSection() {
               open={sectionsDrawerOpen}
               onOpenChange={(e) => setSectionsDrawerOpen(e.open)}
               placement="start"
+              closeOnInteractOutside
             >
               <DrawerBackdrop />
-              <DrawerPositioner>
+              <DrawerPositioner
+                onPointerDown={(e) => {
+                  if (e.target === e.currentTarget) setSectionsDrawerOpen(false)
+                }}
+              >
                 <DrawerContent id="menu-sections-drawer" maxW="min(100vw, 320px)">
                   <DrawerHeader borderBottomWidth="1px" borderColor="border">
                     <DrawerTitle>Sections</DrawerTitle>
-                    <DrawerCloseTrigger top="3" insetEnd="3" position="absolute" />
+                    <DrawerCloseTrigger asChild position="absolute" top="3" insetEnd="3">
+                      <CloseButton
+                        size="md"
+                        aria-label="Close sections list"
+                        variant="ghost"
+                        colorPalette="green"
+                      />
+                    </DrawerCloseTrigger>
                   </DrawerHeader>
                   <DrawerBody py={4}>
                     <SectionNavList
