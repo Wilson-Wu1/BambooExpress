@@ -590,12 +590,9 @@ function SectionJumpStrip({ activeSectionId, onPick }) {
             css={{
               overscrollBehaviorX: 'contain',
               WebkitOverflowScrolling: 'touch',
-              scrollbarWidth: 'thin',
-              '&::-webkit-scrollbar': { height: '6px' },
-              '&::-webkit-scrollbar-thumb': {
-                backgroundColor: 'rgba(0, 0, 0, 0.22)',
-                borderRadius: '999px',
-              },
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              '&::-webkit-scrollbar': { display: 'none' },
             }}
           >
             {MENU_SECTIONS.map((s) => {
@@ -611,12 +608,29 @@ function SectionJumpStrip({ activeSectionId, onPick }) {
                   colorPalette="gray"
                   borderWidth={0}
                   borderRadius="md"
+                  position="relative"
                   px={3}
                   minH="40px"
                   whiteSpace="nowrap"
                   fontWeight={selected ? 'semibold' : 'medium'}
                   color={selected ? 'black' : 'fg.muted'}
                   _hover={{ bg: 'blackAlpha.50' }}
+                  css={
+                    selected
+                      ? {
+                          '&::after': {
+                            content: '""',
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            height: '2px',
+                            backgroundColor: 'black',
+                            borderRadius: '1px',
+                          },
+                        }
+                      : undefined
+                  }
                   aria-current={selected ? 'true' : undefined}
                   title={`${s.titleEn} · ${s.titleZh}`}
                   onClick={() => onPick(s.id)}
@@ -632,18 +646,32 @@ function SectionJumpStrip({ activeSectionId, onPick }) {
         <DrawerPositioner>
           <DrawerContent
             maxH="85dvh"
+            minH={0}
             borderTopRadius="xl"
             display="flex"
             flexDirection="column"
+            overflow="hidden"
             css={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
           >
-            <DrawerHeader position="relative" pr={14}>
+            <DrawerHeader position="relative" pr={14} flexShrink={0}>
               <DrawerTitle fontWeight="bold">All sections</DrawerTitle>
               <DrawerCloseTrigger asChild position="absolute" top="3" insetEnd="3">
                 <CloseButton size="md" aria-label="Close sections list" variant="ghost" colorPalette="gray" />
               </DrawerCloseTrigger>
             </DrawerHeader>
-            <DrawerBody overflowY="auto" pt={0} pb={4}>
+            <DrawerBody
+              flex="1"
+              minH={0}
+              overflowY="auto"
+              pt={0}
+              pb={20}
+              css={{
+                /* Large scrollable inset so the last row stays visible after rubber-band scroll and above rounded corners / home indicator. */
+                paddingBottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))',
+                WebkitOverflowScrolling: 'touch',
+                overscrollBehaviorY: 'contain',
+              }}
+            >
               <VStack as="ul" align="stretch" gap={0} listStyleType="none" m={0} p={0}>
                 {MENU_SECTIONS.map((s) => {
                   const selected = s.id === activeSectionId
@@ -1000,7 +1028,7 @@ export function MenuSection() {
     const strip = document.getElementById('menu-jump-strip-inner')
     const chip = strip?.querySelector(`[data-menu-section-chip="${activeId}"]`)
     if (chip && strip) {
-      chip.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'auto' })
+      chip.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' })
     }
   }, [activeId, isSearching])
 
@@ -1036,8 +1064,10 @@ export function MenuSection() {
    * this, scrollIntoView can no-op because body scroll is still locked, or the iOS restore
    * undoes the jump.
    *
-   * Temporarily overriding `html { scroll-behavior: smooth }` makes the jump instant so it
-   * cannot be cancelled by a concurrent smooth-scroll animation.
+   * Desktop: temporarily forcing `scroll-behavior: auto` keeps the jump instant so it cannot be
+   * cancelled by a concurrent smooth-scroll animation.
+   * Mobile: use native smooth scrolling so section changes feel fluid (still no extra delays;
+   * same microtask ordering as above).
    */
   useEffect(() => {
     if (!pendingScrollIdRef.current) return
@@ -1046,6 +1076,11 @@ export function MenuSection() {
     queueMicrotask(() => {
       const el = document.getElementById(`menu-${id}`)
       if (!el) return
+      const isMobile = window.matchMedia('(max-width: 767px)').matches
+      if (isMobile) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        return
+      }
       const html = document.documentElement
       html.style.scrollBehavior = 'auto'
       el.scrollIntoView({ block: 'start' })
