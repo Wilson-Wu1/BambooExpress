@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import {
   Badge,
   Box,
@@ -21,6 +21,7 @@ import {
   DrawerPositioner,
   DrawerRoot,
   DrawerTitle,
+  DrawerTrigger,
   FieldLabel,
   FieldRoot,
   Flex,
@@ -116,6 +117,27 @@ function buildSearchResults(trimmed) {
     }
   }
   return out
+}
+
+/** Ignore scroll-spy while smooth-scrolling after a nav click (avoids fighting `activeId`). */
+const SCROLL_SPY_PAUSE_AFTER_NAV_MS = 1100
+
+const SIDEBAR_NAV_EDGE_PAD = 8
+
+/** Scroll the desktop sections list so the active item stays visible; only mutates `containerEl.scrollTop`. */
+function scrollSidebarNavToActiveItem(containerEl, itemEl) {
+  if (!containerEl || !itemEl) return
+  const cRect = containerEl.getBoundingClientRect()
+  const iRect = itemEl.getBoundingClientRect()
+  const pad = SIDEBAR_NAV_EDGE_PAD
+  const visibleTop = cRect.top + pad
+  const visibleBottom = cRect.bottom - pad
+  if (iRect.top >= visibleTop && iRect.bottom <= visibleBottom) return
+
+  const cH = containerEl.clientHeight
+  const scrollDelta = iRect.top + iRect.height / 2 - (cRect.top + cH / 2)
+  const maxScroll = Math.max(0, containerEl.scrollHeight - cH)
+  containerEl.scrollTop = Math.max(0, Math.min(maxScroll, containerEl.scrollTop + scrollDelta))
 }
 
 const PRICE_SPLIT_RE = /\s*·\s*/
@@ -418,7 +440,8 @@ function DinnerComboCard({ combo, compact = false, dense = false }) {
                   fontWeight="bold"
                   fontSize={dense ? 'sm' : 'lg'}
                   mb={dense ? 2 : 4}
-                  textAlign="center"
+                  textAlign="left"
+                  w="full"
                   color="fg"
                 >
                   {opt.label}
@@ -485,19 +508,205 @@ function DinnerCombosColumn({ sectionId, items }) {
   )
 }
 
-function SectionNavList({ activeSectionId, onPick, tabIdPrefix }) {
+/** Sticky horizontal section labels (mobile only); list control opens a bottom sheet with all sections. */
+function SectionJumpStrip({ activeSectionId, onPick }) {
+  const [sectionsOpen, setSectionsOpen] = useState(false)
+
+  /**
+   * Call onPick immediately in the same event so React batches the drawer close + section pick
+   * into a single render. The actual page scroll is deferred inside pickSection via queueMicrotask
+   * so it always runs after Zag's scroll-lock cleanup microtask (child effects fire before parent
+   * effects in React, so Zag's child-effect microtask is queued first and runs first — FIFO).
+   */
+  const pickFromDrawer = (id) => {
+    setSectionsOpen(false)
+    onPick(id)
+  }
+
   return (
-    <VStack align="stretch" gap={1} role="tablist" aria-label="Menu section categories">
+    <Box
+      display={{ base: 'block', md: 'none' }}
+      position="sticky"
+      zIndex={11}
+      top={{ base: 'calc(4.75rem + env(safe-area-inset-top, 0px))', md: '4.5rem' }}
+      py={2.5}
+      mb={2}
+      mx={{ base: -4, md: 0 }}
+      px={{ base: 4, md: 0 }}
+      bg="bg.subtle/95"
+      backdropFilter="blur(10px)"
+      borderBottomWidth="1px"
+      borderColor="border"
+    >
+      <DrawerRoot
+        open={sectionsOpen}
+        restoreFocus={false}
+        onOpenChange={(e) => setSectionsOpen(e.open)}
+        placement="bottom"
+      >
+        <Flex align="stretch" gap={0} minH="40px">
+          <Box
+            flexShrink={0}
+            position="sticky"
+            left={0}
+            zIndex={2}
+            display="flex"
+            alignItems="center"
+            alignSelf="stretch"
+            pr={2}
+            mr={1}
+            bg="bg.subtle/95"
+            backdropFilter="blur(10px)"
+            boxShadow="8px 0 14px -6px rgba(0, 0, 0, 0.08)"
+          >
+            <DrawerTrigger asChild>
+              <IconButton
+                type="button"
+                aria-label="View all menu sections"
+                variant="ghost"
+                colorPalette="gray"
+                size="md"
+                minW="44px"
+                minH="44px"
+                color="fg.muted"
+                _hover={{ bg: 'blackAlpha.50', color: 'fg' }}
+              >
+                <Box as="span" lineHeight={0} aria-hidden>
+                  <MdList size={22} />
+                </Box>
+              </IconButton>
+            </DrawerTrigger>
+          </Box>
+          <Flex
+            id="menu-jump-strip-inner"
+            role="navigation"
+            aria-label="Jump to menu section"
+            align="center"
+            gap={1}
+            flex="1"
+            minW={0}
+            overflowX="auto"
+            pb={0.5}
+            css={{
+              overscrollBehaviorX: 'contain',
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'thin',
+              '&::-webkit-scrollbar': { height: '6px' },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: 'rgba(0, 0, 0, 0.22)',
+                borderRadius: '999px',
+              },
+            }}
+          >
+            {MENU_SECTIONS.map((s) => {
+              const selected = s.id === activeSectionId
+              return (
+                <Button
+                  key={s.id}
+                  type="button"
+                  data-menu-section-chip={s.id}
+                  flexShrink={0}
+                  size="sm"
+                  variant="ghost"
+                  colorPalette="gray"
+                  borderWidth={0}
+                  borderRadius="md"
+                  px={3}
+                  minH="40px"
+                  whiteSpace="nowrap"
+                  fontWeight={selected ? 'semibold' : 'medium'}
+                  color={selected ? 'black' : 'fg.muted'}
+                  _hover={{ bg: 'blackAlpha.50' }}
+                  aria-current={selected ? 'true' : undefined}
+                  title={`${s.titleEn} · ${s.titleZh}`}
+                  onClick={() => onPick(s.id)}
+                >
+                  {s.titleEn}
+                </Button>
+              )
+            })}
+          </Flex>
+        </Flex>
+
+        <DrawerBackdrop />
+        <DrawerPositioner>
+          <DrawerContent
+            maxH="85dvh"
+            borderTopRadius="xl"
+            display="flex"
+            flexDirection="column"
+            css={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+          >
+            <DrawerHeader position="relative" pr={14}>
+              <DrawerTitle fontWeight="bold">All sections</DrawerTitle>
+              <DrawerCloseTrigger asChild position="absolute" top="3" insetEnd="3">
+                <CloseButton size="md" aria-label="Close sections list" variant="ghost" colorPalette="gray" />
+              </DrawerCloseTrigger>
+            </DrawerHeader>
+            <DrawerBody overflowY="auto" pt={0} pb={4}>
+              <VStack as="ul" align="stretch" gap={0} listStyleType="none" m={0} p={0}>
+                {MENU_SECTIONS.map((s) => {
+                  const selected = s.id === activeSectionId
+                  return (
+                    <Box key={s.id} as="li">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        colorPalette="gray"
+                        justifyContent="flex-start"
+                        textAlign="left"
+                        h="auto"
+                        minH="52px"
+                        w="full"
+                        py={3}
+                        px={3}
+                        borderRadius="md"
+                        fontWeight="normal"
+                        onClick={() => pickFromDrawer(s.id)}
+                      >
+                        <VStack align="start" gap={0.5} w="full">
+                          <Text
+                            fontSize="md"
+                            fontWeight={selected ? 'semibold' : 'medium'}
+                            color={selected ? 'black' : 'fg.muted'}
+                          >
+                            {s.titleEn}
+                          </Text>
+                          <Text
+                            fontSize="sm"
+                            lineHeight="short"
+                            color="fg.muted"
+                            fontWeight="normal"
+                            lang="zh-Hant"
+                            opacity={selected ? 0.85 : 1}
+                          >
+                            {s.titleZh}
+                          </Text>
+                        </VStack>
+                      </Button>
+                    </Box>
+                  )
+                })}
+              </VStack>
+            </DrawerBody>
+          </DrawerContent>
+        </DrawerPositioner>
+      </DrawerRoot>
+    </Box>
+  )
+}
+
+function SectionNavList({ activeSectionId, onPick }) {
+  return (
+    <VStack align="stretch" gap={1} role="navigation" aria-label="Menu section categories">
       {MENU_SECTIONS.map((s) => {
         const selected = s.id === activeSectionId
         return (
           <Button
             key={s.id}
-            role="tab"
             type="button"
-            aria-selected={selected}
-            id={`${tabIdPrefix}-${s.id}`}
-            aria-controls="menu-section-panel"
+            data-menu-section-nav={s.id}
+            aria-current={selected ? 'true' : undefined}
             variant={selected ? 'subtle' : 'ghost'}
             colorPalette="green"
             justifyContent="flex-start"
@@ -540,7 +749,7 @@ function MenuSectionPanel({ section }) {
   }
 
   return (
-    <Box id={`menu-${section.id}`} scrollMarginTop="7rem" w="full">
+    <Box id={`menu-${section.id}`} scrollMarginTop={{ base: '10rem', md: '7rem' }} w="full">
       <Box
         bg="green.700"
         color="white"
@@ -662,7 +871,7 @@ function MenuSearchResultsPanel({ blocks, query }) {
   return (
     <VStack align="stretch" gap={{ base: 8, md: 10 }}>
       {blocks.map(({ section, items }) => (
-        <Box key={section.id} scrollMarginTop="7rem">
+        <Box key={section.id} scrollMarginTop={{ base: '10rem', md: '7rem' }}>
           <Flex
             align="baseline"
             flexWrap="wrap"
@@ -690,13 +899,40 @@ function MenuSearchResultsPanel({ blocks, query }) {
 }
 
 export function MenuSection() {
-  const defaultId = MENU_SECTIONS[0]?.id ?? ''
-  const [activeId, setActiveId] = useState(defaultId)
-  const [sectionsDrawerOpen, setSectionsDrawerOpen] = useState(false)
+  const [activeId, setActiveId] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
+
+  const scrollSpySuspendedRef = useRef(false)
+  const scrollSpyResumeTimerRef = useRef(null)
+
+  /**
+   * Scroll target set by pickSection. Consumed by the useEffect below.
+   * Using a ref (not state) avoids an extra render; the effect is triggered via scrollNonce.
+   */
+  const pendingScrollIdRef = useRef(null)
+  const [scrollNonce, setScrollNonce] = useState(0)
+
+  const pauseScrollSpyAfterNav = useCallback(() => {
+    scrollSpySuspendedRef.current = true
+    if (scrollSpyResumeTimerRef.current != null) {
+      clearTimeout(scrollSpyResumeTimerRef.current)
+    }
+    scrollSpyResumeTimerRef.current = window.setTimeout(() => {
+      scrollSpySuspendedRef.current = false
+      scrollSpyResumeTimerRef.current = null
+    }, SCROLL_SPY_PAUSE_AFTER_NAV_MS)
+  }, [])
 
   const trimmedSearch = searchQuery.trim()
   const isSearching = trimmedSearch.length > 0
+
+  useEffect(() => {
+    return () => {
+      if (scrollSpyResumeTimerRef.current != null) {
+        clearTimeout(scrollSpyResumeTimerRef.current)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     const applyHash = () => {
@@ -704,17 +940,78 @@ export function MenuSection() {
       if (raw && MENU_SECTIONS.some((s) => s.id === raw)) {
         setActiveId(raw)
         setSearchQuery('')
+        const el = document.getElementById(`menu-${raw}`)
+        if (el) {
+          pauseScrollSpyAfterNav()
+          requestAnimationFrame(() => {
+            el.scrollIntoView({ behavior: 'auto', block: 'start' })
+          })
+        }
+      } else {
+        setActiveId('')
       }
     }
     applyHash()
     window.addEventListener('hashchange', applyHash)
     return () => window.removeEventListener('hashchange', applyHash)
-  }, [])
+  }, [pauseScrollSpyAfterNav])
 
-  const activeSection = useMemo(
-    () => MENU_SECTIONS.find((s) => s.id === activeId) ?? MENU_SECTIONS[0],
-    [activeId],
-  )
+  /** Highlight the chip for whichever section has crossed below the sticky header + jump strip. */
+  useEffect(() => {
+    if (isSearching) return undefined
+
+    /** Higher = activate sooner (section top may still be farther below the viewport top). */
+    const activationLinePx = () =>
+      window.matchMedia('(max-width: 767px)').matches ? 252 : 152
+
+    let rafId = 0
+    const tick = () => {
+      rafId = 0
+      if (scrollSpySuspendedRef.current) return
+      const line = activationLinePx()
+      let next = ''
+      for (const s of MENU_SECTIONS) {
+        const el = document.getElementById(`menu-${s.id}`)
+        if (!el) continue
+        if (el.getBoundingClientRect().top <= line) next = s.id
+      }
+      setActiveId((prev) => (prev === next ? prev : next))
+    }
+
+    const schedule = () => {
+      if (!rafId) rafId = requestAnimationFrame(tick)
+    }
+
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule, { passive: true })
+    schedule()
+
+    return () => {
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
+  }, [isSearching])
+
+  /** Keep the active chip visible inside the horizontal strip (mobile only). */
+  useLayoutEffect(() => {
+    if (isSearching || !activeId) return
+    if (!window.matchMedia('(max-width: 767px)').matches) return
+    const strip = document.getElementById('menu-jump-strip-inner')
+    const chip = strip?.querySelector(`[data-menu-section-chip="${activeId}"]`)
+    if (chip && strip) {
+      chip.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'auto' })
+    }
+  }, [activeId, isSearching])
+
+  /** Keep the active row visible inside the sticky sections sidebar (desktop only). */
+  useLayoutEffect(() => {
+    if (isSearching || !activeId) return
+    if (!window.matchMedia('(min-width: 48em)').matches) return
+    const scrollEl = document.getElementById('menu-sections-nav-scroll')
+    const item = scrollEl?.querySelector(`[data-menu-section-nav="${activeId}"]`)
+    if (scrollEl && item) scrollSidebarNavToActiveItem(scrollEl, item)
+  }, [activeId, isSearching])
 
   const searchBlocks = useMemo(
     () => (isSearching ? buildSearchResults(trimmedSearch) : []),
@@ -726,13 +1023,49 @@ export function MenuSection() {
     [searchBlocks],
   )
 
-  const pickSection = (id) => {
-    setActiveId(id)
-    setSearchQuery('')
-    window.history.replaceState(null, '', `#${id}`)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    setSectionsDrawerOpen(false)
-  }
+  /**
+   * Perform the page scroll after effects have flushed.
+   *
+   * Why queueMicrotask instead of scrollIntoView directly:
+   * When called from the bottom sheet, `setSectionsOpen(false)` and `pickSection(id)` are
+   * batched into the same React render. Zag's scroll-lock cleanup runs inside a microtask that
+   * is queued from a `useEffect` in the child SectionJumpStrip component. React runs child
+   * effects before parent effects, so Zag's child-effect microtask is enqueued first.
+   * Our parent-effect microtask is enqueued second — FIFO order ensures Zag's cleanup
+   * (scroll-lock release + iOS scroll restore) finishes before we call scrollIntoView. Without
+   * this, scrollIntoView can no-op because body scroll is still locked, or the iOS restore
+   * undoes the jump.
+   *
+   * Temporarily overriding `html { scroll-behavior: smooth }` makes the jump instant so it
+   * cannot be cancelled by a concurrent smooth-scroll animation.
+   */
+  useEffect(() => {
+    if (!pendingScrollIdRef.current) return
+    const id = pendingScrollIdRef.current
+    pendingScrollIdRef.current = null
+    queueMicrotask(() => {
+      const el = document.getElementById(`menu-${id}`)
+      if (!el) return
+      const html = document.documentElement
+      html.style.scrollBehavior = 'auto'
+      el.scrollIntoView({ block: 'start' })
+      html.style.scrollBehavior = ''
+    })
+  }, [scrollNonce])
+
+  const pickSection = useCallback(
+    (id) => {
+      pauseScrollSpyAfterNav()
+      pendingScrollIdRef.current = id
+      setActiveId(id)
+      setSearchQuery('')
+      window.history.replaceState(null, '', `#${id}`)
+      setScrollNonce((n) => n + 1)
+    },
+    [pauseScrollSpyAfterNav],
+  )
+
+  const sectionNavActiveId = isSearching ? '' : activeId
 
   return (
     <Box as="section" id="menu" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg.subtle">
@@ -749,7 +1082,7 @@ export function MenuSection() {
                 Menu
               </Heading>
               <Text color="fg.muted" fontSize="md" maxW="3xl" lineHeight="tall" mt={3}>
-                Search by dish name, menu number, or Chinese. Or pick a category to browse the full menu.
+                Search by dish name, menu number, or Chinese. Or jump to a category in the full menu below.
               </Text>
             </Box>
             <Button
@@ -814,7 +1147,6 @@ export function MenuSection() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 autoComplete="off"
-                aria-controls="menu-section-panel"
               />
             </InputGroup>
             {isSearching ? (
@@ -826,6 +1158,8 @@ export function MenuSection() {
             ) : null}
           </FieldRoot>
 
+          <SectionJumpStrip activeSectionId={sectionNavActiveId} onPick={pickSection} />
+
           <Flex
             align="flex-start"
             gap={{ base: 6, md: 10 }}
@@ -833,84 +1167,40 @@ export function MenuSection() {
             mx={{ base: -4, md: 0 }}
             px={{ base: 4, md: 0 }}
           >
-            <Button
-              type="button"
-              display={{ base: 'flex', md: 'none' }}
-              variant="outline"
-              colorPalette="green"
-              size="lg"
-              minH="48px"
-              w="full"
-              fontWeight="semibold"
-              onClick={() => setSectionsDrawerOpen(true)}
-              aria-expanded={sectionsDrawerOpen}
-              aria-controls="menu-sections-drawer"
-              aria-haspopup="dialog"
-            >
-              <Box as="span" lineHeight={0} aria-hidden flexShrink={0}>
-                <MdList size={22} />
-              </Box>
-              <Text as="span" ml={2}>
-                Browse sections
-              </Text>
-              <Text as="span" ml="auto" fontSize="sm" fontWeight="normal" color="fg.muted" truncate maxW="45%">
-                {isSearching ? 'Search results' : activeSection?.titleEn}
-              </Text>
-            </Button>
-
-            <DrawerRoot
-              open={sectionsDrawerOpen}
-              onOpenChange={(e) => setSectionsDrawerOpen(e.open)}
-              placement="start"
-              closeOnInteractOutside
-            >
-              <DrawerBackdrop />
-              <DrawerPositioner
-                onPointerDown={(e) => {
-                  if (e.target === e.currentTarget) setSectionsDrawerOpen(false)
-                }}
-              >
-                <DrawerContent id="menu-sections-drawer" maxW="min(100vw, 320px)">
-                  <DrawerHeader borderBottomWidth="1px" borderColor="border">
-                    <DrawerTitle>Sections</DrawerTitle>
-                    <DrawerCloseTrigger asChild position="absolute" top="3" insetEnd="3">
-                      <CloseButton
-                        size="md"
-                        aria-label="Close sections list"
-                        variant="ghost"
-                        colorPalette="green"
-                      />
-                    </DrawerCloseTrigger>
-                  </DrawerHeader>
-                  <DrawerBody py={4}>
-                    <SectionNavList
-                      activeSectionId={isSearching ? '' : activeSection?.id}
-                      onPick={pickSection}
-                      tabIdPrefix="menu-drawer-tab"
-                    />
-                  </DrawerBody>
-                </DrawerContent>
-              </DrawerPositioner>
-            </DrawerRoot>
-
             <Box
               as="nav"
-              display={{ base: 'none', md: 'block' }}
+              display={{ base: 'none', md: 'flex' }}
+              flexDirection="column"
               aria-label="Menu sections"
+              position={{ md: 'sticky' }}
+              top={{ md: '4.5rem' }}
+              alignSelf={{ md: 'flex-start' }}
+              maxH={{ md: 'calc(100dvh - 5rem)' }}
+              minH={0}
               w="260px"
               flexShrink={0}
               borderRightWidth="1px"
               borderColor="border"
               pr={6}
+              pb={{ md: 2 }}
             >
-              <Text fontSize="sm" fontWeight="semibold" color="fg.muted" mb={3}>
+              <Text flexShrink={0} fontSize="sm" fontWeight="semibold" color="fg.muted" mb={3}>
                 Sections
               </Text>
-              <SectionNavList
-                activeSectionId={isSearching ? '' : activeSection?.id}
-                onPick={pickSection}
-                tabIdPrefix="menu-tab"
-              />
+              <Box
+                id="menu-sections-nav-scroll"
+                flex="1"
+                minH={0}
+                overflowY={{ md: 'auto' }}
+                overflowX="hidden"
+                css={{
+                  scrollbarWidth: 'thin',
+                  overscrollBehavior: 'contain',
+                  WebkitOverflowScrolling: 'touch',
+                }}
+              >
+                <SectionNavList activeSectionId={sectionNavActiveId} onPick={pickSection} />
+              </Box>
             </Box>
 
             <Box
@@ -918,17 +1208,16 @@ export function MenuSection() {
               minW={0}
               w={{ base: 'full', md: 'auto' }}
               id="menu-section-panel"
-              role="tabpanel"
-              aria-label={
-                isSearching
-                  ? `Search results for ${trimmedSearch}`
-                  : `Dishes in ${activeSection?.titleEn ?? 'category'}`
-              }
+              aria-label={isSearching ? `Search results for ${trimmedSearch}` : 'Full menu by section'}
             >
               {isSearching ? (
                 <MenuSearchResultsPanel blocks={searchBlocks} query={trimmedSearch} />
               ) : (
-                <MenuSectionPanel section={activeSection} />
+                <VStack align="stretch" gap={{ base: 10, md: 14 }} w="full">
+                  {MENU_SECTIONS.map((section) => (
+                    <MenuSectionPanel key={section.id} section={section} />
+                  ))}
+                </VStack>
               )}
             </Box>
           </Flex>

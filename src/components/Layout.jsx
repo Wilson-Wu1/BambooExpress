@@ -50,97 +50,99 @@ export function Layout() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduceMotion ? 0 : 0.42, ease: EASE_OUT }}
       >
-        <Container maxW="container.lg" py={3}>
-          <Flex align="center" justify="space-between" gap={4}>
-            <Box
-              as={RouterLink}
-              to="/"
-              onClick={closeDrawer}
-              display="flex"
-              alignItems="center"
-              gap={{ base: 2, md: 3 }}
-              fontWeight="bold"
-              fontSize="lg"
-              color="green.800"
-              letterSpacing="tight"
-              minH="44px"
-              _hover={{ opacity: 0.9 }}
-            >
-              <Image
-                src="/bamboo-logo.png"
-                alt="Bamboo Express Ltd. — Oriental take out"
-                h={{ base: '38px', md: '44px' }}
-                w={{ base: '38px', md: '44px' }}
-                fit="contain"
-                flexShrink={0}
-                draggable={false}
-              />
-              <Text as="span">Bamboo Express</Text>
-            </Box>
-
-            <HStack gap={{ base: 2, md: 3 }} align="center" flexShrink={0}>
-              <HStack gap={1} display={{ base: 'none', md: 'flex' }}>
-                <NavLinks />
-              </HStack>
-
-              <Link
-                href={PHONE_HREF}
-                display="inline-flex"
+        <Box px={4}>
+          <Container maxW="7xl" py={{ base: 4, md: 3 }}>
+            <Flex align="center" justify="space-between" gap={4}>
+              <Box
+                as={RouterLink}
+                to="/"
+                onClick={closeDrawer}
+                display="flex"
                 alignItems="center"
-                gap={1.5}
-                fontWeight="semibold"
-                fontSize={{ base: 'sm', md: 'md' }}
+                gap={{ base: 2, md: 3 }}
+                fontWeight="bold"
+                fontSize="lg"
                 color="green.800"
-                textDecoration="underline"
-                px={{ base: 1, md: 2 }}
-                py={2}
-                borderRadius="md"
+                letterSpacing="tight"
                 minH="44px"
-                _hover={{ color: 'green.700', bg: 'bg.muted' }}
-                aria-label={`Call Bamboo Express at ${PHONE_DISPLAY}`}
+                _hover={{ opacity: 0.9 }}
               >
-                <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>
-                  <MdPhone size={20} />
-                </Box>
-                {PHONE_DISPLAY}
-              </Link>
+                <Image
+                  src="/bamboo-logo.png"
+                  alt="Bamboo Express Ltd. — Oriental take out"
+                  h={{ base: '38px', md: '44px' }}
+                  w={{ base: '38px', md: '44px' }}
+                  fit="contain"
+                  flexShrink={0}
+                  draggable={false}
+                />
+                <Text as="span">Bamboo Express</Text>
+              </Box>
 
-              <DrawerRoot open={drawerOpen} onOpenChange={(e) => setDrawerOpen(e.open)}>
-                <DrawerTrigger asChild display={{ base: 'inline-flex', md: 'none' }}>
-                  <IconButton
-                    aria-label="Open navigation menu"
-                    variant="ghost"
-                    size="md"
-                    minW="44px"
-                    minH="44px"
-                    colorPalette="green"
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                </DrawerTrigger>
-                <DrawerBackdrop />
-                <DrawerPositioner>
-                  <DrawerContent>
-                    <DrawerHeader>
-                      <DrawerTitle>Navigate</DrawerTitle>
-                      <DrawerCloseTrigger asChild position="absolute" top="3" insetEnd="3">
-                        <CloseButton
-                          size="md"
-                          aria-label="Close navigation"
-                          variant="ghost"
-                          colorPalette="green"
-                        />
-                      </DrawerCloseTrigger>
-                    </DrawerHeader>
-                    <DrawerBody pt={2}>
-                      <NavLinks onNavigate={closeDrawer} direction="column" />
-                    </DrawerBody>
-                  </DrawerContent>
-                </DrawerPositioner>
-              </DrawerRoot>
-            </HStack>
-          </Flex>
-        </Container>
+              <HStack gap={{ base: 2, md: 3 }} align="center" flexShrink={0}>
+                <HStack gap={1} display={{ base: 'none', md: 'flex' }}>
+                  <NavLinks />
+                </HStack>
+
+                <Link
+                  href={PHONE_HREF}
+                  display="inline-flex"
+                  alignItems="center"
+                  gap={1.5}
+                  fontWeight="semibold"
+                  fontSize={{ base: 'sm', md: 'md' }}
+                  color="green.800"
+                  textDecoration="underline"
+                  px={{ base: 1, md: 2 }}
+                  py={2}
+                  borderRadius="md"
+                  minH="44px"
+                  _hover={{ color: 'green.700', bg: 'bg.muted' }}
+                  aria-label={`Call Bamboo Express at ${PHONE_DISPLAY}`}
+                >
+                  <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>
+                    <MdPhone size={20} />
+                  </Box>
+                  {PHONE_DISPLAY}
+                </Link>
+
+                <DrawerRoot open={drawerOpen} onOpenChange={(e) => setDrawerOpen(e.open)}>
+                  <DrawerTrigger asChild display={{ base: 'inline-flex', md: 'none' }}>
+                    <IconButton
+                      aria-label="Open navigation menu"
+                      variant="ghost"
+                      size="md"
+                      minW="44px"
+                      minH="44px"
+                      colorPalette="green"
+                    >
+                      <MenuIcon />
+                    </IconButton>
+                  </DrawerTrigger>
+                  <DrawerBackdrop />
+                  <DrawerPositioner>
+                    <DrawerContent>
+                      <DrawerHeader>
+                        <DrawerTitle>Navigate</DrawerTitle>
+                        <DrawerCloseTrigger asChild position="absolute" top="3" insetEnd="3">
+                          <CloseButton
+                            size="md"
+                            aria-label="Close navigation"
+                            variant="ghost"
+                            colorPalette="green"
+                          />
+                        </DrawerCloseTrigger>
+                      </DrawerHeader>
+                      <DrawerBody pt={2}>
+                        <NavLinks onNavigate={closeDrawer} direction="column" />
+                      </DrawerBody>
+                    </DrawerContent>
+                  </DrawerPositioner>
+                </DrawerRoot>
+              </HStack>
+            </Flex>
+          </Container>
+        </Box>
       </MotionBox>
 
       <Box as="main" flex="1">
