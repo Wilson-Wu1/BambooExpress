@@ -51,16 +51,17 @@ function OptionCard({ title, icon, prominentBadge, badges, children, itemVariant
       </Flex>
       {prominentBadge ? (
         <Badge
-          size="lg"
-          px={3}
+          colorPalette="green"
+          variant="surface"
+          size="md"
+          px={2.5}
           py={1}
           borderRadius="md"
-          fontWeight="bold"
+          fontWeight="semibold"
           fontSize="sm"
           mb={3}
           w="fit-content"
-          bg="green.700"
-          color="white"
+          cursor="default"
         >
           {prominentBadge}
         </Badge>
@@ -70,13 +71,14 @@ function OptionCard({ title, icon, prominentBadge, badges, children, itemVariant
           {badges.map((label) => (
             <Badge
               key={label}
-              size="sm"
+              colorPalette="green"
+              variant="subtle"
+              fontSize="xs"
               px={2}
               py={0.5}
               borderRadius="md"
-              bg="#1c9931"
-              color="white"
               fontWeight="semibold"
+              cursor="default"
             >
               {label}
             </Badge>

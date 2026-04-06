@@ -147,7 +147,7 @@ function splitMenuPriceRows(price) {
   return price.split(PRICE_SPLIT_RE).map((s) => s.trim()).filter(Boolean)
 }
 
-function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt }) {
+function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhotoInline = false }) {
   const hasPhoto = Boolean(imageSrc && imageAlt)
   const [photoOpen, setPhotoOpen] = useState(false)
   const priceRows = splitMenuPriceRows(price)
@@ -181,13 +181,36 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt }) {
         onKeyDown={hasPhoto ? onPhotoKeyDown : undefined}
         role={hasPhoto ? 'button' : undefined}
         tabIndex={hasPhoto ? 0 : undefined}
-        aria-label={hasPhoto ? `View photo of ${en}` : undefined}
+        aria-label={hasPhoto ? (showPhotoInline ? `Enlarge photo of ${en}` : `View photo of ${en}`) : undefined}
         _focusVisible={
           hasPhoto
             ? { outline: '2px solid', outlineColor: 'green.600', outlineOffset: '2px' }
             : undefined
         }
       >
+        {showPhotoInline && hasPhoto ? (
+          <Box
+            mb={3}
+            mx={{ base: -4, md: -4 }}
+            mt={{ base: -4, md: -4 }}
+            borderTopRadius="lg"
+            overflow="hidden"
+            flexShrink={0}
+            w="auto"
+            lineHeight={0}
+            bg="bg.muted"
+          >
+            <Image
+              src={imageSrc}
+              alt={imageAlt}
+              w="full"
+              aspectRatio={4 / 3}
+              objectFit="cover"
+              maxH={{ base: '200px', sm: '220px', md: '240px' }}
+              display="block"
+            />
+          </Box>
+        ) : null}
         {multiSizeLayout ? (
           <Flex justify="space-between" align="flex-start" gap={3} mb={1} flexWrap="wrap">
             <VStack align="flex-start" gap={1} flex="1" minW={0}>
@@ -292,12 +315,12 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt }) {
           </>
         )}
         {hasPhoto ? (
-          <Flex mt="auto" pt={3} justify="flex-end" align="center" gap={2} color="green.700" userSelect="none">
+          <Flex mt="auto" pt={showPhotoInline ? 2 : 3} justify="flex-end" align="center" gap={2} color="green.700" userSelect="none">
             <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>
               <MdPhotoCamera size={17} />
             </Box>
             <Text fontSize="xs" fontWeight="medium">
-              View photo
+              {showPhotoInline ? 'Enlarge' : 'View photo'}
             </Text>
           </Flex>
         ) : null}
@@ -389,8 +412,10 @@ function DinnerComboCard({ combo, compact = false, dense = false }) {
       w="full"
     >
       <Flex
-        bg="green.700"
-        color="white"
+        bg="green.50"
+        borderWidth="1px"
+        borderColor="green.800"
+        borderTopRadius={cardRadius}
         px={{ base: dense ? 3 : 4, md: dense ? 4 : 5 }}
         py={dense ? 2 : 3}
         justify="space-between"
@@ -399,14 +424,25 @@ function DinnerComboCard({ combo, compact = false, dense = false }) {
         flexWrap="wrap"
       >
         <VStack align="flex-start" gap={dense ? 0 : 0.5}>
-          <Heading as="h4" size={headingSize} fontWeight="bold" lineHeight={dense ? 'short' : undefined}>
+          <Heading
+            as="h4"
+            size={headingSize}
+            fontWeight="bold"
+            lineHeight={dense ? 'short' : undefined}
+            color="green.900"
+          >
             {headlineEn}
           </Heading>
-          <Text fontSize={dense ? 'xs' : 'sm'} opacity={0.92} lang="zh-Hant" lineHeight={dense ? 'short' : undefined}>
+          <Text
+            fontSize={dense ? 'xs' : 'sm'}
+            lang="zh-Hant"
+            lineHeight={dense ? 'short' : undefined}
+            color="green.800"
+          >
             {headlineZh}
           </Text>
         </VStack>
-        <Text fontWeight="bold" fontSize={priceSize} whiteSpace="nowrap" color="white">
+        <Text fontWeight="bold" fontSize={priceSize} whiteSpace="nowrap" color="green.900">
           {price}
         </Text>
       </Flex>
@@ -528,10 +564,9 @@ function SectionJumpStrip({ activeSectionId, onPick }) {
       display={{ base: 'block', md: 'none' }}
       position="sticky"
       zIndex={11}
-      top={{ base: 'calc(4.75rem + env(safe-area-inset-top, 0px))', md: '4.5rem' }}
+      top={{ base: '52px', md: '4.5rem' }}
       py={2.5}
-      mb={2}
-      mx={{ base: -4, md: 0 }}
+      mx={{ base: -8, md: 0 }}
       px={{ base: 4, md: 0 }}
       bg="bg.subtle/95"
       backdropFilter="blur(10px)"
@@ -553,11 +588,10 @@ function SectionJumpStrip({ activeSectionId, onPick }) {
             display="flex"
             alignItems="center"
             alignSelf="stretch"
-            pr={2}
-            mr={1}
+   
             bg="bg.subtle/95"
-            backdropFilter="blur(10px)"
-            boxShadow="8px 0 14px -6px rgba(0, 0, 0, 0.08)"
+ 
+
           >
             <DrawerTrigger asChild>
               <IconButton
@@ -820,6 +854,7 @@ function MenuSectionPanel({ section }) {
               spicy={item.spicy}
               imageSrc={item.imageSrc}
               imageAlt={item.imageAlt}
+              showPhotoInline={section.id === 'highlights'}
             />
           ))}
         </SimpleGrid>
@@ -877,6 +912,7 @@ function menuSearchResultCells(section, items) {
           spicy={item.spicy}
           imageSrc={item.imageSrc}
           imageAlt={item.imageAlt}
+          showPhotoInline={section.id === 'highlights'}
         />,
       )
     }
@@ -1103,7 +1139,7 @@ export function MenuSection() {
   const sectionNavActiveId = isSearching ? '' : activeId
 
   return (
-    <Box as="section" id="menu" scrollMarginTop="5rem" py={{ base: 12, md: 16 }} px={4} bg="bg.subtle">
+    <Box as="section" id="menu" scrollMarginTop="5rem" py={4} px={4} bg="bg.subtle">
       <Container maxW="7xl">
         <VStack align="stretch" gap={{ base: 6, md: 8 }}>
           <Flex
@@ -1116,9 +1152,7 @@ export function MenuSection() {
               <Heading as="h2" size="2xl" fontWeight="bold">
                 Menu
               </Heading>
-              <Text color="fg.muted" fontSize="md" maxW="3xl" lineHeight="tall" mt={3}>
-                Search by dish name, menu number, or Chinese. Or jump to a category in the full menu below.
-              </Text>
+             
             </Box>
             <Button
               asChild

@@ -51,8 +51,8 @@ export function Layout() {
         transition={{ duration: reduceMotion ? 0 : 0.42, ease: EASE_OUT }}
       >
         <Box px={4}>
-          <Container maxW="7xl" py={{ base: 4, md: 3 }}>
-            <Flex align="center" justify="space-between" gap={4}>
+          <Container maxW="7xl" py={{ base: 1, md: 3 }}>
+            <Flex align="center" justify="space-between" gap={4} minW={0}>
               <Box
                 as={RouterLink}
                 to="/"
@@ -60,11 +60,17 @@ export function Layout() {
                 display="flex"
                 alignItems="center"
                 gap={{ base: 2, md: 3 }}
+                flex={{ base: '1', md: 'none' }}
+                minW={{ base: 0, md: 'unset' }}
                 fontWeight="bold"
-                fontSize="lg"
                 color="green.800"
                 letterSpacing="tight"
                 minH="44px"
+                css={{
+                  '@media (max-width: 767px)': {
+                    containerType: 'inline-size',
+                  },
+                }}
                 _hover={{ opacity: 0.9 }}
               >
                 <Image
@@ -76,7 +82,20 @@ export function Layout() {
                   flexShrink={0}
                   draggable={false}
                 />
-                <Text as="span">Bamboo Express</Text>
+                <Text
+                  as="span"
+                  whiteSpace="nowrap"
+                  minW={{ base: 0, md: 'unset' }}
+                  lineHeight="shorter"
+                  css={{
+                    fontSize: '1.125rem',
+                    '@media (max-width: 767px)': {
+                      fontSize: 'clamp(0.75rem, 0.5rem + 5cqi, 1.125rem)',
+                    },
+                  }}
+                >
+                  Bamboo Express
+                </Text>
               </Box>
 
               <HStack gap={{ base: 2, md: 3 }} align="center" flexShrink={0}>
@@ -86,14 +105,14 @@ export function Layout() {
 
                 <Link
                   href={PHONE_HREF}
-                  display="inline-flex"
+                  display={{ base: 'none', md: 'inline-flex' }}
                   alignItems="center"
                   gap={1.5}
                   fontWeight="semibold"
-                  fontSize={{ base: 'sm', md: 'md' }}
+                  fontSize="md"
                   color="green.800"
                   textDecoration="underline"
-                  px={{ base: 1, md: 2 }}
+                  px={2}
                   py={2}
                   borderRadius="md"
                   minH="44px"
@@ -150,6 +169,42 @@ export function Layout() {
       </Box>
 
       <SiteFooter />
+
+      <Box
+        display={{
+          base: drawerOpen ? 'none' : 'block',
+          md: 'none',
+        }}
+        position="fixed"
+        zIndex={20}
+        bottom="calc(1rem + env(safe-area-inset-bottom, 0px))"
+        right="calc(1rem + env(safe-area-inset-right, 0px))"
+      >
+        <Link
+          href={PHONE_HREF}
+          display="inline-flex"
+          alignItems="center"
+          gap={2}
+          bg="green.700"
+          color="white"
+          px={4}
+          py={3}
+          borderRadius="full"
+          fontWeight="semibold"
+          fontSize="sm"
+          textDecoration="none"
+          boxShadow="lg"
+          minH="48px"
+          _hover={{ bg: 'green.800', color: 'white' }}
+          _active={{ bg: 'green.900' }}
+          aria-label={`Call Bamboo Express at ${PHONE_DISPLAY}`}
+        >
+          <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>
+            <MdPhone size={22} />
+          </Box>
+          {PHONE_DISPLAY}
+        </Link>
+      </Box>
     </Box>
   )
 }

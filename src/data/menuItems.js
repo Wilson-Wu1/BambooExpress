@@ -10,6 +10,40 @@ export const MENU_SECTION_NOTES = {
 
 export const MENU_SECTIONS = [
   {
+    "id": "highlights",
+    "titleEn": "Most Popular",
+    "titleZh": "最受欢迎",
+    "items": [
+      {
+        "num": "157",
+        "en": "Sweet & Sour Pork",
+        "zh": "甜酸肉",
+        "price": "$15.75",
+        "imageSrc": "/popular-dishes/157-sweet-sour-pork.jpg",
+        "imageAlt":
+          "Sweet and sour pork with bell peppers and onion in a glossy red-orange sauce, in a black takeout container on a stainless counter; photo includes a printed label reading CANTONESE SWEET & SOUR PORK."
+      },
+      {
+        "num": "45",
+        "en": "Japanese Style Chow Mein",
+        "zh": "日式炒麵",
+        "price": "$14.95",
+        "imageSrc": "/popular-dishes/45-japanese-style-chow-mein.jpg",
+        "imageAlt":
+          "Japanese-style chow mein with egg noodles, julienned carrots, bean sprouts, and meat in a rectangular aluminum foil takeout container, top-down view."
+      },
+      {
+        "num": "124",
+        "en": "Beef w/ Broccoli",
+        "zh": "百家利牛肉",
+        "price": "$16.50",
+        "imageSrc": "/popular-dishes/124-beef-with-broccoli.jpg",
+        "imageAlt":
+          "Beef with broccoli in sauce in a takeout container; restaurant-style Chinese dish."
+      }
+    ]
+  },
+  {
     "id": "dinner-combos",
     "titleEn": "Dinner Combinations",
     "titleZh": "套餐",
@@ -152,6 +186,7 @@ export const MENU_SECTIONS = [
       }
     ]
   },
+ 
   {
     "id": "appetizers",
     "titleEn": "Appetizers",
