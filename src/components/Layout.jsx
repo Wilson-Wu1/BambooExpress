@@ -111,12 +111,12 @@ export function Layout() {
                   fontWeight="semibold"
                   fontSize="md"
                   color="green.800"
-                  textDecoration="underline"
+                  textDecoration="none"
                   px={2}
                   py={2}
                   borderRadius="md"
                   minH="44px"
-                  _hover={{ color: 'green.700', bg: 'bg.muted' }}
+                  _hover={{ color: 'green.700', bg: 'bg.muted', textDecoration: 'none' }}
                   aria-label={`Call Bamboo Express at ${PHONE_DISPLAY}`}
                 >
                   <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>

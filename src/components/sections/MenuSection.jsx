@@ -122,6 +122,10 @@ function buildSearchResults(trimmed) {
 /** Ignore scroll-spy while smooth-scrolling after a nav click (avoids fighting `activeId`). */
 const SCROLL_SPY_PAUSE_AFTER_NAV_MS = 1100
 
+/** Sticky menu toolbar offset below site header on md+; keep in sync with `#menu-sticky-toolbar` `top`. */
+const MENU_STICKY_TOOLBAR_TOP_MD = '68px'
+const MENU_STICKY_TOOLBAR_TOP_MD_PX = 68
+
 const SIDEBAR_NAV_EDGE_PAD = 8
 
 /** Scroll the desktop sections list so the active item stays visible; only mutates `containerEl.scrollTop`. */
@@ -544,7 +548,7 @@ function DinnerCombosColumn({ sectionId, items }) {
   )
 }
 
-/** Sticky horizontal section labels (mobile only); list control opens a bottom sheet with all sections. */
+/** Horizontal section labels (mobile only); list control opens a bottom sheet. Sticky chrome lives on the parent toolbar. */
 function SectionJumpStrip({ activeSectionId, onPick }) {
   const [sectionsOpen, setSectionsOpen] = useState(false)
 
@@ -560,26 +564,14 @@ function SectionJumpStrip({ activeSectionId, onPick }) {
   }
 
   return (
-    <Box
-      display={{ base: 'block', md: 'none' }}
-      position="sticky"
-      zIndex={11}
-      top={{ base: '52px', md: '4.5rem' }}
-      py={2.5}
-      mx={{ base: -8, md: 0 }}
-      px={{ base: 4, md: 0 }}
-      bg="bg.subtle/95"
-      backdropFilter="blur(10px)"
-      borderBottomWidth="1px"
-      borderColor="border"
-    >
+    <Box display={{ base: 'block', md: 'none' }}>
       <DrawerRoot
         open={sectionsOpen}
         restoreFocus={false}
         onOpenChange={(e) => setSectionsOpen(e.open)}
         placement="bottom"
       >
-        <Flex align="stretch" gap={0} minH="40px">
+        <Flex align="stretch" gap={0} minH="40px" py={2.5}>
           <Box
             flexShrink={0}
             position="sticky"
@@ -811,7 +803,7 @@ function MenuSectionPanel({ section }) {
   }
 
   return (
-    <Box id={`menu-${section.id}`} scrollMarginTop={{ base: '10rem', md: '7rem' }} w="full">
+    <Box id={`menu-${section.id}`} scrollMarginTop={{ base: '14rem', md: '10rem' }} w="full">
       <Box
         bg="green.700"
         color="white"
@@ -935,7 +927,7 @@ function MenuSearchResultsPanel({ blocks, query }) {
   return (
     <VStack align="stretch" gap={{ base: 8, md: 10 }}>
       {blocks.map(({ section, items }) => (
-        <Box key={section.id} scrollMarginTop={{ base: '10rem', md: '7rem' }}>
+        <Box key={section.id} scrollMarginTop={{ base: '14rem', md: '10rem' }}>
           <Flex
             align="baseline"
             flexWrap="wrap"
@@ -975,6 +967,9 @@ export function MenuSection() {
    */
   const pendingScrollIdRef = useRef(null)
   const [scrollNonce, setScrollNonce] = useState(0)
+  const menuStickyToolbarRef = useRef(null)
+  /** Header offset + sticky toolbar height (px); desktop sidebar `top` / `maxH` so nav clears the search bar. */
+  const [desktopNavStickyInsetPx, setDesktopNavStickyInsetPx] = useState(null)
 
   const pauseScrollSpyAfterNav = useCallback(() => {
     scrollSpySuspendedRef.current = true
@@ -995,6 +990,30 @@ export function MenuSection() {
       if (scrollSpyResumeTimerRef.current != null) {
         clearTimeout(scrollSpyResumeTimerRef.current)
       }
+    }
+  }, [])
+
+  useLayoutEffect(() => {
+    const toolbar = menuStickyToolbarRef.current
+    if (!toolbar || typeof ResizeObserver === 'undefined') return undefined
+
+    const mq = window.matchMedia('(min-width: 48em)')
+    const update = () => {
+      if (!mq.matches) {
+        setDesktopNavStickyInsetPx(null)
+        return
+      }
+      setDesktopNavStickyInsetPx(MENU_STICKY_TOOLBAR_TOP_MD_PX + toolbar.offsetHeight)
+    }
+
+    const ro = new ResizeObserver(() => update())
+    ro.observe(toolbar)
+    mq.addEventListener('change', update)
+    update()
+
+    return () => {
+      ro.disconnect()
+      mq.removeEventListener('change', update)
     }
   }, [])
 
@@ -1020,13 +1039,19 @@ export function MenuSection() {
     return () => window.removeEventListener('hashchange', applyHash)
   }, [pauseScrollSpyAfterNav])
 
-  /** Highlight the chip for whichever section has crossed below the sticky header + jump strip. */
+  /** Highlight the chip for whichever section has crossed below the sticky header + menu toolbar. */
   useEffect(() => {
     if (isSearching) return undefined
 
-    /** Higher = activate sooner (section top may still be farther below the viewport top). */
-    const activationLinePx = () =>
-      window.matchMedia('(max-width: 767px)').matches ? 252 : 152
+    /** Viewport Y (px) at or below which the active section updates; derived from the sticky toolbar bottom edge. */
+    const activationLinePx = () => {
+      const el = menuStickyToolbarRef.current
+      if (el) {
+        const bottom = el.getBoundingClientRect().bottom
+        if (Number.isFinite(bottom)) return Math.max(0, bottom)
+      }
+      return window.matchMedia('(max-width: 767px)').matches ? 252 : 152
+    }
 
     let rafId = 0
     const tick = () => {
@@ -1183,51 +1208,66 @@ export function MenuSection() {
             </Button>
           </Flex>
 
-          <FieldRoot maxW={{ base: 'full', md: '36rem' }}>
-            <FieldLabel htmlFor="menu-search-input" fontWeight="semibold" fontSize="sm" mb={2}>
-              Search menu
-            </FieldLabel>
-            <InputGroup
-              startElement={
-                <Box as="span" lineHeight={0} color="fg.muted" aria-hidden>
-                  <MdSearch size={20} />
-                </Box>
-              }
-              endElement={
-                trimmedSearch ? (
-                  <IconButton
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    aria-label="Clear search"
-                    colorPalette="gray"
-                    onClick={() => setSearchQuery('')}
-                  >
-                    <Box as="span" lineHeight={0} aria-hidden>
-                      <MdClose size={20} />
+          <Box
+            ref={menuStickyToolbarRef}
+            id="menu-sticky-toolbar"
+            position="sticky"
+            zIndex={11}
+            top={{ base: '52px', md: MENU_STICKY_TOOLBAR_TOP_MD }}
+            mx={{ base: -8, md: 0 }}
+            px={{ base: 4, md: 0 }}
+            pt={{ base: 2, md: 2 }}
+            pb={{ base: 0, md: 2 }}
+            bg="bg.subtle/95"
+            backdropFilter="blur(10px)"
+            borderBottomWidth="1px"
+            borderColor="border"
+          >
+            <VStack align="stretch" gap={{ base: 1, md: 0 }}>
+              <FieldRoot maxW={{ base: 'full', md: '36rem' }}>
+                <InputGroup
+                  startElement={
+                    <Box as="span" lineHeight={0} color="fg.muted" aria-hidden>
+                      <MdSearch size={20} />
                     </Box>
-                  </IconButton>
-                ) : undefined
-              }
-            >
-              <Input
-                id="menu-search-input"
-                placeholder="e.g. wonton, 雲吞, 12…"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                autoComplete="off"
-              />
-            </InputGroup>
-            {isSearching ? (
-              <Text fontSize="sm" color="fg.muted" mt={2} aria-live="polite">
-                {searchResultCount === 0
-                  ? 'No matches'
-                  : `${searchResultCount} match${searchResultCount === 1 ? '' : 'es'}`}
-              </Text>
-            ) : null}
-          </FieldRoot>
+                  }
+                  endElement={
+                    trimmedSearch ? (
+                      <IconButton
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        aria-label="Clear search"
+                        colorPalette="gray"
+                        onClick={() => setSearchQuery('')}
+                      >
+                        <Box as="span" lineHeight={0} aria-hidden>
+                          <MdClose size={20} />
+                        </Box>
+                      </IconButton>
+                    ) : undefined
+                  }
+                >
+                  <Input
+                    id="menu-search-input"
+                    placeholder="Search by dish name or menu number"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    autoComplete="off"
+                  />
+                </InputGroup>
+                {isSearching ? (
+                  <Text fontSize="sm" color="fg.muted" mt={2} aria-live="polite">
+                    {searchResultCount === 0
+                      ? 'No matches'
+                      : `${searchResultCount} match${searchResultCount === 1 ? '' : 'es'}`}
+                  </Text>
+                ) : null}
+              </FieldRoot>
 
-          <SectionJumpStrip activeSectionId={sectionNavActiveId} onPick={pickSection} />
+              <SectionJumpStrip activeSectionId={sectionNavActiveId} onPick={pickSection} />
+            </VStack>
+          </Box>
 
           <Flex
             align="flex-start"
@@ -1235,6 +1275,7 @@ export function MenuSection() {
             direction={{ base: 'column', md: 'row' }}
             mx={{ base: -4, md: 0 }}
             px={{ base: 4, md: 0 }}
+            pt={{ base: 4, md: 0 }}
           >
             <Box
               as="nav"
@@ -1242,9 +1283,19 @@ export function MenuSection() {
               flexDirection="column"
               aria-label="Menu sections"
               position={{ md: 'sticky' }}
-              top={{ md: '4.5rem' }}
+              top={{
+                md:
+                  desktopNavStickyInsetPx != null
+                    ? `${desktopNavStickyInsetPx}px`
+                    : `calc(${MENU_STICKY_TOOLBAR_TOP_MD} + 4.5rem)`,
+              }}
               alignSelf={{ md: 'flex-start' }}
-              maxH={{ md: 'calc(100dvh - 5rem)' }}
+              maxH={{
+                md:
+                  desktopNavStickyInsetPx != null
+                    ? `calc(100dvh - ${desktopNavStickyInsetPx}px - 1rem)`
+                    : 'calc(100dvh - 5rem)',
+              }}
               minH={0}
               w="260px"
               flexShrink={0}
@@ -1253,7 +1304,7 @@ export function MenuSection() {
               pr={6}
               pb={{ md: 2 }}
             >
-              <Text flexShrink={0} fontSize="sm" fontWeight="semibold" color="fg.muted" mb={3}>
+              <Text flexShrink={0} fontSize="sm" fontWeight="semibold" color="fg.muted" mb={3} mt={3}>
                 Sections
               </Text>
               <Box

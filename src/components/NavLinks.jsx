@@ -14,6 +14,7 @@ const navLinkStyles = {
   minH: '44px',
   display: 'inline-flex',
   alignItems: 'center',
+  fontSize: 'sm',
   fontWeight: 'medium',
   color: 'fg',
   transitionProperty: 'background-color, color',
