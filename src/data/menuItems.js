@@ -4,11 +4,189 @@
  * Each section: titleEn, titleZh. Each item: en, zh (English first).
  */
 export const MENU_SECTION_NOTES = {
-  "cantonese-chow-mein": "Above items with black bean sauce: add $1.00.",
-  "rice-plates": "Change to fried rice: add $1.00."
+  "cantonese-chow-mein": "Add black bean sauce: +$1.00 / 加豉汁 +$1.00",
+  "rice-plates": "Change to fried rice: +$1.00 / 炒饭底加 $1.00"
 }
 
 export const MENU_SECTIONS = [
+  {
+    "id": "highlights",
+    "titleEn": "Most Popular",
+    "titleZh": "最受欢迎",
+    "items": [
+      {
+        "num": "157",
+        "en": "Sweet & Sour Pork",
+        "zh": "甜酸肉",
+        "price": "$15.75",
+        "imageSrc": "/popular-dishes/157-sweet-sour-pork.jpg",
+        "imageAlt":
+          "Sweet and sour pork with bell peppers and onion in a glossy red-orange sauce, in a black takeout container on a stainless counter; photo includes a printed label reading CANTONESE SWEET & SOUR PORK."
+      },
+      {
+        "num": "45",
+        "en": "Japanese Style Chow Mein",
+        "zh": "日式炒麵",
+        "price": "$14.95",
+        "imageSrc": "/popular-dishes/45-japanese-style-chow-mein.jpg",
+        "imageAlt":
+          "Japanese-style chow mein with egg noodles, julienned carrots, bean sprouts, and meat in a rectangular aluminum foil takeout container, top-down view."
+      },
+      {
+        "num": "124",
+        "en": "Beef w/ Broccoli",
+        "zh": "百家利牛肉",
+        "price": "$16.50",
+        "imageSrc": "/popular-dishes/124-beef-with-broccoli.jpg",
+        "imageAlt":
+          "Beef with broccoli in sauce in a takeout container; restaurant-style Chinese dish."
+      }
+    ]
+  },
+  {
+    "id": "dinner-combos",
+    "titleEn": "Dinner Combinations",
+    "titleZh": "套餐",
+    "items": [
+      {
+        "type": "dinner_combo",
+        "headlineEn": "Dinner For One",
+        "headlineZh": "一人晚餐",
+        "price": "$15.75",
+        "hintEn": "Choose 1 of 4 combinations.",
+        "layout": "four_options",
+        "options": [
+          {
+            "label": "# 1",
+            "dishes": ["Western Chicken Chow Mein", "S & S Pork", "Pork Fried Rice"]
+          },
+          {
+            "label": "# 2",
+            "dishes": ["Deep Fried Prawns", "Western Chicken Chow Mein", "S & S Pork"]
+          },
+          {
+            "label": "# 3",
+            "dishes": ["Beef Chop Suey", "Western Chicken Chow Mein", "Pork Foo Young"]
+          },
+          {
+            "label": "# 4",
+            "dishes": ["Pork Fried Rice", "Deep Fried Prawns", "Western Chicken Chow Mein"]
+          }
+        ]
+      },
+      {
+        "type": "dinner_combo",
+        "headlineEn": "Dinner For Two",
+        "headlineZh": "二人晚餐",
+        "price": "$44.95",
+        "hintEn": "Choose Style A or Style B.",
+        "layout": "style_ab",
+        "options": [
+          {
+            "label": "Style A",
+            "dishes": [
+              "Spring Roll (2 rolls)",
+              "Lemon Chicken",
+              "Prawn Mixed Vegetables",
+              "B.B.Q. Pork Fried Rice"
+            ]
+          },
+          {
+            "label": "Style B",
+            "dishes": [
+              "Spring Roll (2 rolls)",
+              "Beef w/ Broccoli",
+              "Cantonese S&S Pork",
+              "Soy Sauce Chicken Chow Mein"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "dinner_combo",
+        "headlineEn": "Dinner For Three",
+        "headlineZh": "三人晚餐",
+        "price": "$63.95",
+        "hintEn": "Choose Style A or Style B.",
+        "layout": "style_ab",
+        "options": [
+          {
+            "label": "Style A",
+            "dishes": [
+              "Spring Roll (3 rolls)",
+              "Beef Mixed Vegetables",
+              "Cantonese S&S Pork",
+              "Dry Garlic Ribs",
+              "B.B.Q. Pork Fried Rice"
+            ]
+          },
+          {
+            "label": "Style B",
+            "dishes": [
+              "Spring Roll (3 rolls)",
+              "Beef w/ Broccoli",
+              "S&S Chicken Balls",
+              "Honey Garlic Ribs",
+              "Soy Sauce Chicken Chow Mein"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "dinner_combo",
+        "headlineEn": "Dinner For Four",
+        "headlineZh": "四人晚餐",
+        "price": "$82.95",
+        "hintEn": "Fixed set — includes:",
+        "layout": "fixed",
+        "dishes": [
+          "Spring Roll (4 rolls)",
+          "Cantonese S&S Pork",
+          "House Special Mixed Vegetables",
+          "Breaded Almond Chicken",
+          "Young Chow Fried Rice",
+          "Soy Sauce Chicken Chow Mein"
+        ]
+      },
+      {
+        "type": "dinner_combo",
+        "headlineEn": "Dinner For Six",
+        "headlineZh": "六人晚餐",
+        "price": "$112.95",
+        "hintEn": "Fixed set — includes:",
+        "layout": "fixed",
+        "dishes": [
+          "Spring Roll (6 rolls)",
+          "Deep Fried Prawns",
+          "Beef w/ Broccoli",
+          "1/2 Crispy Fried Chicken",
+          "Cantonese S&S Pork",
+          "House Special Fried Rice",
+          "Soy Sauce Chicken Chow Mein"
+        ]
+      },
+      {
+        "type": "dinner_combo",
+        "headlineEn": "Dinner For Eight",
+        "headlineZh": "八人晚餐",
+        "price": "$149.95",
+        "hintEn": "Fixed set — includes:",
+        "layout": "fixed",
+        "dishes": [
+          "Spring Roll (8 rolls)",
+          "Lettuce Wrap w/ Minced Beef or Chicken",
+          "Lemon Boneless Chicken",
+          "Breaded Almond Chicken",
+          "Cantonese S&S Pork",
+          "Beef w/ Broccoli",
+          "House Special Mixed Vegetables",
+          "House Special Fried Rice",
+          "Soy Sauce Chicken Chow Mein"
+        ]
+      }
+    ]
+  },
+ 
   {
     "id": "appetizers",
     "titleEn": "Appetizers",
@@ -36,7 +214,10 @@ export const MENU_SECTIONS = [
         "num": "4",
         "en": "Honey Garlic Spareribs",
         "zh": "蒜子蜜骨",
-        "price": "$16.95"
+        "price": "$16.95",
+        "imageSrc": "/popular-dishes/honey-garlic-spareribs.png",
+        "imageAlt":
+          "Honey garlic spare ribs in a foil takeout bowl on a stainless counter; the photo includes a printed label reading HONEY GARLIC RIBS."
       },
       {
         "num": "5",
@@ -46,37 +227,40 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "6",
-        "en": "Fried Garlic Squid with Spicy Salt",
+        "en": "Fried Garlic Squid w/ Spicy Salt",
         "zh": "椒鹽鮮魷",
-        "price": "(S) $12.75 · (L) $19.75"
+        "price": "(S) $12.75 · (L) $19.75",
+        "spicy": true
       },
       {
         "num": "7",
-        "en": "Fried Garlic Tofu with Spicy Salt",
+        "en": "Fried Garlic Tofu w/ Spicy Salt",
         "zh": "椒鹽豆腐",
-        "price": "(S) $10.95 · (L) $16.95"
+        "price": "(S) $10.95 · (L) $16.95",
+        "spicy": true
       },
       {
         "num": "8",
         "en": "Fried Garlic Chicken Wings w/ Spicy Salt",
         "zh": "椒鹽雞翼",
-        "price": "$16.50"
+        "price": "$16.50",
+        "spicy": true
       },
       {
         "num": "9",
-        "en": "Lettuce Wrap with Minced Beef",
+        "en": "Lettuce Wrap w/ Minced Beef",
         "zh": "牛肉生菜包",
         "price": "$18.50"
       },
       {
         "num": "10",
-        "en": "Lettuce Wrap with Minced Chicken",
+        "en": "Lettuce Wrap w/ Minced Chicken",
         "zh": "雞肉生菜包",
         "price": "$18.50"
       },
       {
         "num": "11",
-        "en": "Lettuce Wrap with Minced Vegetable",
+        "en": "Lettuce Wrap w/ Minced Vegetable",
         "zh": "什菜生菜包",
         "price": "$18.50"
       }
@@ -103,11 +287,12 @@ export const MENU_SECTIONS = [
         "num": "14",
         "en": "Hot & Sour Soup",
         "zh": "酸辣湯",
-        "price": "(M) $10.25 · (L) $16.95"
+        "price": "(M) $10.25 · (L) $16.95",
+        "spicy": true
       },
       {
         "num": "15",
-        "en": "Cream Corn with Minced Chicken Soup",
+        "en": "Cream Corn w/ Minced Chicken Soup",
         "zh": "雞茸粟米湯",
         "price": "(M) $9.95 · (L) $16.50"
       },
@@ -181,7 +366,7 @@ export const MENU_SECTIONS = [
   },
   {
     "id": "western-chow-fried-rice",
-    "titleEn": "Western chow mein & fried rice",
+    "titleEn": "Western Chow Mein & Fried Rice",
     "titleZh": "西人炒飯炒麵",
     "items": [
       {
@@ -230,19 +415,21 @@ export const MENU_SECTIONS = [
         "num": "34",
         "en": "Curried Beef Fried Rice",
         "zh": "咖哩牛肉炒飯",
-        "price": "$15.50"
+        "price": "$15.50",
+        "spicy": true
       },
       {
         "num": "35",
         "en": "Curried Chicken Fried Rice",
         "zh": "咖哩雞炒飯",
-        "price": "$15.50"
+        "price": "$15.50",
+        "spicy": true
       }
     ]
   },
   {
     "id": "cantonese-chow-mein",
-    "titleEn": "Cantonese chow mein",
+    "titleEn": "Cantonese Chow Mein",
     "titleZh": "炒粉麵類",
     "items": [
       {
@@ -296,7 +483,7 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "44",
-        "en": "Pan Fried Rice Noodle with Beef",
+        "en": "Pan Fried Rice Noodle w/ Beef",
         "zh": "干炒牛河",
         "price": "$17.50"
       },
@@ -304,7 +491,10 @@ export const MENU_SECTIONS = [
         "num": "45",
         "en": "Japanese Style Chow Mein",
         "zh": "日式炒麵",
-        "price": "$14.95"
+        "price": "$14.95",
+        "imageSrc": "/popular-dishes/45-japanese-style-chow-mein.jpg",
+        "imageAlt":
+          "Japanese-style chow mein with egg noodles, julienned carrots, bean sprouts, and meat in a rectangular aluminum foil takeout container, top-down view."
       },
       {
         "num": "46",
@@ -320,19 +510,19 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "48",
-        "en": "Beef with Black Bean Sauce Chow Mein",
+        "en": "Beef w/ Black Bean Sauce Chow Mein",
         "zh": "豉椒牛肉炒麵",
         "price": "$15.50"
       },
       {
         "num": "49",
-        "en": "Chicken with Black Bean Sauce Chow Mein",
+        "en": "Chicken w/ Black Bean Sauce Chow Mein",
         "zh": "豉椒雞炒麵",
         "price": "$15.50"
       },
       {
         "num": "50",
-        "en": "Spareribs with Black Bean Sauce Chow Mein",
+        "en": "Spareribs w/ Black Bean Sauce Chow Mein",
         "zh": "豉椒排骨炒麵",
         "price": "$15.50"
       },
@@ -370,7 +560,7 @@ export const MENU_SECTIONS = [
   },
   {
     "id": "fried-rice",
-    "titleEn": "Fried rice",
+    "titleEn": "Fried Rice",
     "titleZh": "炒飯類",
     "items": [
       {
@@ -455,7 +645,7 @@ export const MENU_SECTIONS = [
   },
   {
     "id": "rice-plates",
-    "titleEn": "Dishes on rice",
+    "titleEn": "Dishes On Rice",
     "titleZh": "飯類",
     "items": [
       {
@@ -466,7 +656,7 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "69",
-        "en": "Beef with Scrambled Egg on Rice",
+        "en": "Beef w/ Scrambled Egg on Rice",
         "zh": "滑旦牛肉飯",
         "price": "$15.75"
       },
@@ -478,7 +668,7 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "71",
-        "en": "Beef with Black Bean Sauce on Rice",
+        "en": "Beef w/ Black Bean Sauce on Rice",
         "zh": "豉椒牛飯",
         "price": "$14.50"
       },
@@ -540,25 +730,29 @@ export const MENU_SECTIONS = [
         "num": "81",
         "en": "Curried Chicken on Rice",
         "zh": "咖哩雞飯",
-        "price": "$14.50"
+        "price": "$14.50",
+        "spicy": true
       },
       {
         "num": "82",
         "en": "Curried Beef on Rice",
         "zh": "咖哩牛肉飯",
-        "price": "$14.50"
+        "price": "$14.50",
+        "spicy": true
       },
       {
         "num": "83",
         "en": "Curried Prawns on Rice",
         "zh": "咖哩蝦飯",
-        "price": "$15.95"
+        "price": "$15.95",
+        "spicy": true
       },
       {
         "num": "84",
         "en": "Curried Mixed Vegetable on Rice",
         "zh": "咖哩什菜飯",
-        "price": "$14.25"
+        "price": "$14.25",
+        "spicy": true
       },
       {
         "num": "85",
@@ -576,7 +770,8 @@ export const MENU_SECTIONS = [
         "num": "87",
         "en": "Minced Beef & Bean Cake on Rice",
         "zh": "麻婆豆腐飯",
-        "price": "$14.95"
+        "price": "$14.95",
+        "spicy": true
       },
       {
         "num": "88",
@@ -600,7 +795,7 @@ export const MENU_SECTIONS = [
       {
         "num": "90",
         "en": "Mandarin Orange Chicken",
-        "zh": "杏橙雞",
+        "zh": "香橙鸡",
         "price": "$20.25"
       },
       {
@@ -660,7 +855,7 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "100",
-        "en": "Chicken with 3 kinds of Mushrooms",
+        "en": "Chicken w/ 3 kinds of Mushrooms",
         "zh": "三菇雞球",
         "price": "$20.25"
       },
@@ -679,31 +874,31 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "103",
-        "en": "Chicken with Broccoli",
+        "en": "Chicken w/ Broccoli",
         "zh": "百家利雞球",
         "price": "$16.50"
       },
       {
         "num": "104",
-        "en": "Chicken with Gai Lan",
+        "en": "Chicken w/ Gai Lan",
         "zh": "芥蘭雞球",
         "price": "$17.95"
       },
       {
         "num": "105",
-        "en": "Chicken with Bok Choy",
+        "en": "Chicken w/ Bok Choy",
         "zh": "時菜雞球",
         "price": "$16.95"
       },
       {
         "num": "106",
-        "en": "Tomato with Chicken",
+        "en": "Tomato w/ Chicken",
         "zh": "鮮茄雞球",
         "price": "$16.95"
       },
       {
         "num": "107",
-        "en": "Green Beans with Chicken in Black Bean Sauce",
+        "en": "Green Beans w/ Chicken in Black Bean Sauce",
         "zh": "豉汁豆仔雞球",
         "price": "$16.25"
       },
@@ -711,7 +906,8 @@ export const MENU_SECTIONS = [
         "num": "108",
         "en": "Deep Fried Crispy Chicken w/ Hot Sauce",
         "zh": "川油淋雞",
-        "price": "$18.75"
+        "price": "$18.75",
+        "spicy": true
       },
       {
         "num": "109",
@@ -728,25 +924,25 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "num": "111",
-        "en": "Satay with Tender Beef",
+        "en": "Satay w/ Tender Beef",
         "zh": "沙爹牛柳球",
         "price": "$19.95"
       },
       {
         "num": "111a",
-        "en": "Satay with Sliced Beef",
+        "en": "Satay w/ Sliced Beef",
         "zh": "沙爹牛肉",
         "price": "$16.95"
       },
       {
         "num": "112",
-        "en": "Beef & Ginger with Green Onions",
+        "en": "Beef & Ginger w/ Green Onions",
         "zh": "姜蔥牛肉",
         "price": "$19.95"
       },
       {
         "num": "113",
-        "en": "Beef with Black Bean Sauce",
+        "en": "Beef w/ Black Bean Sauce",
         "zh": "豉椒牛肉",
         "price": "$16.95"
       },
@@ -754,17 +950,18 @@ export const MENU_SECTIONS = [
         "num": "114",
         "en": "Curried Beef",
         "zh": "咖哩牛肉",
-        "price": "$16.95"
+        "price": "$16.95",
+        "spicy": true
       },
       {
         "num": "115",
-        "en": "Beef with 3 kinds of Mushrooms",
+        "en": "Beef w/ 3 kinds of Mushrooms",
         "zh": "三菇牛肉",
         "price": "$20.25"
       },
       {
         "num": "116",
-        "en": "Beef with Oyster Sauce",
+        "en": "Beef w/ Oyster Sauce",
         "zh": "蠔油牛肉",
         "price": "$20.25"
       },
@@ -783,25 +980,26 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "119",
-        "en": "Tender Beef with Black Pepper Sauce",
+        "en": "Tender Beef w/ Black Pepper Sauce",
         "zh": "黑椒牛柳",
-        "price": "$19.95"
+        "price": "$19.95",
+        "spicy": true
       },
       {
         "num": "120",
-        "en": "Tender Beef with Mushroom Baby Corn",
+        "en": "Tender Beef w/ Mushroom Baby Corn",
         "zh": "生炒牛柳球",
         "price": "$19.95"
       },
       {
         "num": "121",
-        "en": "Beef with Bok Choy",
+        "en": "Beef w/ Bok Choy",
         "zh": "時菜牛肉",
         "price": "$16.95"
       },
       {
         "num": "122",
-        "en": "Beef with Gai Lan",
+        "en": "Beef w/ Gai Lan",
         "zh": "芥蘭牛肉",
         "price": "$17.95"
       },
@@ -813,25 +1011,26 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "124",
-        "en": "Beef with Broccoli",
+        "en": "Beef w/ Broccoli",
         "zh": "百家利牛肉",
         "price": "$16.50"
       },
       {
         "num": "125",
-        "en": "Soft Tofu with Beef",
+        "en": "Soft Tofu w/ Beef",
         "zh": "牛肉滑旦付",
         "price": "$16.50"
       },
       {
         "num": "126",
-        "en": "Ground Beef with Tofu",
+        "en": "Ground Beef w/ Tofu",
         "zh": "麻婆豆付",
-        "price": "$16.50"
+        "price": "$16.50",
+        "spicy": true
       },
       {
         "num": "127",
-        "en": "Tomato with Beef",
+        "en": "Tomato w/ Beef",
         "zh": "番茄牛肉",
         "price": "$16.75"
       },
@@ -851,7 +1050,7 @@ export const MENU_SECTIONS = [
     "items": [
       {
         "num": "129",
-        "en": "Deep Fried Prawns with Sweet & Sour Sauce",
+        "en": "Deep Fried Prawns w/ Sweet & Sour Sauce",
         "zh": "酥炸大蝦",
         "price": "$19.50"
       },
@@ -863,13 +1062,13 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "131",
-        "en": "Pan Fried Prawns with Broccoli",
+        "en": "Pan Fried Prawns w/ Broccoli",
         "zh": "百家利蝦球",
         "price": "$19.50"
       },
       {
         "num": "132",
-        "en": "Prawns with Black Bean Sauce",
+        "en": "Prawns w/ Black Bean Sauce",
         "zh": "豉椒蝦球",
         "price": "$19.50"
       },
@@ -882,19 +1081,19 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "134",
-        "en": "Pan Fried Prawns with Bok Choy",
+        "en": "Pan Fried Prawns w/ Bok Choy",
         "zh": "時菜蝦球",
         "price": "$19.50"
       },
       {
         "num": "135",
-        "en": "Prawns with 3 kinds of Mushrooms",
+        "en": "Prawns w/ 3 kinds of Mushrooms",
         "zh": "三菇蝦球",
         "price": "$20.95"
       },
       {
         "num": "136",
-        "en": "Fried Prawns with Spicy Salt (shell off)",
+        "en": "Fried Prawns w/ Spicy Salt (shell off)",
         "zh": "椒鹽蝦球",
         "price": "$21.75"
       },
@@ -913,13 +1112,13 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "139",
-        "en": "Scallops with Broccoli or Bok Choy",
+        "en": "Scallops w/ Broccoli or Bok Choy",
         "zh": "時菜帶子",
         "price": "$19.95"
       },
       {
         "num": "140",
-        "en": "Three kinds of Seafood with Broccoli or Bok Choy",
+        "en": "Three kinds of Seafood w/ Broccoli or Bok Choy",
         "zh": "時菜三鮮",
         "price": "$18.95"
       },
@@ -927,7 +1126,8 @@ export const MENU_SECTIONS = [
         "num": "141",
         "en": "Fried Garlic Fish Fillets w/ Spicy Salt",
         "zh": "椒鹽魚球",
-        "price": "$19.95"
+        "price": "$19.95",
+        "spicy": true
       },
       {
         "num": "142",
@@ -943,7 +1143,7 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "143",
-        "en": "Pan Fried Fish Fillets with Broccoli or Bok Choy",
+        "en": "Pan Fried Fish Fillets w/ Broccoli or Bok Choy",
         "zh": "時菜現塊",
         "price": "$18.95"
       },
@@ -955,20 +1155,20 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "145",
-        "en": "Pan Fried Prawns with Cashew Nuts",
+        "en": "Pan Fried Prawns w/ Cashew Nuts",
         "zh": "腰果蝦球",
         "price": "$18.95"
       },
       {
         "num": "146",
-        "en": "Pan Fried Prawns with Spicy Sauce",
+        "en": "Pan Fried Prawns w/ Spicy Sauce",
         "zh": "醬爆蝦球",
         "price": "$18.95",
         "spicy": true
       },
       {
         "num": "147",
-        "en": "Pan Fried Prawns with Scrambled Egg",
+        "en": "Pan Fried Prawns w/ Scrambled Egg",
         "zh": "滑旦蝦球",
         "price": "$19.50"
       }
@@ -976,7 +1176,7 @@ export const MENU_SECTIONS = [
   },
   {
     "id": "hot-pot",
-    "titleEn": "Hot pot",
+    "titleEn": "Hot Pot",
     "titleZh": "煲仔類",
     "items": [
       {
@@ -993,44 +1193,44 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "150",
-        "en": "Singing Chicken with Chinese Sausage (Boneless)",
+        "en": "Singing Chicken w/ Chinese Sausage (Boneless)",
         "zh": "啫啫雞煲",
         "price": "$19.95"
       },
       {
         "num": "151",
-        "en": "Fried Tofu with Mixed Meat",
+        "en": "Fried Tofu w/ Mixed Meat",
         "zh": "八珍豆腐煲",
         "price": "$18.50"
       },
       {
         "num": "152",
-        "en": "Fried Tofu with Seafood",
+        "en": "Fried Tofu w/ Seafood",
         "zh": "海鮮豆腐煲",
         "price": "$19.95"
       },
       {
         "num": "153",
-        "en": "Fried Tofu with Fish Fillets",
+        "en": "Fried Tofu w/ Fish Fillets",
         "zh": "班腩豆腐煲",
         "price": "$18.95"
       },
       {
         "num": "154",
-        "en": "Salted Fish with Chicken & Soft Tofu",
+        "en": "Salted Fish w/ Chicken & Soft Tofu",
         "zh": "咸魚雞粒豆腐煲",
         "price": "$18.95"
       },
       {
         "num": "155",
-        "en": "Eggplant with Shredded Pork (Spicy)",
+        "en": "Eggplant w/ Shredded Pork (Spicy)",
         "zh": "魚香茄子煲",
         "price": "$18.50",
         "spicy": true
       },
       {
         "num": "156",
-        "en": "Eggplant with Prawns (Spicy)",
+        "en": "Eggplant w/ Prawns (Spicy)",
         "zh": "蝦球茄子煲",
         "price": "$19.50",
         "spicy": true
@@ -1046,7 +1246,10 @@ export const MENU_SECTIONS = [
         "num": "157",
         "en": "Sweet & Sour Pork",
         "zh": "甜酸肉",
-        "price": "$15.75"
+        "price": "$15.75",
+        "imageSrc": "/popular-dishes/157-sweet-sour-pork.jpg",
+        "imageAlt":
+          "Sweet and sour pork with bell peppers and onion in a glossy red-orange sauce, in a black takeout container on a stainless counter; photo includes a printed label reading CANTONESE SWEET & SOUR PORK."
       },
       {
         "num": "158",
@@ -1056,33 +1259,32 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "159",
-        "en": "Fried Pork Chop with Orange Sauce",
+        "en": "Fried Pork Chop w/ Orange Sauce",
         "zh": "香橙豬扒",
         "price": "$19.95"
       },
       {
         "num": "160",
-        "en": "Fried Pork Chop with Gourmet Sauce",
+        "en": "Fried Pork Chop w/ Gourmet Sauce",
         "zh": "京都豬扒",
         "price": "$19.95"
       },
       {
         "num": "161",
-        "en": "Fried Pork Chop with Spicy Salt",
+        "en": "Fried Pork Chop w/ Spicy Salt",
         "zh": "椒鹽豬扒",
         "price": "$19.95",
         "spicy": true
       },
       {
         "num": "162",
-        "en": "Fried Pork Chop with Honey Garlic Sauce",
+        "en": "Fried Pork Chop w/ Honey Garlic Sauce",
         "zh": "蜜汁豬扒",
         "price": "$19.95",
-        "spicy": true
       },
       {
         "num": "163",
-        "en": "Fried Ribs with Spicy Salt",
+        "en": "Fried Ribs w/ Spicy Salt",
         "zh": "椒鹽骨",
         "price": "$16.95",
         "spicy": true
@@ -1101,31 +1303,31 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "166",
-        "en": "Pan Fried Spareribs with Black Bean Sauce",
+        "en": "Pan Fried Spareribs w/ Black Bean Sauce",
         "zh": "豉椒炆排骨",
         "price": "$16.95"
       },
       {
         "num": "167",
-        "en": "Steamed Spareribs with Black Bean Sauce",
+        "en": "Steamed Spareribs w/ Black Bean Sauce",
         "zh": "豉汁蒸排骨",
         "price": "$19.95"
       },
       {
         "num": "168",
-        "en": "Steamed Minced Pork with Chinese Sausage",
+        "en": "Steamed Minced Pork w/ Chinese Sausage",
         "zh": "臘腸蒸肉餅",
         "price": "$19.95"
       },
       {
         "num": "169",
-        "en": "Steamed Minced Pork with Salted Fish",
+        "en": "Steamed Minced Pork w/ Salted Fish",
         "zh": "咸魚蒸肉餅",
         "price": "$19.95"
       },
       {
         "num": "170",
-        "en": "B.B.Q. Pork with Broccoli or Bok Choy",
+        "en": "B.B.Q. Pork w/ Broccoli or Bok Choy",
         "zh": "百家利/白菜叉燒",
         "price": "$16.50"
       },
@@ -1145,7 +1347,7 @@ export const MENU_SECTIONS = [
   },
   {
     "id": "egg-foo-young",
-    "titleEn": "Egg foo young",
+    "titleEn": "Egg Foo Young",
     "titleZh": "芙蓉類",
     "items": [
       {
@@ -1188,7 +1390,7 @@ export const MENU_SECTIONS = [
   },
   {
     "id": "chop-suey",
-    "titleEn": "Chop suey",
+    "titleEn": "Chop Suey",
     "titleZh": "什錦類",
     "items": [
       {
@@ -1229,51 +1431,51 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "184",
-        "en": "Baby Corn with Beef",
+        "en": "Baby Corn w/ Beef",
         "zh": "粟米仔牛肉",
         "price": "$17.95"
       },
       {
         "num": "185",
-        "en": "Baby Corn with Chicken",
+        "en": "Baby Corn w/ Chicken",
         "zh": "粟米仔雞球",
         "price": "$17.95"
       },
       {
         "num": "186",
-        "en": "Baby Corn with Seafood",
+        "en": "Baby Corn w/ Seafood",
         "zh": "粟米仔海鮮",
         "price": "$18.25"
       },
       {
         "num": "188",
-        "en": "Curried Potatoes with Beef or Chicken",
+        "en": "Curried Potatoes w/ Beef or Chicken",
         "zh": "咖哩薯仔牛肉/雞",
         "price": "$16.95",
         "spicy": true
       },
       {
         "num": "189",
-        "en": "Curried Potatoes with Seafood",
+        "en": "Curried Potatoes w/ Seafood",
         "zh": "咖哩薯仔海鮮",
         "price": "$17.25",
         "spicy": true
       },
       {
         "num": "190",
-        "en": "Bean Sprouts with Beef or Chicken",
+        "en": "Bean Sprouts w/ Beef or Chicken",
         "zh": "芽菜牛肉/雞球",
         "price": "$14.95"
       },
       {
         "num": "191",
-        "en": "Green Beans with Beef or Chicken in Black Bean Sauce",
+        "en": "Green Beans w/ Beef or Chicken in Black Bean Sauce",
         "zh": "豉汁四季豆牛肉/雞",
         "price": "$16.25"
       },
       {
         "num": "192",
-        "en": "Green Beans with Minced Pork in Spicy Sauce",
+        "en": "Green Beans w/ Minced Pork in Spicy Sauce",
         "zh": "干煸四季豆",
         "price": "$15.95",
         "spicy": true
@@ -1282,7 +1484,7 @@ export const MENU_SECTIONS = [
   },
   {
     "id": "vegetarian",
-    "titleEn": "Vegetarian special",
+    "titleEn": "Vegetarian Special",
     "titleZh": "蔬菜類",
     "items": [
       {
@@ -1311,7 +1513,7 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "197",
-        "en": "Chinese Mushroom with Bok Choy",
+        "en": "Chinese Mushroom w/ Bok Choy",
         "zh": "時菜扒北菇",
         "price": "$18.25"
       },
@@ -1323,25 +1525,25 @@ export const MENU_SECTIONS = [
       },
       {
         "num": "199",
-        "en": "Fried Tofu with Oyster Sauce",
+        "en": "Fried Tofu w/ Oyster Sauce",
         "zh": "紅燒豆付",
         "price": "$16.95"
       },
       {
         "num": "200",
-        "en": "Soft Tofu with Mixed Vegetables",
+        "en": "Soft Tofu w/ Mixed Vegetables",
         "zh": "什菜滑豆付",
         "price": "$15.75"
       },
       {
         "num": "201",
-        "en": "Lettuce with Oyster Sauce",
+        "en": "Lettuce w/ Oyster Sauce",
         "zh": "蠔油生菜",
         "price": "$10.95"
       },
       {
         "num": "202",
-        "en": "Deluxe Vegetables with Oyster Sauce",
+        "en": "Deluxe Vegetables w/ Oyster Sauce",
         "zh": "蠔油四寶蔬",
         "price": "$17.25"
       }
@@ -1349,7 +1551,7 @@ export const MENU_SECTIONS = [
   },
   {
     "id": "sides-drinks",
-    "titleEn": "Sides & beverages",
+    "titleEn": "Sides & Beverages",
     "titleZh": "小食及飲品",
     "items": [
       {
@@ -1389,48 +1591,34 @@ export const MENU_SECTIONS = [
         "price": "$1.95"
       }
     ]
-  },
-  {
-    "id": "dinner-combos",
-    "titleEn": "Dinner combinations",
-    "titleZh": "套餐",
-    "items": [
-      {
-        "num": "",
-        "en": "Dinner for one — four set combinations",
-        "zh": "一人晚餐",
-        "price": "$15.75"
-      },
-      {
-        "num": "",
-        "en": "Dinner for two — Style A or B",
-        "zh": "二人晚餐",
-        "price": "$44.95"
-      },
-      {
-        "num": "",
-        "en": "Dinner for three — Style A or B",
-        "zh": "三人晚餐",
-        "price": "$63.95"
-      },
-      {
-        "num": "",
-        "en": "Dinner for four — fixed set",
-        "zh": "四人晚餐",
-        "price": "$82.95"
-      },
-      {
-        "num": "",
-        "en": "Dinner for six — fixed set",
-        "zh": "六人晚餐",
-        "price": "$112.95"
-      },
-      {
-        "num": "",
-        "en": "Dinner for eight — fixed set",
-        "zh": "八人晚餐",
-        "price": "$149.95"
-      }
-    ]
   }
+  
+]
+
+/** Featured on the home page — menuSectionId matches /menu#hash in MenuSection. */
+export const POPULAR_DISHES = [
+  {
+    num: '157',
+    en: 'Sweet & Sour Pork',
+    zh: '甜酸肉',
+    price: '$15.75',
+    menuSectionId: 'pork',
+    imageSrc: '/popular-dishes/157-sweet-sour-pork.jpg',
+    },
+  {
+    num: '45',
+    en: 'Japanese Style Chow Mein',
+    zh: '日式炒麵',
+    price: '$14.95',
+    menuSectionId: 'cantonese-chow-mein',
+    imageSrc: '/popular-dishes/45-japanese-style-chow-mein.jpg',
+     },
+  {
+    num: '124',
+    en: 'Beef w/ Broccoli',
+    zh: '百家利牛肉',
+    price: '$16.50',
+    menuSectionId: 'beef',
+    imageSrc: '/popular-dishes/124-beef-with-broccoli.jpg',
+    },
 ]

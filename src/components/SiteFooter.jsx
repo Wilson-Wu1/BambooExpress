@@ -6,7 +6,7 @@ import { NavLinks } from './NavLinks'
 export function SiteFooter() {
   return (
     <Box as="footer" borderTopWidth="1px" borderColor="border" py={{ base: 8, md: 10 }} px={4} mt="auto" bg="bg.subtle">
-      <Container maxW="container.lg">
+      <Container maxW="7xl">
         <Flex
           direction={{ base: 'column', lg: 'row' }}
           align={{ base: 'center', lg: 'center' }}

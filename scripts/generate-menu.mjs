@@ -269,19 +269,139 @@ S('sides-drinks', 'Sides & beverages', '小食及飲品', [
   i('208', 'Canned Pop', '罐裝汽水', '$1.95'),
 ])
 
-S('dinner-combos', 'Dinner combinations', '套餐', [
-  i('', 'Dinner for one — four set combinations', '一人晚餐', '$15.75'),
-  i('', 'Dinner for two — Style A or B', '二人晚餐', '$44.95'),
-  i('', 'Dinner for three — Style A or B', '三人晚餐', '$63.95'),
-  i('', 'Dinner for four — fixed set', '四人晚餐', '$82.95'),
-  i('', 'Dinner for six — fixed set', '六人晚餐', '$112.95'),
-  i('', 'Dinner for eight — fixed set', '八人晚餐', '$149.95'),
-])
+/** Hand-authored structure — edit `src/data/menuItems.js` or keep this in sync when regenerating. */
+const dinnerCombosItems = [
+  {
+    type: 'dinner_combo',
+    headlineEn: 'Dinner for one',
+    headlineZh: '一人晚餐',
+    price: '$15.75',
+    hintEn: 'Choose one of four combinations.',
+    layout: 'four_options',
+    options: [
+      { label: '# 1', dishes: ['Western Chicken Chow Mein', 'S & S Pork', 'Pork Fried Rice'] },
+      { label: '# 2', dishes: ['Deep Fried Prawns', 'Western Chicken Chow Mein', 'S & S Pork'] },
+      { label: '# 3', dishes: ['Beef Chop Suey', 'Western Chicken Chow Mein', 'Pork Foo Young'] },
+      { label: '# 4', dishes: ['Pork Fried Rice', 'Deep Fried Prawns', 'Western Chicken Chow Mein'] },
+    ],
+  },
+  {
+    type: 'dinner_combo',
+    headlineEn: 'Dinner for two',
+    headlineZh: '二人晚餐',
+    price: '$44.95',
+    hintEn: 'Choose Style A or Style B.',
+    layout: 'style_ab',
+    options: [
+      {
+        label: 'Style A',
+        dishes: [
+          'Spring Roll (2 rolls)',
+          'Lemon Chicken',
+          'Prawn Mixed Vegetables',
+          'B.B.Q. Pork Fried Rice',
+        ],
+      },
+      {
+        label: 'Style B',
+        dishes: [
+          'Spring Roll (2 rolls)',
+          'Beef w/ Broccoli',
+          'Cantonese S&S Pork',
+          'Soy Sauce Chicken Chow Mein',
+        ],
+      },
+    ],
+  },
+  {
+    type: 'dinner_combo',
+    headlineEn: 'Dinner for three',
+    headlineZh: '三人晚餐',
+    price: '$63.95',
+    hintEn: 'Choose Style A or Style B.',
+    layout: 'style_ab',
+    options: [
+      {
+        label: 'Style A',
+        dishes: [
+          'Spring Roll (3 rolls)',
+          'Beef Mixed Vegetables',
+          'Cantonese S&S Pork',
+          'Dry Garlic Ribs',
+          'B.B.Q. Pork Fried Rice',
+        ],
+      },
+      {
+        label: 'Style B',
+        dishes: [
+          'Spring Roll (3 rolls)',
+          'Beef w/ Broccoli',
+          'S&S Chicken Balls',
+          'Honey Garlic Ribs',
+          'Soy Sauce Chicken Chow Mein',
+        ],
+      },
+    ],
+  },
+  {
+    type: 'dinner_combo',
+    headlineEn: 'Dinner for four',
+    headlineZh: '四人晚餐',
+    price: '$82.95',
+    hintEn: 'Fixed set — includes:',
+    layout: 'fixed',
+    dishes: [
+      'Spring Roll (4 rolls)',
+      'Cantonese S&S Pork',
+      'House Special Mixed Vegetables',
+      'Breaded Almond Chicken',
+      'Young Chow Fried Rice',
+      'Soy Sauce Chicken Chow Mein',
+    ],
+  },
+  {
+    type: 'dinner_combo',
+    headlineEn: 'Dinner for six',
+    headlineZh: '六人晚餐',
+    price: '$112.95',
+    hintEn: 'Fixed set — includes:',
+    layout: 'fixed',
+    dishes: [
+      'Spring Roll (6 rolls)',
+      'Deep Fried Prawns',
+      'Beef w/ Broccoli',
+      '1/2 Crispy Fried Chicken',
+      'Cantonese S&S Pork',
+      'House Special Fried Rice',
+      'Soy Sauce Chicken Chow Mein',
+    ],
+  },
+  {
+    type: 'dinner_combo',
+    headlineEn: 'Dinner for eight',
+    headlineZh: '八人晚餐',
+    price: '$149.95',
+    hintEn: 'Fixed set — includes:',
+    layout: 'fixed',
+    dishes: [
+      'Spring Roll (8 rolls)',
+      'Deep Fried Prawns',
+      'Beef w/ Broccoli',
+      'Crispy Fried Chicken',
+      'Cantonese S&S Pork',
+      'Honey Garlic Ribs',
+      'Young Chow Fried Rice',
+      'Soy Sauce Chicken Chow Mein',
+    ],
+  },
+]
+
+S('dinner-combos', 'Dinner Combinations', '套餐', dinnerCombosItems)
 
 const SECTION_NOTES = {
   'cantonese-chow-mein':
     'Above items with black bean sauce: add $1.00.',
-  'rice-plates': 'Change to fried rice: add $1.00.',
+  'rice-plates': 'Change to fried rice: add $1.00',
 }
 
 const header = `/**
