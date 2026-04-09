@@ -43,3 +43,5 @@ or
 ```
 
 Search still uses Chinese strings in the data for matching when the user types; only visible labels are hidden when `hideChinese` is enabled.
+
+Rachelle - UI/UX Audit
