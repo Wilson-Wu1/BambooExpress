@@ -144,6 +144,27 @@ function scrollSidebarNavToActiveItem(containerEl, itemEl) {
   containerEl.scrollTop = Math.max(0, Math.min(maxScroll, containerEl.scrollTop + scrollDelta))
 }
 
+/**
+ * Center the active chip in the mobile horizontal strip. Only updates `stripEl.scrollLeft`.
+ * Avoid `Element.scrollIntoView` here: it can scroll the window / wrong ancestor (notably under
+ * `position: sticky`) and fight the user when scroll-spy updates while scrolling vertically.
+ */
+function scrollJumpStripToChip(stripEl, chipEl) {
+  if (!stripEl || !chipEl) return
+  const sRect = stripEl.getBoundingClientRect()
+  const cRect = chipEl.getBoundingClientRect()
+  const pad = SIDEBAR_NAV_EDGE_PAD
+  const visibleLeft = sRect.left + pad
+  const visibleRight = sRect.right - pad
+  if (cRect.left >= visibleLeft && cRect.right <= visibleRight) return
+
+  const chipCenterX = cRect.left + cRect.width / 2
+  const stripMidX = sRect.left + sRect.width / 2
+  const scrollDelta = chipCenterX - stripMidX
+  const maxScroll = Math.max(0, stripEl.scrollWidth - stripEl.clientWidth)
+  stripEl.scrollLeft = Math.max(0, Math.min(maxScroll, stripEl.scrollLeft + scrollDelta))
+}
+
 const PRICE_SPLIT_RE = /\s*·\s*/
 
 function splitMenuPriceRows(price) {
@@ -1109,9 +1130,7 @@ export function MenuSection({ hideChinese = false }) {
     if (!window.matchMedia('(max-width: 767px)').matches) return
     const strip = document.getElementById('menu-jump-strip-inner')
     const chip = strip?.querySelector(`[data-menu-section-chip="${activeId}"]`)
-    if (chip && strip) {
-      chip.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' })
-    }
+    if (strip && chip) scrollJumpStripToChip(strip, chip)
   }, [activeId, isSearching])
 
   /** Keep the active row visible inside the sticky sections sidebar (desktop only). */
