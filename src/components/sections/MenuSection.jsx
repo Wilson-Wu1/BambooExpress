@@ -151,7 +151,7 @@ function splitMenuPriceRows(price) {
   return price.split(PRICE_SPLIT_RE).map((s) => s.trim()).filter(Boolean)
 }
 
-function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhotoInline = false }) {
+function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhotoInline = false, hideChinese = false }) {
   const hasPhoto = Boolean(imageSrc && imageAlt)
   const [photoOpen, setPhotoOpen] = useState(false)
   const priceRows = splitMenuPriceRows(price)
@@ -249,9 +249,11 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                   </Box>
                 ) : null}
               </Box>
-              <Text color="fg.muted" fontSize="sm" lineHeight="tall" lang="zh-Hant">
-                {zh}
-              </Text>
+              {!hideChinese ? (
+                <Text color="fg.muted" fontSize="sm" lineHeight="tall" lang="zh-Hant">
+                  {zh}
+                </Text>
+              ) : null}
             </VStack>
             <VStack align="flex-end" gap={0.5} flexShrink={0}>
               {priceRows.map((line, rowIdx) => (
@@ -313,9 +315,11 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                 </Box>
               ) : null}
             </Box>
-            <Text color="fg.muted" fontSize="sm" mt={1} lineHeight="tall" lang="zh-Hant">
-              {zh}
-            </Text>
+            {!hideChinese ? (
+              <Text color="fg.muted" fontSize="sm" mt={1} lineHeight="tall" lang="zh-Hant">
+                {zh}
+              </Text>
+            ) : null}
           </>
         )}
         {hasPhoto ? (
@@ -399,7 +403,7 @@ function ComboDishList({ dishes, dense = false }) {
   )
 }
 
-function DinnerComboCard({ combo, compact = false, dense = false }) {
+function DinnerComboCard({ combo, compact = false, dense = false, hideChinese = false }) {
   const { headlineEn, headlineZh, price, hintEn, layout, options, dishes } = combo
   const headingSize = compact || dense ? 'sm' : 'md'
   const priceSize = compact || dense ? 'md' : 'lg'
@@ -437,14 +441,16 @@ function DinnerComboCard({ combo, compact = false, dense = false }) {
           >
             {headlineEn}
           </Heading>
-          <Text
-            fontSize={dense ? 'xs' : 'sm'}
-            lang="zh-Hant"
-            lineHeight={dense ? 'short' : undefined}
-            color="green.800"
-          >
-            {headlineZh}
-          </Text>
+          {!hideChinese ? (
+            <Text
+              fontSize={dense ? 'xs' : 'sm'}
+              lang="zh-Hant"
+              lineHeight={dense ? 'short' : undefined}
+              color="green.800"
+            >
+              {headlineZh}
+            </Text>
+          ) : null}
         </VStack>
         <Text fontWeight="bold" fontSize={priceSize} whiteSpace="nowrap" color="green.900">
           {price}
@@ -496,7 +502,7 @@ function DinnerComboCard({ combo, compact = false, dense = false }) {
   )
 }
 
-function DinnerCombosColumn({ sectionId, items }) {
+function DinnerCombosColumn({ sectionId, items, hideChinese = false }) {
   const blocks = []
   let i = 0
   while (i < items.length) {
@@ -512,6 +518,7 @@ function DinnerCombosColumn({ sectionId, items }) {
           spicy={item.spicy}
           imageSrc={item.imageSrc}
           imageAlt={item.imageAlt}
+          hideChinese={hideChinese}
         />,
       )
       i += 1
@@ -531,13 +538,15 @@ function DinnerCombosColumn({ sectionId, items }) {
           w="full"
           alignItems="stretch"
         >
-          <DinnerComboCard combo={item} dense />
-          <DinnerComboCard combo={next} dense />
+          <DinnerComboCard combo={item} dense hideChinese={hideChinese} />
+          <DinnerComboCard combo={next} dense hideChinese={hideChinese} />
         </SimpleGrid>,
       )
       i += 2
     } else {
-      blocks.push(<DinnerComboCard key={`${sectionId}-dinner-${i}`} combo={item} dense />)
+      blocks.push(
+        <DinnerComboCard key={`${sectionId}-dinner-${i}`} combo={item} dense hideChinese={hideChinese} />,
+      )
       i += 1
     }
   }
@@ -549,7 +558,7 @@ function DinnerCombosColumn({ sectionId, items }) {
 }
 
 /** Horizontal section labels (mobile only); list control opens a bottom sheet. Sticky chrome lives on the parent toolbar. */
-function SectionJumpStrip({ activeSectionId, onPick }) {
+function SectionJumpStrip({ activeSectionId, onPick, hideChinese = false }) {
   const [sectionsOpen, setSectionsOpen] = useState(false)
 
   /**
@@ -658,7 +667,7 @@ function SectionJumpStrip({ activeSectionId, onPick }) {
                       : undefined
                   }
                   aria-current={selected ? 'true' : undefined}
-                  title={`${s.titleEn} · ${s.titleZh}`}
+                  title={hideChinese ? s.titleEn : `${s.titleEn} · ${s.titleZh}`}
                   onClick={() => onPick(s.id)}
                 >
                   {s.titleEn}
@@ -726,16 +735,18 @@ function SectionJumpStrip({ activeSectionId, onPick }) {
                           >
                             {s.titleEn}
                           </Text>
-                          <Text
-                            fontSize="sm"
-                            lineHeight="short"
-                            color="fg.muted"
-                            fontWeight="normal"
-                            lang="zh-Hant"
-                            opacity={selected ? 0.85 : 1}
-                          >
-                            {s.titleZh}
-                          </Text>
+                          {!hideChinese ? (
+                            <Text
+                              fontSize="sm"
+                              lineHeight="short"
+                              color="fg.muted"
+                              fontWeight="normal"
+                              lang="zh-Hant"
+                              opacity={selected ? 0.85 : 1}
+                            >
+                              {s.titleZh}
+                            </Text>
+                          ) : null}
                         </VStack>
                       </Button>
                     </Box>
@@ -750,7 +761,7 @@ function SectionJumpStrip({ activeSectionId, onPick }) {
   )
 }
 
-function SectionNavList({ activeSectionId, onPick }) {
+function SectionNavList({ activeSectionId, onPick, hideChinese = false }) {
   return (
     <VStack align="stretch" gap={1} role="navigation" aria-label="Menu section categories">
       {MENU_SECTIONS.map((s) => {
@@ -779,16 +790,18 @@ function SectionNavList({ activeSectionId, onPick }) {
               <Text fontSize="sm" lineHeight="short">
                 {s.titleEn}
               </Text>
-              <Text
-                fontSize="xs"
-                lineHeight="short"
-                color={selected ? 'green.800' : 'fg.muted'}
-                fontWeight="normal"
-                lang="zh-Hant"
-                opacity={selected ? 0.92 : 1}
-              >
-                {s.titleZh}
-              </Text>
+              {!hideChinese ? (
+                <Text
+                  fontSize="xs"
+                  lineHeight="short"
+                  color={selected ? 'green.800' : 'fg.muted'}
+                  fontWeight="normal"
+                  lang="zh-Hant"
+                  opacity={selected ? 0.92 : 1}
+                >
+                  {s.titleZh}
+                </Text>
+              ) : null}
             </VStack>
           </Button>
         )
@@ -797,7 +810,7 @@ function SectionNavList({ activeSectionId, onPick }) {
   )
 }
 
-function MenuSectionPanel({ section }) {
+function MenuSectionPanel({ section, hideChinese = false }) {
   if (!section) {
     return null
   }
@@ -815,12 +828,16 @@ function MenuSectionPanel({ section }) {
       >
         <Heading as="h3" size="lg" fontWeight="bold">
           <Text as="span">{section.titleEn}</Text>
-          <Text as="span" mx={2} opacity={0.85} aria-hidden>
-            ·
-          </Text>
-          <Text as="span" lang="zh-Hant">
-            {section.titleZh}
-          </Text>
+          {!hideChinese ? (
+            <>
+              <Text as="span" mx={2} opacity={0.85} aria-hidden>
+                ·
+              </Text>
+              <Text as="span" lang="zh-Hant">
+                {section.titleZh}
+              </Text>
+            </>
+          ) : null}
         </Heading>
       </Box>
 
@@ -833,7 +850,7 @@ function MenuSectionPanel({ section }) {
       ) : null}
 
       {section.id === 'dinner-combos' ? (
-        <DinnerCombosColumn sectionId={section.id} items={section.items} />
+        <DinnerCombosColumn sectionId={section.id} items={section.items} hideChinese={hideChinese} />
       ) : (
         <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gap={{ base: 2, sm: 3, md: 4 }}>
           {section.items.map((item, idx) => (
@@ -847,6 +864,7 @@ function MenuSectionPanel({ section }) {
               imageSrc={item.imageSrc}
               imageAlt={item.imageAlt}
               showPhotoInline={section.id === 'highlights'}
+              hideChinese={hideChinese}
             />
           ))}
         </SimpleGrid>
@@ -855,7 +873,7 @@ function MenuSectionPanel({ section }) {
   )
 }
 
-function menuSearchResultCells(section, items) {
+function menuSearchResultCells(section, items, hideChinese = false) {
   const cells = []
   let i = 0
   while (i < items.length) {
@@ -874,8 +892,8 @@ function menuSearchResultCells(section, items) {
             w="full"
           >
             <SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: 2, sm: 3, md: 4 }} alignItems="stretch">
-              <DinnerComboCard combo={item} compact />
-              <DinnerComboCard combo={next} compact />
+              <DinnerComboCard combo={item} compact hideChinese={hideChinese} />
+              <DinnerComboCard combo={next} compact hideChinese={hideChinese} />
             </SimpleGrid>
           </Box>,
         )
@@ -890,7 +908,7 @@ function menuSearchResultCells(section, items) {
           gridColumn={{ sm: '1 / -1' }}
           w="full"
         >
-          <DinnerComboCard combo={item} compact />
+          <DinnerComboCard combo={item} compact hideChinese={hideChinese} />
         </Box>,
       )
     } else {
@@ -905,6 +923,7 @@ function menuSearchResultCells(section, items) {
           imageSrc={item.imageSrc}
           imageAlt={item.imageAlt}
           showPhotoInline={section.id === 'highlights'}
+          hideChinese={hideChinese}
         />,
       )
     }
@@ -913,7 +932,7 @@ function menuSearchResultCells(section, items) {
   return cells
 }
 
-function MenuSearchResultsPanel({ blocks, query }) {
+function MenuSearchResultsPanel({ blocks, query, hideChinese = false }) {
   if (!blocks.length) {
     return (
       <Box borderRadius="md" borderWidth="1px" borderColor="border" bg="bg" px={4} py={8} textAlign="center">
@@ -941,12 +960,14 @@ function MenuSearchResultsPanel({ blocks, query }) {
             <Heading as="h3" size="md" fontWeight="bold">
               {section.titleEn}
             </Heading>
-            <Text fontSize="sm" color="fg.muted" lang="zh-Hant">
-              {section.titleZh}
-            </Text>
+            {!hideChinese ? (
+              <Text fontSize="sm" color="fg.muted" lang="zh-Hant">
+                {section.titleZh}
+              </Text>
+            ) : null}
           </Flex>
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gap={{ base: 2, sm: 3, md: 4 }}>
-            {menuSearchResultCells(section, items)}
+            {menuSearchResultCells(section, items, hideChinese)}
           </SimpleGrid>
         </Box>
       ))}
@@ -954,7 +975,7 @@ function MenuSearchResultsPanel({ blocks, query }) {
   )
 }
 
-export function MenuSection() {
+export function MenuSection({ hideChinese = false }) {
   const [activeId, setActiveId] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -1265,7 +1286,7 @@ export function MenuSection() {
                 ) : null}
               </FieldRoot>
 
-              <SectionJumpStrip activeSectionId={sectionNavActiveId} onPick={pickSection} />
+              <SectionJumpStrip activeSectionId={sectionNavActiveId} onPick={pickSection} hideChinese={hideChinese} />
             </VStack>
           </Box>
 
@@ -1319,7 +1340,7 @@ export function MenuSection() {
                   WebkitOverflowScrolling: 'touch',
                 }}
               >
-                <SectionNavList activeSectionId={sectionNavActiveId} onPick={pickSection} />
+                <SectionNavList activeSectionId={sectionNavActiveId} onPick={pickSection} hideChinese={hideChinese} />
               </Box>
             </Box>
 
@@ -1331,11 +1352,11 @@ export function MenuSection() {
               aria-label={isSearching ? `Search results for ${trimmedSearch}` : 'Full menu by section'}
             >
               {isSearching ? (
-                <MenuSearchResultsPanel blocks={searchBlocks} query={trimmedSearch} />
+                <MenuSearchResultsPanel blocks={searchBlocks} query={trimmedSearch} hideChinese={hideChinese} />
               ) : (
                 <VStack align="stretch" gap={{ base: 10, md: 14 }} w="full">
                   {MENU_SECTIONS.map((section) => (
-                    <MenuSectionPanel key={section.id} section={section} />
+                    <MenuSectionPanel key={section.id} section={section} hideChinese={hideChinese} />
                   ))}
                 </VStack>
               )}

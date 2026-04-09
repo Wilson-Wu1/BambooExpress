@@ -17,7 +17,7 @@ export function MenuPage() {
       animate={{ opacity: 1 }}
       transition={{ duration: reduceMotion ? 0 : 0.4, ease: EASE_OUT }}
     >
-      <MenuSection />
+      <MenuSection hideChinese />
     </MotionBox>
   )
 }
