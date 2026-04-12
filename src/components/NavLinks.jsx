@@ -23,7 +23,7 @@ const navLinkStyles = {
   _hover: { bg: 'bg.muted', color: 'green.700' },
 }
 
-export function NavLinks({ onNavigate, direction = 'row', flexWrap }) {
+export function NavLinks({ onNavigate, direction = 'row', flexWrap, justifyContent }) {
   const Stack = direction === 'row' ? HStack : VStack
   const gap = direction === 'row' ? 1 : 0
 
@@ -54,6 +54,7 @@ export function NavLinks({ onNavigate, direction = 'row', flexWrap }) {
     <Stack
       gap={gap}
       align={direction === 'column' ? 'stretch' : 'center'}
+      justify={justifyContent}
       flexWrap={direction === 'row' ? flexWrap : undefined}
     >
       {link('/#main', 'Home', MdHome)}

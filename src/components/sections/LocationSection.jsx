@@ -13,6 +13,7 @@ import {
 import { useReducedMotion } from 'framer-motion'
 import { GiChopsticks } from 'react-icons/gi'
 import { MdLocationOn, MdPhone } from 'react-icons/md'
+import { Link as RouterLink } from 'react-router-dom'
 import { MotionBox } from '../../lib/chakra-motion'
 import { EASE_OUT, revealViewport } from '../../lib/motion-presets'
 
@@ -179,10 +180,8 @@ export function LocationSection() {
                   _hover={{ bg: 'green.600' }}
                 >
                   <Box
-                    as="a"
-                    href="/bamboo-menu.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    as={RouterLink}
+                    to="/menu"
                     display="inline-flex"
                     alignItems="center"
                     gap={2}

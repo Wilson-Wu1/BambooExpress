@@ -21,7 +21,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { MdPhone } from 'react-icons/md'
-import { Link as RouterLink, Outlet } from 'react-router-dom'
+import { Link as RouterLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { MotionBox } from '../lib/chakra-motion'
 import { EASE_OUT } from '../lib/motion-presets'
 import { NavLinks } from './NavLinks'
@@ -34,6 +34,29 @@ export function Layout() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const closeDrawer = () => setDrawerOpen(false)
   const reduceMotion = useReducedMotion()
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const handleLogoClick = (e) => {
+    closeDrawer()
+    if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) {
+      return
+    }
+    const scrollTop = () => window.scrollTo({ top: 0, behavior: 'instant' })
+    if (location.pathname === '/') {
+      e.preventDefault()
+      if (location.hash) {
+        navigate('/', { replace: true })
+      }
+      scrollTop()
+      return
+    }
+    e.preventDefault()
+    navigate('/')
+    requestAnimationFrame(() => {
+      requestAnimationFrame(scrollTop)
+    })
+  }
 
   return (
     <Box minH="100dvh" display="flex" flexDirection="column" bg="bg">
@@ -56,7 +79,7 @@ export function Layout() {
               <Box
                 as={RouterLink}
                 to="/"
-                onClick={closeDrawer}
+                onClick={handleLogoClick}
                 display="flex"
                 alignItems="center"
                 gap={{ base: 2, md: 3 }}
