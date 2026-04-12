@@ -1,49 +1,74 @@
-import { Box, Container, Flex, HStack, IconButton, Image, Text } from '@chakra-ui/react'
+import { Box, Container, Flex, Grid, HStack, IconButton, Image, Text } from '@chakra-ui/react'
 import { FaFacebook, FaInstagram } from 'react-icons/fa'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { NavLinks } from './NavLinks'
 
 export function SiteFooter() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const goHomeTop = (e) => {
+    if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) {
+      return
+    }
+    e.preventDefault()
+    const scrollTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    if (location.pathname === '/') {
+      if (location.hash) {
+        navigate('/', { replace: true })
+      }
+      scrollTop()
+      return
+    }
+    navigate('/')
+    requestAnimationFrame(() => {
+      requestAnimationFrame(scrollTop)
+    })
+  }
+
   return (
     <Box as="footer" borderTopWidth="1px" borderColor="border" py={{ base: 8, md: 10 }} px={4} mt="auto" bg="bg.subtle">
       <Container maxW="7xl">
-        <Flex
-          direction={{ base: 'column', lg: 'row' }}
-          align={{ base: 'center', lg: 'center' }}
-          justify="space-between"
+        <Grid
+          templateColumns={{ base: '1fr', lg: '1fr auto 1fr' }}
+          alignItems="center"
+          justifyItems={{ base: 'center', lg: 'stretch' }}
           gap={{ base: 6, lg: 8 }}
         >
-          <Box
-            as={RouterLink}
-            to="/"
-            display="flex"
-            alignItems="center"
-            gap={3}
-            flexShrink={0}
-            fontWeight="bold"
-            fontSize="lg"
-            color="green.800"
-            letterSpacing="tight"
-            minH="44px"
-            _hover={{ opacity: 0.9 }}
-          >
-            <Image
-              src="/bamboo-logo.png"
-              alt="Bamboo Express Ltd. — Oriental take out"
-              h="44px"
-              w="44px"
-              fit="contain"
+          <Link to="/" onClick={goHomeTop} style={{ textDecoration: 'none' }}>
+            <Flex
+              as="span"
+              display="inline-flex"
+              alignItems="center"
+              gap={3}
               flexShrink={0}
-              draggable={false}
-            />
-            <Text as="span">Bamboo Express</Text>
-          </Box>
+              fontWeight="bold"
+              fontSize="lg"
+              color="green.800"
+              letterSpacing="tight"
+              minH="44px"
+              cursor="pointer"
+              _hover={{ opacity: 0.9 }}
+              justifySelf={{ base: 'center', lg: 'start' }}
+            >
+              <Image
+                src="/bamboo-logo.png"
+                alt="Bamboo Express Ltd. — Oriental take out"
+                h="44px"
+                w="44px"
+                fit="contain"
+                flexShrink={0}
+                draggable={false}
+              />
+              <Text as="span">Bamboo Express</Text>
+            </Flex>
+          </Link>
 
-          <Flex justify="center" flex="1" minW={0}>
-            <NavLinks flexWrap="wrap" />
+          <Flex justify="center" minW={0} w="full">
+            <NavLinks flexWrap="wrap" justifyContent="center" />
           </Flex>
 
-          <HStack gap={1} flexShrink={0}>
+          <HStack gap={1} flexShrink={0} justifySelf={{ base: 'center', lg: 'end' }}>
             <IconButton
               asChild
               variant="ghost"
@@ -71,7 +96,7 @@ export function SiteFooter() {
               </a>
             </IconButton>
           </HStack>
-        </Flex>
+        </Grid>
 
         <Text
           fontSize="sm"

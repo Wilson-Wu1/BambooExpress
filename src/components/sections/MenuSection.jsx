@@ -4,6 +4,8 @@ import {
   Box,
   Button,
   CloseButton,
+  CollapsibleContent,
+  CollapsibleRoot,
   Container,
   DialogBackdrop,
   DialogBody,
@@ -32,10 +34,10 @@ import {
   InputGroup,
   SimpleGrid,
   Text,
+  useBreakpointValue,
   VStack,
 } from '@chakra-ui/react'
-import { GiChopsticks } from 'react-icons/gi'
-import { MdClose, MdList, MdPhotoCamera, MdSearch } from 'react-icons/md'
+import { MdClose, MdList, MdPhotoCamera, MdPictureAsPdf, MdSearch } from 'react-icons/md'
 import { PiPepperLight } from 'react-icons/pi'
 import { MENU_SECTION_NOTES, MENU_SECTIONS } from '../../data/menuItems'
 
@@ -175,14 +177,21 @@ function splitMenuPriceRows(price) {
 function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhotoInline = false, hideChinese = false }) {
   const hasPhoto = Boolean(imageSrc && imageAlt)
   const [photoOpen, setPhotoOpen] = useState(false)
+  const photoExpandInline = useBreakpointValue({ base: true, md: false }) ?? false
   const priceRows = splitMenuPriceRows(price)
   const multiSizeLayout = priceRows.length > 1
 
-  const openPhoto = () => setPhotoOpen(true)
+  const hideInlineThumb = showPhotoInline && hasPhoto && photoExpandInline && photoOpen
+
+  const activatePhoto = () => {
+    if (!hasPhoto) return
+    if (photoExpandInline) setPhotoOpen((o) => !o)
+    else setPhotoOpen(true)
+  }
   const onPhotoKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
-      openPhoto()
+      activatePhoto()
     }
   }
 
@@ -202,18 +211,27 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
         transition={hasPhoto ? 'border-color 0.2s ease, box-shadow 0.2s ease' : undefined}
         _hover={hasPhoto ? { borderColor: 'green.200', boxShadow: 'sm' } : undefined}
         cursor={hasPhoto ? 'pointer' : undefined}
-        onClick={hasPhoto ? openPhoto : undefined}
+        onClick={hasPhoto ? activatePhoto : undefined}
         onKeyDown={hasPhoto ? onPhotoKeyDown : undefined}
         role={hasPhoto ? 'button' : undefined}
         tabIndex={hasPhoto ? 0 : undefined}
-        aria-label={hasPhoto ? (showPhotoInline ? `Enlarge photo of ${en}` : `View photo of ${en}`) : undefined}
+        aria-expanded={hasPhoto && photoExpandInline ? photoOpen : undefined}
+        aria-label={
+          hasPhoto
+            ? photoExpandInline
+              ? `${photoOpen ? 'Collapse' : 'Expand'} photo of ${en}`
+              : showPhotoInline
+                ? `Enlarge photo of ${en}`
+                : `View photo of ${en}`
+            : undefined
+        }
         _focusVisible={
           hasPhoto
             ? { outline: '2px solid', outlineColor: 'green.600', outlineOffset: '2px' }
             : undefined
         }
       >
-        {showPhotoInline && hasPhoto ? (
+        {showPhotoInline && hasPhoto && !hideInlineThumb ? (
           <Box
             mb={3}
             mx={{ base: -4, md: -4 }}
@@ -244,32 +262,39 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                   #{num}
                 </Badge>
               ) : null}
-              <Box fontWeight="semibold" fontSize="md" lineHeight="snug" w="full">
-                <Text as="span" fontWeight="inherit" fontSize="inherit" lineHeight="inherit">
-                  {en}
-                </Text>
-                {spicy ? (
-                  <Box
-                    as="span"
-                    display="inline-flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    ml={2}
-                    color="green.700"
-                    lineHeight={1}
-                    aria-label="Spicy"
-                    title="Spicy"
-                    css={{
-                      '& svg': {
-                        display: 'block',
-                        transform: 'translateY(0.14em)',
-                      },
-                    }}
-                  >
-                    <PiPepperLight size={18} aria-hidden />
+              <Flex align="flex-start" justify="space-between" gap={2} w="full" minW={0}>
+                <Box fontWeight="semibold" fontSize="md" lineHeight="snug" flex="1" minW={0}>
+                  <Text as="span" fontWeight="inherit" fontSize="inherit" lineHeight="inherit">
+                    {en}
+                  </Text>
+                  {spicy ? (
+                    <Box
+                      as="span"
+                      display="inline-flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      ml={2}
+                      color="green.700"
+                      lineHeight={1}
+                      aria-label="Spicy"
+                      title="Spicy"
+                      css={{
+                        '& svg': {
+                          display: 'block',
+                          transform: 'translateY(0.14em)',
+                        },
+                      }}
+                    >
+                      <PiPepperLight size={18} aria-hidden />
+                    </Box>
+                  ) : null}
+                </Box>
+                {hasPhoto ? (
+                  <Box as="span" lineHeight={0} flexShrink={0} color="green.700" pt={0.5} aria-hidden>
+                    <MdPhotoCamera size={17} />
                   </Box>
                 ) : null}
-              </Box>
+              </Flex>
               {!hideChinese ? (
                 <Text color="fg.muted" fontSize="sm" lineHeight="tall" lang="zh-Hant">
                   {zh}
@@ -310,32 +335,39 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                 {price}
               </Text>
             </Flex>
-            <Box fontWeight="semibold" fontSize="md" lineHeight="snug" w="full">
-              <Text as="span" fontWeight="inherit" fontSize="inherit" lineHeight="inherit">
-                {en}
-              </Text>
-              {spicy ? (
-                <Box
-                  as="span"
-                  display="inline-flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  ml={2}
-                  color="green.700"
-                  lineHeight={1}
-                  aria-label="Spicy"
-                  title="Spicy"
-                  css={{
-                    '& svg': {
-                      display: 'block',
-                      transform: 'translateY(0.14em)',
-                    },
-                  }}
-                >
-                  <PiPepperLight size={18} aria-hidden />
+            <Flex align="flex-start" justify="space-between" gap={2} w="full" minW={0}>
+              <Box fontWeight="semibold" fontSize="md" lineHeight="snug" flex="1" minW={0}>
+                <Text as="span" fontWeight="inherit" fontSize="inherit" lineHeight="inherit">
+                  {en}
+                </Text>
+                {spicy ? (
+                  <Box
+                    as="span"
+                    display="inline-flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    ml={2}
+                    color="green.700"
+                    lineHeight={1}
+                    aria-label="Spicy"
+                    title="Spicy"
+                    css={{
+                      '& svg': {
+                        display: 'block',
+                        transform: 'translateY(0.14em)',
+                      },
+                    }}
+                  >
+                    <PiPepperLight size={18} aria-hidden />
+                  </Box>
+                ) : null}
+              </Box>
+              {hasPhoto ? (
+                <Box as="span" lineHeight={0} flexShrink={0} color="green.700" pt={0.5} aria-hidden>
+                  <MdPhotoCamera size={17} />
                 </Box>
               ) : null}
-            </Box>
+            </Flex>
             {!hideChinese ? (
               <Text color="fg.muted" fontSize="sm" mt={1} lineHeight="tall" lang="zh-Hant">
                 {zh}
@@ -343,19 +375,34 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
             ) : null}
           </>
         )}
-        {hasPhoto ? (
-          <Flex mt="auto" pt={showPhotoInline ? 2 : 3} justify="flex-end" align="center" gap={2} color="green.700" userSelect="none">
-            <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>
-              <MdPhotoCamera size={17} />
-            </Box>
-            <Text fontSize="xs" fontWeight="medium">
-              {showPhotoInline ? 'Enlarge' : 'View photo'}
-            </Text>
-          </Flex>
+        {hasPhoto && photoExpandInline ? (
+          <CollapsibleRoot open={photoOpen} onOpenChange={(d) => setPhotoOpen(d.open)} w="full">
+            <CollapsibleContent overflow="hidden">
+              <Box
+                mt={3}
+                pt={3}
+                mx={{ base: -4, md: 0 }}
+                borderTopWidth="1px"
+                borderTopColor="border"
+                lineHeight={0}
+                bg="bg.muted"
+              >
+                <Image
+                  src={imageSrc}
+                  alt={imageAlt}
+                  w="full"
+                  display="block"
+                  maxH="min(58dvh, 480px)"
+                  objectFit="contain"
+                  borderBottomRadius="md"
+                />
+              </Box>
+            </CollapsibleContent>
+          </CollapsibleRoot>
         ) : null}
       </Box>
 
-      {hasPhoto ? (
+      {hasPhoto && !photoExpandInline ? (
         <DialogRoot open={photoOpen} onOpenChange={(e) => setPhotoOpen(e.open)}>
           <DialogBackdrop />
           <DialogPositioner>
@@ -873,7 +920,7 @@ function MenuSectionPanel({ section, hideChinese = false }) {
       {section.id === 'dinner-combos' ? (
         <DinnerCombosColumn sectionId={section.id} items={section.items} hideChinese={hideChinese} />
       ) : (
-        <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gap={{ base: 2, sm: 3, md: 4 }}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={{ base: 2, md: 3, lg: 4 }}>
           {section.items.map((item, idx) => (
             <MenuItemCard
               key={`${section.id}-${item.num || 'x'}-${idx}`}
@@ -987,7 +1034,7 @@ function MenuSearchResultsPanel({ blocks, query, hideChinese = false }) {
               </Text>
             ) : null}
           </Flex>
-          <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gap={{ base: 2, sm: 3, md: 4 }}>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={{ base: 2, md: 3, lg: 4 }}>
             {menuSearchResultCells(section, items, hideChinese)}
           </SimpleGrid>
         </Box>
@@ -1241,7 +1288,7 @@ export function MenuSection({ hideChinese = false }) {
                 gap={2}
               >
                 <Box as="span" lineHeight={0} aria-hidden>
-                  <GiChopsticks size={20} />
+                  <MdPictureAsPdf size={20} />
                 </Box>
                 View Full Menu
               </Box>
