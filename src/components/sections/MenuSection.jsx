@@ -170,6 +170,16 @@ function scrollJumpStripToChip(stripEl, chipEl) {
 
 const PRICE_SPLIT_RE = /\s*·\s*/
 
+const prefetchedMenuPhotoUrls = new Set()
+
+/** Warm HTTP cache for dialog / expand photos before click (same URL as thumbnails). */
+function prefetchMenuPhoto(url) {
+  if (!url || prefetchedMenuPhotoUrls.has(url)) return
+  prefetchedMenuPhotoUrls.add(url)
+  const img = new Image()
+  img.src = url
+}
+
 function splitMenuPriceRows(price) {
   if (typeof price !== 'string') return []
   return price.split(PRICE_SPLIT_RE).map((s) => s.trim()).filter(Boolean)
@@ -220,6 +230,8 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
         _hover={hasPhoto ? { borderColor: 'green.200', boxShadow: 'sm' } : undefined}
         cursor={hasPhoto ? 'pointer' : undefined}
         onClick={hasPhoto ? activatePhoto : undefined}
+        onMouseEnter={hasPhoto ? () => prefetchMenuPhoto(imageSrc) : undefined}
+        onFocus={hasPhoto ? () => prefetchMenuPhoto(imageSrc) : undefined}
         onKeyDown={hasPhoto ? onPhotoKeyDown : undefined}
         role={hasPhoto ? 'button' : undefined}
         tabIndex={hasPhoto ? 0 : undefined}
@@ -259,6 +271,8 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
               objectFit="cover"
               maxH={{ base: '200px', sm: '220px', md: '240px' }}
               display="block"
+              loading="lazy"
+              decoding="async"
             />
           </Box>
         ) : null}
@@ -403,6 +417,8 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                   maxH="min(58dvh, 480px)"
                   objectFit="contain"
                   borderBottomRadius="md"
+                  loading="lazy"
+                  decoding="async"
                 />
               </Box>
             </CollapsibleContent>
@@ -444,6 +460,9 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                   maxH="min(70vh, 520px)"
                   objectFit="contain"
                   bg="bg.muted"
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="high"
                 />
               </DialogBody>
             </DialogContent>
@@ -513,6 +532,8 @@ function DinnerComboStyleOption({ opt, headlineEn, dense, cardRadius }) {
       p={{ base: dense ? 3 : 5, md: dense ? 4 : 6 }}
       cursor={hasPhoto ? 'pointer' : undefined}
       onClick={hasPhoto ? openPhoto : undefined}
+      onMouseEnter={hasPhoto ? () => prefetchMenuPhoto(opt.imageSrc) : undefined}
+      onFocus={hasPhoto ? () => prefetchMenuPhoto(opt.imageSrc) : undefined}
       onKeyDown={hasPhoto ? onKeyDown : undefined}
       role={hasPhoto ? 'button' : undefined}
       tabIndex={hasPhoto ? 0 : undefined}
@@ -570,6 +591,9 @@ function DinnerComboStyleOption({ opt, headlineEn, dense, cardRadius }) {
                   maxH="min(70vh, 520px)"
                   objectFit="contain"
                   bg="bg.muted"
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="high"
                 />
               </DialogBody>
             </DialogContent>
