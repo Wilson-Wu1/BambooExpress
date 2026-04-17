@@ -40,6 +40,7 @@ import {
 import { MdClose, MdList, MdPhotoCamera, MdPictureAsPdf, MdSearch } from 'react-icons/md'
 import { PiPepperLight } from 'react-icons/pi'
 import { MENU_SECTION_NOTES, MENU_SECTIONS } from '../../data/menuItems'
+import { resolveMenuItemImage } from '../../utils/menuPhotos'
 
 /**
  * English search aliases: `w/` ↔ "with", `&` ↔ "and" (menu copy uses shorthand).
@@ -178,8 +179,15 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
   const hasPhoto = Boolean(imageSrc && imageAlt)
   const [photoOpen, setPhotoOpen] = useState(false)
   const photoExpandInline = useBreakpointValue({ base: true, md: false }) ?? false
+  /** Close photos when crossing md so we never paint desktop Dialog open while mobile collapsible was open (avoids focus/portal freeze). */
+  const prevPhotoExpandInlineRef = useRef(photoExpandInline)
+  if (prevPhotoExpandInlineRef.current !== photoExpandInline) {
+    prevPhotoExpandInlineRef.current = photoExpandInline
+    setPhotoOpen(false)
+  }
   const priceRows = splitMenuPriceRows(price)
   const multiSizeLayout = priceRows.length > 1
+  const cameraBelowPricesMulti = multiSizeLayout && hasPhoto
 
   const hideInlineThumb = showPhotoInline && hasPhoto && photoExpandInline && photoOpen
 
@@ -255,14 +263,14 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
           </Box>
         ) : null}
         {multiSizeLayout ? (
-          <Flex justify="space-between" align="flex-start" gap={3} mb={1} flexWrap="wrap">
+          <Flex justify="space-between" align="flex-start" gap={3} flexWrap="wrap">
             <VStack align="flex-start" gap={1} flex="1" minW={0}>
               {num ? (
                 <Badge colorPalette="green" variant="subtle" fontSize="xs" px={2} py={0.5} borderRadius="md">
                   #{num}
                 </Badge>
               ) : null}
-              <Flex align="flex-start" justify="space-between" gap={2} w="full" minW={0}>
+              <Flex align="center" justify="space-between" gap={2} w="full" minW={0}>
                 <Box fontWeight="semibold" fontSize="md" lineHeight="snug" flex="1" minW={0}>
                   <Text as="span" fontWeight="inherit" fontSize="inherit" lineHeight="inherit">
                     {en}
@@ -289,11 +297,6 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                     </Box>
                   ) : null}
                 </Box>
-                {hasPhoto ? (
-                  <Box as="span" lineHeight={0} flexShrink={0} color="green.700" pt={0.5} aria-hidden>
-                    <MdPhotoCamera size={17} />
-                  </Box>
-                ) : null}
               </Flex>
               {!hideChinese ? (
                 <Text color="fg.muted" fontSize="sm" lineHeight="tall" lang="zh-Hant">
@@ -314,6 +317,11 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                   {line}
                 </Text>
               ))}
+              {cameraBelowPricesMulti ? (
+                <Box as="span" lineHeight={0} flexShrink={0} color="green.700" pt={0.5} aria-hidden>
+                  <MdPhotoCamera size={17} />
+                </Box>
+              ) : null}
             </VStack>
           </Flex>
         ) : (
@@ -335,7 +343,7 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                 {price}
               </Text>
             </Flex>
-            <Flex align="flex-start" justify="space-between" gap={2} w="full" minW={0}>
+            <Flex align="center" justify="space-between" gap={2} w="full" minW={0}>
               <Box fontWeight="semibold" fontSize="md" lineHeight="snug" flex="1" minW={0}>
                 <Text as="span" fontWeight="inherit" fontSize="inherit" lineHeight="inherit">
                   {en}
@@ -363,7 +371,7 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                 ) : null}
               </Box>
               {hasPhoto ? (
-                <Box as="span" lineHeight={0} flexShrink={0} color="green.700" pt={0.5} aria-hidden>
+                <Box as="span" lineHeight={0} flexShrink={0} color="green.700" aria-hidden>
                   <MdPhotoCamera size={17} />
                 </Box>
               ) : null}
@@ -471,6 +479,107 @@ function ComboDishList({ dishes, dense = false }) {
   )
 }
 
+/** One Style A/B card; entire box opens the photo dialog when a photo exists (camera icon is decorative). */
+function DinnerComboStyleOption({ opt, headlineEn, dense, cardRadius }) {
+  const hasPhoto = Boolean(opt.imageSrc && opt.imageAlt)
+  const [photoOpen, setPhotoOpen] = useState(false)
+  const isDesktop = useBreakpointValue({ base: false, md: true }) ?? false
+  const prevIsDesktopRef = useRef(isDesktop)
+  if (prevIsDesktopRef.current !== isDesktop) {
+    prevIsDesktopRef.current = isDesktop
+    setPhotoOpen(false)
+  }
+  const dialogTitle = `${headlineEn} — ${opt.label}`
+  const iconSize = dense ? 20 : 22
+
+  const openPhoto = () => {
+    if (hasPhoto) setPhotoOpen(true)
+  }
+  const onKeyDown = (e) => {
+    if (!hasPhoto) return
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      openPhoto()
+    }
+  }
+
+  return (
+    <Box
+      bg="bg"
+      borderRadius={cardRadius}
+      borderWidth="1px"
+      borderColor="border"
+      boxShadow="sm"
+      p={{ base: dense ? 3 : 5, md: dense ? 4 : 6 }}
+      cursor={hasPhoto ? 'pointer' : undefined}
+      onClick={hasPhoto ? openPhoto : undefined}
+      onKeyDown={hasPhoto ? onKeyDown : undefined}
+      role={hasPhoto ? 'button' : undefined}
+      tabIndex={hasPhoto ? 0 : undefined}
+      aria-label={hasPhoto ? `View photo: ${dialogTitle}` : undefined}
+      transition={hasPhoto ? 'border-color 0.2s ease, box-shadow 0.2s ease' : undefined}
+      _hover={hasPhoto ? { borderColor: 'green.200', boxShadow: 'md' } : undefined}
+      _focusVisible={
+        hasPhoto
+          ? { outline: '2px solid', outlineColor: 'green.600', outlineOffset: '2px' }
+          : undefined
+      }
+    >
+      <Flex align="center" justify="space-between" gap={2} mb={dense ? 2 : 4} w="full">
+        <Text fontWeight="bold" fontSize={dense ? 'sm' : 'lg'} textAlign="left" flex="1" minW={0} color="fg">
+          {opt.label}
+        </Text>
+        {hasPhoto ? (
+          <Box flexShrink={0} lineHeight={0} color="green.700" aria-hidden>
+            <MdPhotoCamera size={iconSize} />
+          </Box>
+        ) : null}
+      </Flex>
+      <ComboDishList dishes={opt.dishes} dense={dense} />
+      {hasPhoto ? (
+        <DialogRoot open={photoOpen} onOpenChange={(e) => setPhotoOpen(e.open)}>
+          <DialogBackdrop />
+          <DialogPositioner>
+            <DialogContent maxW="min(100vw - 2rem, 42rem)">
+              <DialogHeader position="relative" pr={12}>
+                <DialogTitle fontWeight="semibold" pr={2}>
+                  {dialogTitle}
+                </DialogTitle>
+                <DialogCloseTrigger asChild position="absolute" top="2" insetEnd="2">
+                  <IconButton
+                    aria-label="Close photo"
+                    variant="ghost"
+                    size="sm"
+                    colorPalette="gray"
+                    minW="40px"
+                    minH="40px"
+                    borderRadius="md"
+                  >
+                    <Box as="span" lineHeight={0} aria-hidden>
+                      <MdClose size={22} />
+                    </Box>
+                  </IconButton>
+                </DialogCloseTrigger>
+              </DialogHeader>
+              <DialogBody pb={6}>
+                <Image
+                  src={opt.imageSrc}
+                  alt={opt.imageAlt}
+                  w="full"
+                  borderRadius="md"
+                  maxH="min(70vh, 520px)"
+                  objectFit="contain"
+                  bg="bg.muted"
+                />
+              </DialogBody>
+            </DialogContent>
+          </DialogPositioner>
+        </DialogRoot>
+      ) : null}
+    </Box>
+  )
+}
+
 function DinnerComboCard({ combo, compact = false, dense = false, hideChinese = false }) {
   const { headlineEn, headlineZh, price, hintEn, layout, options, dishes } = combo
   const headingSize = compact || dense ? 'sm' : 'md'
@@ -541,27 +650,13 @@ function DinnerComboCard({ combo, compact = false, dense = false, hideChinese = 
         ) : (
           <SimpleGrid columns={{ base: 1, md: 2 }} gap={{ base: dense ? 2 : 3, md: dense ? 3 : 4 }}>
             {(options || []).map((opt) => (
-              <Box
+              <DinnerComboStyleOption
                 key={opt.label}
-                bg="bg"
-                borderRadius={cardRadius}
-                borderWidth="1px"
-                borderColor="border"
-                boxShadow="sm"
-                p={{ base: dense ? 3 : 5, md: dense ? 4 : 6 }}
-              >
-                <Text
-                  fontWeight="bold"
-                  fontSize={dense ? 'sm' : 'lg'}
-                  mb={dense ? 2 : 4}
-                  textAlign="left"
-                  w="full"
-                  color="fg"
-                >
-                  {opt.label}
-                </Text>
-                <ComboDishList dishes={opt.dishes} dense={dense} />
-              </Box>
+                opt={opt}
+                headlineEn={headlineEn}
+                dense={dense}
+                cardRadius={cardRadius}
+              />
             ))}
           </SimpleGrid>
         )}
@@ -576,6 +671,7 @@ function DinnerCombosColumn({ sectionId, items, hideChinese = false }) {
   while (i < items.length) {
     const item = items[i]
     if (item.type !== 'dinner_combo') {
+      const { imageSrc, imageAlt } = resolveMenuItemImage(sectionId, item)
       blocks.push(
         <MenuItemCard
           key={`${sectionId}-${item.num || 'x'}-${i}`}
@@ -584,8 +680,8 @@ function DinnerCombosColumn({ sectionId, items, hideChinese = false }) {
           en={item.en}
           price={item.price}
           spicy={item.spicy}
-          imageSrc={item.imageSrc}
-          imageAlt={item.imageAlt}
+          imageSrc={imageSrc}
+          imageAlt={imageAlt}
           hideChinese={hideChinese}
         />,
       )
@@ -921,20 +1017,23 @@ function MenuSectionPanel({ section, hideChinese = false }) {
         <DinnerCombosColumn sectionId={section.id} items={section.items} hideChinese={hideChinese} />
       ) : (
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={{ base: 2, md: 3, lg: 4 }}>
-          {section.items.map((item, idx) => (
-            <MenuItemCard
-              key={`${section.id}-${item.num || 'x'}-${idx}`}
-              num={item.num}
-              zh={item.zh}
-              en={item.en}
-              price={item.price}
-              spicy={item.spicy}
-              imageSrc={item.imageSrc}
-              imageAlt={item.imageAlt}
-              showPhotoInline={section.id === 'highlights'}
-              hideChinese={hideChinese}
-            />
-          ))}
+          {section.items.map((item, idx) => {
+            const { imageSrc, imageAlt } = resolveMenuItemImage(section.id, item)
+            return (
+              <MenuItemCard
+                key={`${section.id}-${item.num || 'x'}-${idx}`}
+                num={item.num}
+                zh={item.zh}
+                en={item.en}
+                price={item.price}
+                spicy={item.spicy}
+                imageSrc={imageSrc}
+                imageAlt={imageAlt}
+                showPhotoInline={section.id === 'highlights'}
+                hideChinese={hideChinese}
+              />
+            )
+          })}
         </SimpleGrid>
       )}
     </Box>
@@ -980,6 +1079,7 @@ function menuSearchResultCells(section, items, hideChinese = false) {
         </Box>,
       )
     } else {
+      const { imageSrc, imageAlt } = resolveMenuItemImage(section.id, item)
       cells.push(
         <MenuItemCard
           key={`search-${section.id}-${item.num || 'x'}-${i}`}
@@ -988,8 +1088,8 @@ function menuSearchResultCells(section, items, hideChinese = false) {
           en={item.en}
           price={item.price}
           spicy={item.spicy}
-          imageSrc={item.imageSrc}
-          imageAlt={item.imageAlt}
+          imageSrc={imageSrc}
+          imageAlt={imageAlt}
           showPhotoInline={section.id === 'highlights'}
           hideChinese={hideChinese}
         />,

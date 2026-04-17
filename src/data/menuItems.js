@@ -84,6 +84,9 @@ export const MENU_SECTIONS = [
         "options": [
           {
             "label": "Style A",
+            "imageSrc": "/menu-photos/DINNER%20COMBO/dinner_for_2_A.jpeg",
+            "imageAlt":
+              "Dinner for two, Style A: spring rolls, lemon chicken, prawn mixed vegetables, and BBQ pork fried rice.",
             "dishes": [
               "Spring Roll (2 rolls)",
               "Lemon Chicken",
@@ -93,6 +96,9 @@ export const MENU_SECTIONS = [
           },
           {
             "label": "Style B",
+            "imageSrc": "/menu-photos/DINNER%20COMBO/dinner_for_2_B.jpeg",
+            "imageAlt":
+              "Dinner for two, Style B: spring rolls, beef with broccoli, Cantonese sweet and sour pork, and soy sauce chicken chow mein.",
             "dishes": [
               "Spring Roll (2 rolls)",
               "Beef w/ Broccoli",

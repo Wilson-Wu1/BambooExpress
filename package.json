@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/generate-menu-photo-manifest.mjs",
     "build": "vite build",
+    "generate:menu-photos": "node scripts/generate-menu-photo-manifest.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
