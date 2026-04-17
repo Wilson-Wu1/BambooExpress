@@ -1435,7 +1435,7 @@ export function MenuSection({ hideChinese = false }) {
             borderColor="border"
           >
             <VStack align="stretch" gap={{ base: 1, md: 0 }}>
-              <FieldRoot maxW={{ base: 'full', md: '36rem' }}>
+              <FieldRoot maxW={{ base: 'full', md: '36rem' }} px={{ base: 4, md: 0 }}>
                 <InputGroup
                   startElement={
                     <Box as="span" lineHeight={0} color="fg.muted" aria-hidden>
