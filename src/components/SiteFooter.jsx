@@ -44,7 +44,7 @@ export function SiteFooter() {
               flexShrink={0}
               fontWeight="bold"
               fontSize="lg"
-              color="green.800"
+              color="brand.fg"
               letterSpacing="tight"
               minH="44px"
               cursor="pointer"

@@ -39,7 +39,7 @@ export function NotFoundPage() {
             <Text
               fontSize="sm"
               fontWeight="semibold"
-              color="green.700"
+              color="brand.accent"
               textTransform="uppercase"
               letterSpacing="wider"
             >
@@ -72,9 +72,9 @@ export function NotFoundPage() {
                 minH="48px"
                 fontWeight="semibold"
                 variant="outline"
-                borderColor="green.700"
-                color="green.800"
-                _hover={{ bg: 'green.50', borderColor: 'green.800' }}
+                borderColor="brand.accent"
+                color="brand.fg"
+                _hover={{ bg: 'brand.surface', borderColor: 'brand.border' }}
               >
                 <Box as={RouterLink} to="/menu" display="inline-flex" alignItems="center">
                   View menu

@@ -20,7 +20,7 @@ const navLinkStyles = {
   transitionProperty: 'background-color, color',
   transitionDuration: '0.2s',
   transitionTimingFunction: 'ease',
-  _hover: { bg: 'bg.muted', color: 'green.700' },
+  _hover: { bg: 'bg.muted', color: 'brand.accent' },
 }
 
 export function NavLinks({ onNavigate, direction = 'row', flexWrap, justifyContent }) {
@@ -39,7 +39,7 @@ export function NavLinks({ onNavigate, direction = 'row', flexWrap, justifyConte
     >
       {direction === 'column' && Icon ? (
         <HStack gap={3} w="full">
-          <Box as="span" color="green.700" lineHeight={0} flexShrink={0} aria-hidden>
+          <Box as="span" color="brand.accent" lineHeight={0} flexShrink={0} aria-hidden>
             <Icon size={22} />
           </Box>
           {label}

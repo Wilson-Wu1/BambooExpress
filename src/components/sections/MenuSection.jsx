@@ -191,10 +191,14 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
   const photoExpandInline = useBreakpointValue({ base: true, md: false }) ?? false
   /** Close photos when crossing md so we never paint desktop Dialog open while mobile collapsible was open (avoids focus/portal freeze). */
   const prevPhotoExpandInlineRef = useRef(photoExpandInline)
-  if (prevPhotoExpandInlineRef.current !== photoExpandInline) {
+  useLayoutEffect(() => {
+    if (prevPhotoExpandInlineRef.current !== photoExpandInline) {
+      /* Closing on breakpoint change is a deliberate sync; cannot be derived from render without ref-in-render. */
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset dialog when mobile/desktop photo UI switches
+      setPhotoOpen(false)
+    }
     prevPhotoExpandInlineRef.current = photoExpandInline
-    setPhotoOpen(false)
-  }
+  }, [photoExpandInline])
   const priceRows = splitMenuPriceRows(price)
   const multiSizeLayout = priceRows.length > 1
   const cameraBelowPricesMulti = multiSizeLayout && hasPhoto
@@ -227,7 +231,7 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
         textAlign="left"
         w="full"
         transition={hasPhoto ? 'border-color 0.2s ease, box-shadow 0.2s ease' : undefined}
-        _hover={hasPhoto ? { borderColor: 'green.200', boxShadow: 'sm' } : undefined}
+        _hover={hasPhoto ? { borderColor: 'green.muted', boxShadow: 'sm' } : undefined}
         cursor={hasPhoto ? 'pointer' : undefined}
         onClick={hasPhoto ? activatePhoto : undefined}
         onMouseEnter={hasPhoto ? () => prefetchMenuPhoto(imageSrc) : undefined}
@@ -247,7 +251,7 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
         }
         _focusVisible={
           hasPhoto
-            ? { outline: '2px solid', outlineColor: 'green.600', outlineOffset: '2px' }
+            ? { outline: '2px solid', outlineColor: 'brand.accent', outlineOffset: '2px' }
             : undefined
         }
       >
@@ -296,7 +300,7 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                       alignItems="center"
                       justifyContent="center"
                       ml={2}
-                      color="green.700"
+                      color="brand.accent"
                       lineHeight={1}
                       aria-label="Spicy"
                       title="Spicy"
@@ -324,7 +328,7 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                   key={rowIdx}
                   fontWeight="bold"
                   fontSize="sm"
-                  color="green.800"
+                  color="brand.fg"
                   whiteSpace="nowrap"
                   lineHeight="short"
                 >
@@ -332,7 +336,7 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                 </Text>
               ))}
               {cameraBelowPricesMulti ? (
-                <Box as="span" lineHeight={0} flexShrink={0} color="green.700" pt={0.5} aria-hidden>
+                <Box as="span" lineHeight={0} flexShrink={0} color="brand.accent" pt={0.5} aria-hidden>
                   <MdPhotoCamera size={17} />
                 </Box>
               ) : null}
@@ -349,7 +353,7 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
               <Text
                 fontWeight="bold"
                 fontSize="sm"
-                color="green.800"
+                color="brand.fg"
                 flexShrink={0}
                 whiteSpace="nowrap"
                 ml="auto"
@@ -369,7 +373,7 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                     alignItems="center"
                     justifyContent="center"
                     ml={2}
-                    color="green.700"
+                    color="brand.accent"
                     lineHeight={1}
                     aria-label="Spicy"
                     title="Spicy"
@@ -385,7 +389,7 @@ function MenuItemCard({ num, zh, en, price, spicy, imageSrc, imageAlt, showPhoto
                 ) : null}
               </Box>
               {hasPhoto ? (
-                <Box as="span" lineHeight={0} flexShrink={0} color="green.700" aria-hidden>
+                <Box as="span" lineHeight={0} flexShrink={0} color="brand.accent" aria-hidden>
                   <MdPhotoCamera size={17} />
                 </Box>
               ) : null}
@@ -480,7 +484,7 @@ function ComboDishList({ dishes, dense = false }) {
         <Box as="li" key={i} display="flex" gap={dense ? 2 : 2.5} alignItems="flex-start">
           <Text
             as="span"
-            color="green.600"
+            color="brand.accent"
             flexShrink={0}
             mt={dense ? 0 : 0.5}
             aria-hidden
@@ -504,10 +508,13 @@ function DinnerComboStyleOption({ opt, headlineEn, dense, cardRadius }) {
   const [photoOpen, setPhotoOpen] = useState(false)
   const isDesktop = useBreakpointValue({ base: false, md: true }) ?? false
   const prevIsDesktopRef = useRef(isDesktop)
-  if (prevIsDesktopRef.current !== isDesktop) {
+  useLayoutEffect(() => {
+    if (prevIsDesktopRef.current !== isDesktop) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset dialog when viewport crosses md breakpoint
+      setPhotoOpen(false)
+    }
     prevIsDesktopRef.current = isDesktop
-    setPhotoOpen(false)
-  }
+  }, [isDesktop])
   const dialogTitle = `${headlineEn} — ${opt.label}`
   const iconSize = dense ? 20 : 22
 
@@ -539,10 +546,10 @@ function DinnerComboStyleOption({ opt, headlineEn, dense, cardRadius }) {
       tabIndex={hasPhoto ? 0 : undefined}
       aria-label={hasPhoto ? `View photo: ${dialogTitle}` : undefined}
       transition={hasPhoto ? 'border-color 0.2s ease, box-shadow 0.2s ease' : undefined}
-      _hover={hasPhoto ? { borderColor: 'green.200', boxShadow: 'md' } : undefined}
+      _hover={hasPhoto ? { borderColor: 'green.muted', boxShadow: 'md' } : undefined}
       _focusVisible={
         hasPhoto
-          ? { outline: '2px solid', outlineColor: 'green.600', outlineOffset: '2px' }
+          ? { outline: '2px solid', outlineColor: 'brand.accent', outlineOffset: '2px' }
           : undefined
       }
     >
@@ -551,7 +558,7 @@ function DinnerComboStyleOption({ opt, headlineEn, dense, cardRadius }) {
           {opt.label}
         </Text>
         {hasPhoto ? (
-          <Box flexShrink={0} lineHeight={0} color="green.700" aria-hidden>
+          <Box flexShrink={0} lineHeight={0} color="brand.accent" aria-hidden>
             <MdPhotoCamera size={iconSize} />
           </Box>
         ) : null}
@@ -621,9 +628,9 @@ function DinnerComboCard({ combo, compact = false, dense = false, hideChinese = 
       w="full"
     >
       <Flex
-        bg="green.50"
+        bg="brand.surface"
         borderWidth="1px"
-        borderColor="green.800"
+        borderColor="brand.border"
         borderTopRadius={cardRadius}
         px={{ base: dense ? 3 : 4, md: dense ? 4 : 5 }}
         py={dense ? 2 : 3}
@@ -638,7 +645,7 @@ function DinnerComboCard({ combo, compact = false, dense = false, hideChinese = 
             size={headingSize}
             fontWeight="bold"
             lineHeight={dense ? 'short' : undefined}
-            color="green.900"
+            color="brand.fgStrong"
           >
             {headlineEn}
           </Heading>
@@ -647,13 +654,13 @@ function DinnerComboCard({ combo, compact = false, dense = false, hideChinese = 
               fontSize={dense ? 'xs' : 'sm'}
               lang="zh-Hant"
               lineHeight={dense ? 'short' : undefined}
-              color="green.800"
+              color="brand.fg"
             >
               {headlineZh}
             </Text>
           ) : null}
         </VStack>
-        <Text fontWeight="bold" fontSize={priceSize} whiteSpace="nowrap" color="green.900">
+        <Text fontWeight="bold" fontSize={priceSize} whiteSpace="nowrap" color="brand.fgStrong">
           {price}
         </Text>
       </Flex>
@@ -970,7 +977,7 @@ function SectionNavList({ activeSectionId, onPick, hideChinese = false }) {
             px={3}
             fontWeight={selected ? 'semibold' : 'medium'}
             borderLeftWidth="3px"
-            borderLeftColor={selected ? 'green.700' : 'transparent'}
+            borderLeftColor={selected ? 'brand.accent' : 'transparent'}
             rounded="md"
             onClick={() => onPick(s.id)}
           >
@@ -982,7 +989,7 @@ function SectionNavList({ activeSectionId, onPick, hideChinese = false }) {
                 <Text
                   fontSize="xs"
                   lineHeight="short"
-                  color={selected ? 'green.800' : 'fg.muted'}
+                  color={selected ? 'brand.fg' : 'fg.muted'}
                   fontWeight="normal"
                   lang="zh-Hant"
                   opacity={selected ? 0.92 : 1}
@@ -1396,10 +1403,10 @@ export function MenuSection({ hideChinese = false }) {
               minH="48px"
               fontWeight="semibold"
               variant="outline"
-              borderColor="green.700"
-              color="green.700"
-              bg="green.50"
-              _hover={{ bg: 'green.100', borderColor: 'green.800', color: 'green.800' }}
+              borderColor="brand.accent"
+              color="brand.accent"
+              bg="brand.surface"
+              _hover={{ bg: 'brand.surfaceHover', borderColor: 'brand.border', color: 'brand.fg' }}
               alignSelf={{ base: 'stretch', md: 'center' }}
             >
               <Box

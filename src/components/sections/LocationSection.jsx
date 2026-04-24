@@ -62,14 +62,14 @@ export function LocationSection() {
 
               <VStack align="stretch" gap={4}>
                 <Flex align="flex-start" gap={3}>
-                  <Box color="green.700" mt={0.5} flexShrink={0} lineHeight={0}>
+                  <Box color="brand.accent" mt={0.5} flexShrink={0} lineHeight={0}>
                     <MdLocationOn size={22} aria-hidden />
                   </Box>
                   <Link
                     href={mapsSearchUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    color="green.700"
+                    color="brand.accent"
                     fontWeight="medium"
                     textDecoration="underline"
                     lineHeight="tall"
@@ -78,10 +78,10 @@ export function LocationSection() {
                   </Link>
                 </Flex>
                 <Flex align="center" gap={3}>
-                  <Box color="green.700" flexShrink={0} lineHeight={0}>
+                  <Box color="brand.accent" flexShrink={0} lineHeight={0}>
                     <MdPhone size={20} aria-hidden />
                   </Box>
-                  <Link href={`tel:${PHONE_TEL}`} color="green.700" fontWeight="medium" textDecoration="underline">
+                  <Link href={`tel:${PHONE_TEL}`} color="brand.accent" fontWeight="medium" textDecoration="underline">
                     {PHONE_DISPLAY}
                   </Link>
                 </Flex>
@@ -122,6 +122,9 @@ export function LocationSection() {
                 display="block"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
+                _dark={{
+                  filter: 'invert(1) hue-rotate(180deg) brightness(0.9) contrast(1.05)',
+                }}
               />
             </MotionBox>
 
@@ -198,11 +201,11 @@ export function LocationSection() {
                   minH="48px"
                   flex={{ sm: 1 }}
                   fontWeight="semibold"
-                  bg="white"
-                  color="green.800"
+                  bg="bg.panel"
+                  color="brand.fg"
                   borderWidth="1px"
-                  borderColor="gray.200"
-                  _hover={{ bg: 'gray.100' }}
+                  borderColor="border"
+                  _hover={{ bg: 'bg.muted' }}
                 >
                   <Box
                     as="a"

@@ -60,7 +60,7 @@ function PopularDishCard({ num, en, zh, price, menuSectionId, imageSrc, imageAlt
               #{num}
             </Badge>
           ) : null}
-          <Text fontWeight="bold" fontSize="sm" color="green.800" ml="auto">
+          <Text fontWeight="bold" fontSize="sm" color="brand.fg" ml="auto">
             {price}
           </Text>
         </Flex>
@@ -78,7 +78,7 @@ function PopularDishCard({ num, en, zh, price, menuSectionId, imageSrc, imageAlt
             to={`/menu#${menuSectionId}`}
             fontSize="sm"
             fontWeight="medium"
-            color="green.700"
+            color="brand.accent"
             textDecoration="underline"
           >
             View On Menu

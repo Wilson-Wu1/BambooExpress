@@ -20,12 +20,13 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react'
-import { MdPhone } from 'react-icons/md'
+import { MdDarkMode, MdLightMode, MdPhone } from 'react-icons/md'
 import { Link as RouterLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { MotionBox } from '../lib/chakra-motion'
 import { EASE_OUT } from '../lib/motion-presets'
 import { NavLinks } from './NavLinks'
 import { SiteFooter } from './SiteFooter'
+import { useColorMode } from './ui/use-color-mode'
 
 const PHONE_DISPLAY = '(604) 277-6666'
 const PHONE_HREF = 'tel:+16042776666'
@@ -86,7 +87,7 @@ export function Layout() {
                 flex={{ base: '1', md: 'none' }}
                 minW={{ base: 0, md: 'unset' }}
                 fontWeight="bold"
-                color="green.800"
+                color="brand.fg"
                 letterSpacing="tight"
                 minH="44px"
                 css={{
@@ -104,6 +105,8 @@ export function Layout() {
                   fit="contain"
                   flexShrink={0}
                   draggable={false}
+                  bg="white"
+                  borderRadius="full"
                 />
                 <Text
                   as="span"
@@ -133,13 +136,13 @@ export function Layout() {
                   gap={1.5}
                   fontWeight="semibold"
                   fontSize="md"
-                  color="green.800"
+                  color="brand.fg"
                   textDecoration="none"
                   px={2}
                   py={2}
                   borderRadius="md"
                   minH="44px"
-                  _hover={{ color: 'green.700', bg: 'bg.muted', textDecoration: 'none' }}
+                  _hover={{ color: 'brand.accent', bg: 'bg.muted', textDecoration: 'none' }}
                   aria-label={`Call Bamboo Express at ${PHONE_DISPLAY}`}
                 >
                   <Box as="span" lineHeight={0} flexShrink={0} aria-hidden>
@@ -147,6 +150,8 @@ export function Layout() {
                   </Box>
                   {PHONE_DISPLAY}
                 </Link>
+
+                <ColorModeToggle />
 
                 <DrawerRoot open={drawerOpen} onOpenChange={(e) => setDrawerOpen(e.open)}>
                   <DrawerTrigger asChild display={{ base: 'inline-flex', md: 'none' }}>
@@ -229,6 +234,26 @@ export function Layout() {
         </Link>
       </Box>
     </Box>
+  )
+}
+
+function ColorModeToggle() {
+  const { colorMode, toggleColorMode, resolvedTheme } = useColorMode()
+  const isDark = colorMode === 'dark'
+  return (
+    <IconButton
+      aria-label={
+        resolvedTheme == null ? 'Toggle color mode' : isDark ? 'Switch to light mode' : 'Switch to dark mode'
+      }
+      variant="ghost"
+      size="md"
+      minW="44px"
+      minH="44px"
+      colorPalette="green"
+      onClick={toggleColorMode}
+    >
+      {isDark ? <MdLightMode size={22} /> : <MdDarkMode size={22} />}
+    </IconButton>
   )
 }
 

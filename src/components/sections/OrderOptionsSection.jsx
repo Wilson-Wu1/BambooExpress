@@ -12,7 +12,7 @@ function BulletList({ items }) {
     <VStack as="ul" align="stretch" gap={2.5} listStyleType="none" m={0} p={0}>
       {items.map((content, i) => (
         <Flex key={i} as="li" align="flex-start" gap={2.5}>
-          <Text as="span" color="green.700" fontWeight="bold" lineHeight="tall" flexShrink={0} mt={0.5}>
+          <Text as="span" color="brand.accent" fontWeight="bold" lineHeight="tall" flexShrink={0} mt={0.5}>
             •
           </Text>
           <Text color="fg" lineHeight="tall">
@@ -34,7 +34,7 @@ function OptionCard({ title, icon, prominentBadge, badges, children, itemVariant
       borderWidth="1px"
       borderColor="border"
       borderLeftWidth="4px"
-      borderLeftColor="green.700"
+      borderLeftColor="brand.accent"
       boxShadow="sm"
       p={{ base: 5, md: 6 }}
       h="full"
@@ -42,7 +42,7 @@ function OptionCard({ title, icon, prominentBadge, badges, children, itemVariant
       whileHover={reduceMotion ? undefined : { y: -2, transition: { duration: 0.2, ease: EASE_OUT } }}
     >
       <Flex align="center" gap={3} mb={3}>
-        <Box color="green.700" flexShrink={0} lineHeight={0} aria-hidden>
+        <Box color="brand.accent" flexShrink={0} lineHeight={0} aria-hidden>
           {icon}
         </Box>
         <Heading as="h3" size="lg" fontWeight="bold">
