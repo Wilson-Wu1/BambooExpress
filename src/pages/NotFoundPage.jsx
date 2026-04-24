@@ -85,11 +85,11 @@ export function NotFoundPage() {
           <Box
             flexShrink={0}
             w={{ base: 'full', md: 'auto' }}
-            maxW={{ base: 'md', md: 'min(38vw, 340px)' }}
+            maxW={{ base: 'md', md: 'min(38vw, 500px)' }}
             mx={{ base: 'auto', md: 0 }}
           >
             <Image
-              src="/panda404.jpg"
+              src="/panda404gif.gif"
               alt="Cartoon giant panda lying face-down on the grass, looking tired and lost"
               w="full"
               h="auto"
