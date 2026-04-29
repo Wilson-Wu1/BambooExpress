@@ -59,6 +59,7 @@ export function SiteFooter() {
                 fit="contain"
                 flexShrink={0}
                 draggable={false}
+                loading="lazy"
               />
               <Text as="span">Bamboo Express</Text>
             </Flex>

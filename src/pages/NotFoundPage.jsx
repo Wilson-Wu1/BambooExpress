@@ -98,6 +98,7 @@ export function NotFoundPage() {
               borderColor="border"
               boxShadow="md"
               draggable={false}
+              loading="eager"
             />
           </Box>
         </Flex>

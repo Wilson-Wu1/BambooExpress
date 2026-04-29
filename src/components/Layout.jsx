@@ -104,6 +104,7 @@ export function Layout() {
                   fit="contain"
                   flexShrink={0}
                   draggable={false}
+                  loading="eager"
                 />
                 <Text
                   as="span"
