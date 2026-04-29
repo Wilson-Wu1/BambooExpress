@@ -8,6 +8,7 @@
     "prebuild": "node scripts/generate-menu-photo-manifest.mjs",
     "build": "vite build",
     "generate:menu-photos": "node scripts/generate-menu-photo-manifest.mjs",
+    "optimize:menu-photos": "node scripts/optimize-menu-photos.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -31,6 +32,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
     "pdf-parse": "^2.4.5",
+    "sharp": "^0.34.5",
     "vite": "^8.0.1"
   }
 }

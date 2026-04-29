@@ -171,6 +171,7 @@ export function HeroSection() {
               fit="contain"
               draggable={false}
               display="block"
+              loading="eager"
             />
           </MotionBox>
         </MotionFlex>
